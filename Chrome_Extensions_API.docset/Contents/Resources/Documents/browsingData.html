@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.browsingData</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.browsingData</code> API to remove browsing data from a user&apos;s local profile.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;browsingData&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <h2 id="manifest">Manifest</h2>
+      
+      <p>
+        You must declare the &quot;browsingData&quot; permission in the
+        <a href="https://developer.chrome.com/extensions/manifest">extension manifest</a> to use this API.
+      </p>
+      
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My extension&quot;,
+        ...
+        <b>&quot;permissions&quot;: [
+          &quot;browsingData&quot;,
+        ]</b>,
+        ...
+      }
+      </pre>
+      
+      <h2 id="usage">Usage</h2>
+      
+      <p>
+        The simplest use-case for this API is a a time-based mechanism for clearing a
+        user&apos;s browsing data. Your code should provide a timestamp which indicates the
+        historical date after which the user&apos;s browsing data should be removed. This
+        timestamp is formatted as the number of milliseconds since the Unix epoch
+        (which can be retrieved from a JavaScript <code>Date</code> object via the
+        <code>getTime</code> method).
+      </p>
+      
+      <p>
+        For example, to clear all of a user&apos;s browsing data from the last week, you
+        might write code as follows:
+      </p>
+      
+      <pre>var callback = function () {
+        // Do something clever here once data has been removed.
+      };
+      
+      var millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+      var oneWeekAgo = (new Date()).getTime() - millisecondsPerWeek;
+      chrome.browsingData.remove({
+        &quot;since&quot;: oneWeekAgo
+      }, {
+        &quot;appcache&quot;: true,
+        &quot;cache&quot;: true,
+        &quot;cacheStorage&quot;: true,
+        &quot;cookies&quot;: true,
+        &quot;downloads&quot;: true,
+        &quot;fileSystems&quot;: true,
+        &quot;formData&quot;: true,
+        &quot;history&quot;: true,
+        &quot;indexedDB&quot;: true,
+        &quot;localStorage&quot;: true,
+        &quot;passwords&quot;: true,
+        &quot;serviceWorkers&quot;: true,
+        &quot;webSQL&quot;: true
+      }, callback);</pre>
+      
+      <p>
+        The <code>chrome.browsingData.remove</code> method allows you to remove
+        various types of browsing data with a single call, and will be much faster
+        than calling multiple more specific methods. If, however, you only want to
+        clear one specific type of browsing data (cookies, for example), the more
+        granular methods offer a readable alternative to a call filled with JSON.
+      </p>
+      
+      <pre>var callback = function () {
+        // Do something clever here once data has been removed.
+      };
+      
+      var millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+      var oneWeekAgo = (new Date()).getTime() - millisecondsPerWeek;
+      chrome.browsingData.removeCookies({
+        &quot;since&quot;: oneWeekAgo
+      }, callback);</pre>
+      
+      <p>
+        If the user is syncing their data, <code>chrome.browsingData.remove</code> may
+        automatically rebuild the cookie for the Sync account after clearing it. This
+        is to ensure that Sync can continue working, so that the data can be
+        eventually deleted on the server. However the more specific
+        <code>chrome.browsingData.removeCookies</code> can be used to clear the cookie
+        for the Sync account, and Sync will be paused in this case.
+      </p>
+      
+      <p class="caution">
+        <strong>Important</strong>: Removing browsing data involves a good deal of
+        heavy lifting in the background, and can take <em>tens of seconds</em> to
+        complete, depending on a user&apos;s profile. You should use the callback mechanism
+        to keep your users up to date on the removal&apos;s status.
+      </p>
+      
+      
+      <h2 id="specific_origins">Specific Origins</h2>
+      
+      <p>To remove data for a specific origin or to exclude a set of origins from
+      deletion, you can use the <code>RemovalOptions.origins</code> and
+      <code>RemovalOptions.excludeOrigins</code> parameters. They can only be applied
+      to cookies, cache, and storage (CacheStorage, FileSystems, IndexedDB,
+      LocalStorage, ServiceWorkers, and WebSQL).
+      </p>
+      
+      <pre>chrome.browsingData.remove({
+        &quot;origins&quot;: [&quot;https://www.example.com&quot;]
+      }, {
+        &quot;cacheStorage&quot;: true,
+        &quot;cookies&quot;: true,
+        &quot;fileSystems&quot;: true,
+        &quot;indexedDB&quot;: true,
+        &quot;localStorage&quot;: true,
+        &quot;serviceWorkers&quot;: true,
+        &quot;webSQL&quot;: true
+      }, callback);</pre>
+      
+      <p class="caution">
+          <strong>Important</strong>: As cookies are scoped more broadly than other
+          types of storage, deleting cookies for an origin will delete all cookies of
+          the registrable domain. For example, deleting data for
+          <code>https://www.example.com</code> will delete cookies with a domain of
+          <code>.example.com</code> as well.
+      </p>
+      
+      <h2 id="origin_types">Origin Types</h2>
+      
+      <p>
+        Adding an <code>originTypes</code> property to the API&apos;s options object allows
+        you to specify which types of origins ought to be effected. Currently, origins
+        are divided into three categories:
+      </p>
+      <ul>
+        <li>
+          <code>unprotectedWeb</code> covers the general case of websites that users
+          visit without taking any special action. If you don&apos;t specify an
+          <code>originTypes</code>, the API defaults to removing data from unprotected
+          web origins.
+        </li>
+        <li>
+          <code>protectedWeb</code> covers those web origins that have been installed
+          as hosted applications. Installing <a href="https://chrome.google.com/webstore/detail/aknpkdffaafgjchaibgeefbgmgeghloj">
+          Angry Birds</a>, for example, protects the origin
+          <code>http://chrome.angrybirds.com</code>, and removes it from the
+          <code>unprotectedWeb</code> category. Please do be careful when triggering
+          deletion of data for these origins: make sure your users know what they&apos;re
+          getting, as this will irrevocably remove their game data. No one wants to
+          knock tiny pig houses over more often than necessary.
+        </li>
+        <li>
+          <code>extension</code> covers origins under the
+          <code>chrome-extensions:</code> scheme. Removing extension data is, again,
+          something you should be very careful about.
+        </li>
+      </ul>
+      <p>
+        We could adjust the previous example to remove only data from protected
+        websites as follows:
+      </p>
+      <pre>var callback = function () {
+        // Do something clever here once data has been removed.
+      };
+      
+      var millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+      var oneWeekAgo = (new Date()).getTime() - millisecondsPerWeek;
+      chrome.browsingData.remove({
+        &quot;since&quot;: oneWeekAgo,
+        <b>&quot;originTypes&quot;: {
+          &quot;protectedWeb&quot;: true
+        }</b>
+      }, {
+        &quot;appcache&quot;: true,
+        &quot;cache&quot;: true,
+        &quot;cacheStorage&quot;: true,
+        &quot;cookies&quot;: true,
+        &quot;downloads&quot;: true,
+        &quot;fileSystems&quot;: true,
+        &quot;formData&quot;: true,
+        &quot;history&quot;: true,
+        &quot;indexedDB&quot;: true,
+        &quot;localStorage&quot;: true,
+        &quot;passwords&quot;: true,
+        &quot;serviceWorkers&quot;: true,
+        &quot;webSQL&quot;: true
+      }, callback);</pre>
+      
+      <p class="caution">
+        <strong>Seriously</strong>: Be careful with <code>protectedWeb</code> and
+        <code>extension</code>. These are destructive operations that your users
+        will write angry email about if they&apos;re not well-informed about what to
+        expect when your extension removes data on their behalf.
+      </p>
+      
+      <h2 id="samples">Examples</h2>
+      <p>
+        Samples for the <code>browsingData</code> API are available
+        <a href="https://developer.chrome.com/extensions/samples#search:browsingData">on the samples page</a>.
+      </p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-RemovalOptions">RemovalOptions</a></td></tr>
+          <tr><td><a href="#type-DataTypeSet">DataTypeSet</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-settings">settings</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.settings(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-remove">remove</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.remove(<span>    RemovalOptions options</span>, <span>    DataTypeSet dataToRemove</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeAppcache">removeAppcache</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeAppcache(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeCache">removeCache</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeCache(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeCacheStorage">removeCacheStorage</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeCacheStorage(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeCookies">removeCookies</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeCookies(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeDownloads">removeDownloads</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeDownloads(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeFileSystems">removeFileSystems</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeFileSystems(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeFormData">removeFormData</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeFormData(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeHistory">removeHistory</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeHistory(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeIndexedDB">removeIndexedDB</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeIndexedDB(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeLocalStorage">removeLocalStorage</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeLocalStorage(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removePluginData">removePluginData</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removePluginData(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removePasswords">removePasswords</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removePasswords(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeServiceWorkers">removeServiceWorkers</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeServiceWorkers(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeWebSQL">removeWebSQL</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browsingData.removeWebSQL(<span>    RemovalOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-RemovalOptions">RemovalOptions</h3>
+              <dd>Options that determine exactly what data will be removed.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="RemovalOptions-properties">properties</th></tr>
+                  <tr id="property-RemovalOptions-since">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        since</td>
+                    <td>
+                    
+                    <p>
+                      Remove data accumulated on or after this date, represented in milliseconds since the epoch (accessible via the <code>getTime</code> method of the JavaScript <code>Date</code> object). If absent, defaults to 0 (which would remove all browsing data).
+                    </p></td>
+                  </tr><tr id="property-RemovalOptions-originTypes">
+                    <td>object</td>
+                    <td><span class="optional">(optional)</span>
+                        originTypes</td>
+                    <td>
+                    
+                    <p>
+                      An object whose properties specify which origin types ought to be cleared. If this object isn&apos;t specified, it defaults to clearing only &quot;unprotected&quot; origins. Please ensure that you <em>really</em> want to remove application data before adding &apos;protectedWeb&apos; or &apos;extensions&apos;.
+                    </p>  <table class="innerTable">
+                        <tbody><tr id="property-originTypes-unprotectedWeb">
+                          <td>boolean</td>
+                          <td><span class="optional">(optional)</span>
+                              unprotectedWeb</td>
+                          <td>
+                          
+                          <p>
+                            Normal websites.
+                          </p></td>
+                        </tr><tr id="property-originTypes-protectedWeb">
+                          <td>boolean</td>
+                          <td><span class="optional">(optional)</span>
+                              protectedWeb</td>
+                          <td>
+                          
+                          <p>
+                            Websites that have been installed as hosted applications (be careful!).
+                          </p></td>
+                        </tr><tr id="property-originTypes-extension">
+                          <td>boolean</td>
+                          <td><span class="optional">(optional)</span>
+                              extension</td>
+                          <td>
+                          
+                          <p>
+                            Extensions and packaged applications a user has installed (be _really_ careful!).
+                          </p></td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-RemovalOptions-origins">
+                    <td>array of string</td>
+                    <td><span class="optional">(optional)</span>
+                        origins</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 74.
+                    </p>
+                    
+                    <p>
+                      When present, only data for origins in this list is deleted. Only supported for cookies, storage and cache. Cookies are cleared for the whole registrable domain.
+                    </p></td>
+                  </tr><tr id="property-RemovalOptions-excludeOrigins">
+                    <td>array of string</td>
+                    <td><span class="optional">(optional)</span>
+                        excludeOrigins</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 74.
+                    </p>
+                    
+                    <p>
+                      When present, data for origins in this list is excluded from deletion. Can&apos;t be used together with <code>origins</code>. Only supported for cookies, storage and cache.  Cookies are excluded for the whole registrable domain.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-DataTypeSet">DataTypeSet</h3>
+              <dd>A set of data types. Missing data types are interpreted as <code>false</code>.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="DataTypeSet-properties">properties</th></tr>
+                  <tr id="property-DataTypeSet-appcache">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        appcache</td>
+                    <td>
+                    
+                    <p>
+                      Websites&apos; appcaches.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-cache">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        cache</td>
+                    <td>
+                    
+                    <p>
+                      The browser&apos;s cache.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-cacheStorage">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        cacheStorage</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 72.
+                    </p>
+                    
+                    <p>
+                      Cache storage
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-cookies">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        cookies</td>
+                    <td>
+                    
+                    <p>
+                      The browser&apos;s cookies.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-downloads">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        downloads</td>
+                    <td>
+                    
+                    <p>
+                      The browser&apos;s download list.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-fileSystems">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        fileSystems</td>
+                    <td>
+                    
+                    <p>
+                      Websites&apos; file systems.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-formData">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        formData</td>
+                    <td>
+                    
+                    <p>
+                      The browser&apos;s stored form data.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-history">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        history</td>
+                    <td>
+                    
+                    <p>
+                      The browser&apos;s history.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-indexedDB">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        indexedDB</td>
+                    <td>
+                    
+                    <p>
+                      Websites&apos; IndexedDB data.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-localStorage">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        localStorage</td>
+                    <td>
+                    
+                    <p>
+                      Websites&apos; local storage data.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-serverBoundCertificates">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        serverBoundCertificates</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Deprecated</strong> since Chrome 76.
+                        Support for server-bound certificates has been removed. This data type will be ignored.
+                    </p>
+                    
+                    <p>
+                      Server-bound certificates.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-passwords">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        passwords</td>
+                    <td>
+                    
+                    <p>
+                      Stored passwords.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-pluginData">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        pluginData</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Deprecated</strong> since Chrome 88.
+                        Support for Flash has been removed. This data type will be ignored.
+                    </p>
+                    
+                    <p>
+                      Plugins&apos; data.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-serviceWorkers">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        serviceWorkers</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 39.
+                    </p>
+                    
+                    <p>
+                      Service Workers.
+                    </p></td>
+                  </tr><tr id="property-DataTypeSet-webSQL">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        webSQL</td>
+                    <td>
+                    
+                    <p>
+                      Websites&apos; WebSQL data.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-settings">settings
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.settings(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Reports which types of data are currently selected in the &apos;Clear browsing data&apos; settings UI.  Note: some of the data types included in this API are not available in the settings UI, and some UI settings control more than one data type listed here.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-settings-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>object</td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-result-options">
+                                    <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                                    <td>
+                                        options</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr><tr id="property-result-dataToRemove">
+                                    <td>    <a href="#type-DataTypeSet">DataTypeSet</a></td>
+                                    <td>
+                                        dataToRemove</td>
+                                    <td>
+                                    
+                                    <p>
+                                      All of the types will be present in the result, with values of <code>true</code> if they are both selected to be removed and permitted to be removed, otherwise <code>false</code>.
+                                    </p></td>
+                                  </tr><tr id="property-result-dataRemovalPermitted">
+                                    <td>    <a href="#type-DataTypeSet">DataTypeSet</a></td>
+                                    <td>
+                                        dataRemovalPermitted</td>
+                                    <td>
+                                    
+                                    <p>
+                                      All of the types will be present in the result, with values of <code>true</code> if they are permitted to be removed (e.g., by enterprise policy) and <code>false</code> if not.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-remove">remove
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.remove(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span>    <a href="#type-DataTypeSet">DataTypeSet</a> dataToRemove</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears various types of browsing data stored in a user&apos;s profile.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-remove-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-remove-dataToRemove">
+                      <td>    <a href="#type-DataTypeSet">DataTypeSet</a></td>
+                      <td>
+                          dataToRemove</td>
+                      <td>
+                      
+                      <p>
+                        The set of data types to remove.
+                      </p></td>
+                    </tr>
+                    <tr id="property-remove-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when deletion has completed.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeAppcache">removeAppcache
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeAppcache(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears websites&apos; appcache data.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeAppcache-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeAppcache-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when websites&apos; appcache data has been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeCache">removeCache
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeCache(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the browser&apos;s cache.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeCache-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeCache-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the browser&apos;s cache has been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeCacheStorage">removeCacheStorage
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeCacheStorage(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 72.
+                </p>
+                <p>
+                  Clears websites&apos; cache storage data.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeCacheStorage-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeCacheStorage-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when websites&apos; cache storage has been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeCookies">removeCookies
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeCookies(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the browser&apos;s cookies and server-bound certificates modified within a particular timeframe.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeCookies-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeCookies-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the browser&apos;s cookies and server-bound certificates have been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeDownloads">removeDownloads
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeDownloads(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the browser&apos;s list of downloaded files (<em>not</em> the downloaded files themselves).
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeDownloads-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeDownloads-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the browser&apos;s list of downloaded files has been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeFileSystems">removeFileSystems
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeFileSystems(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears websites&apos; file system data.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeFileSystems-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeFileSystems-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when websites&apos; file systems have been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeFormData">removeFormData
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeFormData(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the browser&apos;s stored form data (autofill).
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeFormData-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeFormData-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the browser&apos;s form data has been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeHistory">removeHistory
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeHistory(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the browser&apos;s history.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeHistory-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeHistory-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the browser&apos;s history has cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeIndexedDB">removeIndexedDB
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeIndexedDB(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears websites&apos; IndexedDB data.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeIndexedDB-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeIndexedDB-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when websites&apos; IndexedDB data has been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeLocalStorage">removeLocalStorage
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeLocalStorage(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears websites&apos; local storage data.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeLocalStorage-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeLocalStorage-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when websites&apos; local storage has been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removePluginData">removePluginData
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removePluginData(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  <strong>Deprecated</strong> since Chrome 88.
+                    Support for Flash has been removed. This function has no effect.
+                </p>
+                <p>
+                  Clears plugins&apos; data.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removePluginData-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removePluginData-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when plugins&apos; data has been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removePasswords">removePasswords
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removePasswords(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the browser&apos;s stored passwords.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removePasswords-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removePasswords-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the browser&apos;s passwords have been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeServiceWorkers">removeServiceWorkers
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeServiceWorkers(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 72.
+                </p>
+                <p>
+                  Clears websites&apos; service workers.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeServiceWorkers-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeServiceWorkers-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when websites&apos; service workers have been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeWebSQL">removeWebSQL
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browsingData.removeWebSQL(<span>    <a href="#type-RemovalOptions">RemovalOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears websites&apos; WebSQL data.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeWebSQL-options">
+                      <td>    <a href="#type-RemovalOptions">RemovalOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-removeWebSQL-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when websites&apos; WebSQL databases have been cleared.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.browserAction</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its <a href="#icon">icon</a>, a browser action can have a <a href="#tooltip">tooltip</a>, a <a href="#badge">badge</a>, and a <a href="#popups">popup</a>.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Manifest:</td>
+        <td>
+            <span class="code">
+            &quot;browser_action&quot;: {...}
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <p>
+      In the following figure,
+      the multicolored square
+      to the right of the address bar
+      is the icon for a browser action.
+      A popup is below the icon.
+      </p>
+      
+      <img src="assets/browser-action.png" width="363" height="226">
+      
+      <p>
+      If you want to create an icon that isn&apos;t always visible,
+      use a <a href="pageAction.html">page action</a>
+      instead of a browser action.
+      </p>
+      
+      <h2 id="manifest">Manifest</h2>
+      
+      <p>
+      Register your browser action in the
+      <a href="https://developer.chrome.com/extensions/manifest">extension manifest</a>
+      like this:
+      </p>
+      
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My extension&quot;,
+        ...
+        <b>&quot;browser_action&quot;: {
+          &quot;default_icon&quot;: {                    <em>// optional</em>
+            &quot;16&quot;: &quot;images/icon16.png&quot;,           <em>// optional</em>
+            &quot;24&quot;: &quot;images/icon24.png&quot;,           <em>// optional</em>
+            &quot;32&quot;: &quot;images/icon32.png&quot;            <em>// optional</em>
+          },
+          &quot;default_title&quot;: &quot;Google Mail&quot;,      <em>// optional; shown in tooltip</em>
+          &quot;default_popup&quot;: &quot;popup.html&quot;        <em>// optional</em>
+        }</b>,
+        ...
+      }
+      </pre>
+      
+      <p>
+      You can provide any size icon to be used in Chrome, and Chrome will select the
+      closest one and scale it to the appropriate size to fill the 16-dip space.
+      However, if the exact size isn&apos;t provided, this scaling can cause the icon to
+      lose detail or look fuzzy.
+      </p>
+      
+      <p>
+      Since devices with less-common scale factors like 1.5x or 1.2x are becoming more
+      common, you are encouraged to provide multiple sizes for your icons. This also
+      ensures that if the icon display size is ever changed, you don&apos;t need to do any
+      more work to provide different icons!
+      </p>
+      
+      <p>
+      The old syntax for registering the default icon is still supported:
+      </p>
+      
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My extension&quot;,
+        ...
+        <b>&quot;browser_action&quot;: {
+          ...
+          &quot;default_icon&quot;: &quot;images/icon32.png&quot;  <em>// optional</em>
+          <em>// equivalent to &quot;default_icon&quot;: { &quot;32&quot;: &quot;images/icon32.png&quot; }</em>
+        }</b>,
+        ...
+      }
+      </pre>
+      
+      <h2 id="ui">Parts of the UI</h2>
+      
+      <p>
+      A browser action can have an <a href="#icon">icon</a>,
+      a <a href="#tooltip">tooltip</a>,
+      a <a href="#badge">badge</a>,
+      and a <a href="#popups">popup</a>.
+      </p>
+      
+      <h3 id="icon">Icon</h3>
+      
+      <p>The browser action icons in Chrome are 16 dips (device-independent pixels)
+        wide and high. Larger icons are resized to fit, but for best results,
+        use a 16-dip square icon.</p>
+      
+      <p>You can set the icon in two ways:
+        using a static image or using the
+        HTML5 <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html">canvas element</a>.
+        Using static images is easier for simple applications,
+        but you can create more dynamic UIs &#x2014;
+        such as smooth animation &#x2014;
+        using the canvas element.
+        </p>
+      
+      <p>Static images can be in any format WebKit can display,
+        including BMP, GIF, ICO, JPEG, or PNG.
+        For unpacked extensions, images must be in the PNG format.
+        </p>
+      
+      <p>To set the icon,
+        use the <b>default_icon</b> field of <b>browser_action</b>
+        in the <a href="#manifest">manifest</a>,
+        or call the <a href="#method-setIcon">browserAction.setIcon</a> method.
+        </p>
+      
+      <p>To properly display icon when screen pixel density (ratio
+        <code>size_in_pixel / size_in_dip</code>) is different than 1,
+        the icon can be defined as set of images with different sizes.
+        The actual image to display will be selected from the set to
+        best fit the pixel size of 16 dip.
+        The icon set can contain any size icon specification, and Chrome will
+        select the most appropriate one.
+      </p>
+      
+      <h3 id="tooltip">Tooltip</h3>
+      
+      <p>
+      To set the tooltip,
+      use the <b>default_title</b> field of <b>browser_action</b>
+      in the <a href="#manifest">manifest</a>,
+      or call the <a href="#method-setTitle">browserAction.setTitle</a> method.
+      You can specify locale-specific strings for the <b>default_title</b> field;
+      see <a href="i18n.html">Internationalization</a> for details.
+      </p>
+      
+      <h3 id="badge">Badge</h3>
+      
+      <p>Browser actions can optionally display a <em>badge</em> &#x2014;
+        a bit of text that is layered over the icon.
+        Badges make it easy to update the browser action
+        to display a small amount of information
+        about the state of the extension.</p>
+      
+      <p>Because the badge has limited space,
+         it should have 4 characters or less.
+        </p>
+      
+      <p>
+      Set the text and color of the badge using
+      <a href="#method-setBadgeText">browserAction.setBadgeText</a> and
+      <a href="#method-setBadgeBackgroundColor">browserAction.setBadgeBackgroundColor</a>,
+      respectively.
+      
+      </p>
+      
+      
+      <h3 id="popups">Popup</h3>
+      
+      <p>If a browser action has a popup,
+        the popup appears when the user clicks the icon.
+        The popup can contain any HTML contents that you like,
+        and it&apos;s automatically sized to fit its contents.
+        </p>
+      
+      <p>
+      To add a popup to your browser action,
+      create an HTML file with the popup&apos;s contents.
+      Specify the HTML file in the <b>default_popup</b> field of <b>browser_action</b>
+      in the <a href="#manifest">manifest</a>, or call the
+      <a href="#method-setPopup">browserAction.setPopup</a> method.
+      </p>
+      
+      <h2 id="tips">Tips</h2>
+      
+      <p>For the best visual impact,
+        follow these guidelines:</p>
+      
+      <ul>
+        <li><b>Do</b> use browser actions for features
+          that make sense on most pages.
+        </li><li><b>Don&apos;t</b> use browser actions for features
+          that make sense for only a few pages.
+          Use <a href="pageAction.html">page actions</a> instead.
+        </li><li><b>Do</b> use big, colorful icons that make the most of
+          the 16x16-dip space.
+          Browser action icons should seem a little bigger
+          and heavier than page action icons.
+        </li><li><b>Don&apos;t</b> attempt to mimic
+          Google Chrome&apos;s monochrome menu icon.
+          That doesn&apos;t work well with themes, and anyway,
+          extensions should stand out a little.
+        </li><li><b>Do</b> use alpha transparency
+          to add soft edges to your icon.
+          Because many people use themes,
+          your icon should look nice
+          on a variety of background colors.
+        </li><li><b>Don&apos;t</b> constantly animate your icon.
+          That&apos;s just annoying.
+      </li></ul>
+      
+      <h2 id="examples"> Examples </h2>
+      
+      <p>
+      You can find simple examples of using browser actions in the
+      <a href="https://chromium.googlesource.com/chromium/src/+/master/chrome/common/extensions/docs/examples/api/browserAction/">examples/api/browserAction</a>
+      directory.
+      For other examples and for help in viewing the source code, see
+      <a href="https://developer.chrome.com/extensions/samples">Samples</a>.
+      </p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-ColorArray">ColorArray</a></td></tr>
+          <tr><td><a href="#type-ImageDataType">ImageDataType</a></td></tr>
+          <tr><td><a href="#type-TabDetails">TabDetails</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-setTitle">setTitle</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.setTitle(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getTitle">getTitle</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.getTitle(<span>    TabDetails details</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setIcon">setIcon</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.setIcon(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setPopup">setPopup</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.setPopup(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getPopup">getPopup</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.getPopup(<span>    TabDetails details</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setBadgeText">setBadgeText</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.setBadgeText(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getBadgeText">getBadgeText</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.getBadgeText(<span>    TabDetails details</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setBadgeBackgroundColor">setBadgeBackgroundColor</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.setBadgeBackgroundColor(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getBadgeBackgroundColor">getBadgeBackgroundColor</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.getBadgeBackgroundColor(<span>    TabDetails details</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-enable">enable</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.enable(<span class="optional">integer tabId</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-disable">disable</a> &#x2212;
+            <code class="prettyprint">
+            chrome.browserAction.disable(<span class="optional">integer tabId</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onClicked">onClicked</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-ColorArray">ColorArray</h3>
+              <dd>
+                  array of integer
+                </dd><table>
+                
+              </table>
+            </div>
+            <div>
+              <h3 id="type-ImageDataType">ImageDataType</h3>
+              <dd>Pixel data for an image. Must be an ImageData object; for example, from a <code>canvas</code> element.</dd><table>
+                
+              </table>
+            </div>
+            <div>
+              <h3 id="type-TabDetails">TabDetails</h3>
+              <p class="availability">
+                Since Chrome 88.
+                 <em>Warning:</em> this is the current <strong>Dev</strong> channel.
+                
+                 <a href="index.html#dev_apis">Learn more</a>.
+              </p>
+              <table>
+                  <tbody><tr><th colspan="3" id="TabDetails-properties">properties</th></tr>
+                  <tr id="property-TabDetails-tabId">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tabId</td>
+                    <td>
+                    
+                    <p>
+                      The ID of the tab to query state for. If no tab is specified, the non-tab-specific state is returned.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-setTitle">setTitle
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.setTitle(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the title of the browser action. This title appears in the tooltip.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setTitle-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-title">
+                            <td>string</td>
+                            <td>
+                                title</td>
+                            <td>
+                            
+                            <p>
+                              The string the browser action should display when moused over.
+                            </p></td>
+                          </tr><tr id="property-details-tabId">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                tabId</td>
+                            <td>
+                            
+                            <p>
+                              Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setTitle-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getTitle">getTitle
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.getTitle(<span>    <a href="#type-TabDetails">TabDetails</a> details</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the title of the browser action.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getTitle-details">
+                      <td>    <a href="#type-TabDetails">TabDetails</a></td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-getTitle-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(string result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>string</td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setIcon">setIcon
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.setIcon(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the icon for the browser action. The icon can be specified as the path to an image file, as the pixel data from a canvas element, or as a dictionary of one of those. Either the <code>path</code> or the <code>imageData</code> property must be specified.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setIcon-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-imageData">
+                            <td>    <a href="#type-ImageDataType">ImageDataType</a> or object</td>
+                            <td><span class="optional">(optional)</span>
+                                imageData</td>
+                            <td>
+                            
+                            <p>
+                              Either an ImageData object or a dictionary {size -&gt; ImageData} representing an icon to be set. If the icon is specified as a dictionary, the image used is chosen depending on the screen&apos;s pixel density. If the number of image pixels that fit into one screen space unit equals <code>scale</code>, then an image with size <code>scale</code> * n is selected, where <i>n</i> is the size of the icon in the UI. At least one image must be specified. Note that &apos;details.imageData = foo&apos; is equivalent to &apos;details.imageData = {&apos;16&apos;: foo}&apos;
+                            </p></td>
+                          </tr><tr id="property-details-path">
+                            <td>string or object</td>
+                            <td><span class="optional">(optional)</span>
+                                path</td>
+                            <td>
+                            
+                            <p>
+                              Either a relative image path or a dictionary {size -&gt; relative image path} pointing to an icon to be set. If the icon is specified as a dictionary, the image used is chosen depending on the screen&apos;s pixel density. If the number of image pixels that fit into one screen space unit equals <code>scale</code>, then an image with size <code>scale</code> * n is selected, where <i>n</i> is the size of the icon in the UI. At least one image must be specified. Note that &apos;details.path = foo&apos; is equivalent to &apos;details.path = {&apos;16&apos;: foo}&apos;
+                            </p></td>
+                          </tr><tr id="property-details-tabId">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                tabId</td>
+                            <td>
+                            
+                            <p>
+                              Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setIcon-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setPopup">setPopup
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.setPopup(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the HTML document to be opened as a popup when the user clicks the browser action icon.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setPopup-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-tabId">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                tabId</td>
+                            <td>
+                            
+                            <p>
+                              Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
+                            </p></td>
+                          </tr><tr id="property-details-popup">
+                            <td>string</td>
+                            <td>
+                                popup</td>
+                            <td>
+                            
+                            <p>
+                              The HTML file to show in a popup. If set to the empty string (&apos;&apos;), no popup is shown.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setPopup-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getPopup">getPopup
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.getPopup(<span>    <a href="#type-TabDetails">TabDetails</a> details</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the HTML document that is set as the popup for this browser action.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getPopup-details">
+                      <td>    <a href="#type-TabDetails">TabDetails</a></td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-getPopup-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(string result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>string</td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setBadgeText">setBadgeText
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.setBadgeText(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the badge text for the browser action. The badge is displayed on top of the icon.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setBadgeText-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-text">
+                            <td>string</td>
+                            <td><span class="optional">(optional)</span>
+                                text</td>
+                            <td>
+                            
+                            <p>
+                              Any number of characters can be passed, but only about four can fit into the space. If an empty string (<code>&apos;&apos;</code>) is passed, the badge text is cleared.  If <code>tabId</code> is specified and <code>text</code> is null, the text for the specified tab is cleared and defaults to the global badge text.
+                            </p></td>
+                          </tr><tr id="property-details-tabId">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                tabId</td>
+                            <td>
+                            
+                            <p>
+                              Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setBadgeText-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getBadgeText">getBadgeText
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.getBadgeText(<span>    <a href="#type-TabDetails">TabDetails</a> details</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the badge text of the browser action. If no tab is specified, the non-tab-specific badge text is returned.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getBadgeText-details">
+                      <td>    <a href="#type-TabDetails">TabDetails</a></td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-getBadgeText-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(string result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>string</td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setBadgeBackgroundColor">setBadgeBackgroundColor
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.setBadgeBackgroundColor(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the background color for the badge.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setBadgeBackgroundColor-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-color">
+                            <td>string or     <a href="#type-ColorArray">ColorArray</a></td>
+                            <td>
+                                color</td>
+                            <td>
+                            
+                            <p>
+                              An array of four integers in the range 0-255 that make up the RGBA color of the badge. Can also be a string with a CSS hex color value; for example, <code>#FF0000</code> or <code>#F00</code> (red). Renders colors at full opacity.
+                            </p></td>
+                          </tr><tr id="property-details-tabId">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                tabId</td>
+                            <td>
+                            
+                            <p>
+                              Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setBadgeBackgroundColor-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getBadgeBackgroundColor">getBadgeBackgroundColor
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.getBadgeBackgroundColor(<span>    <a href="#type-TabDetails">TabDetails</a> details</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the background color of the browser action.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getBadgeBackgroundColor-details">
+                      <td>    <a href="#type-TabDetails">TabDetails</a></td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-getBadgeBackgroundColor-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-ColorArray">ColorArray</a> result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>    <a href="#type-ColorArray">ColorArray</a></td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-enable">enable
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.enable(<span class="optional">integer tabId</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Enables the browser action for a tab. Defaults to enabled.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-enable-tabId">
+                      <td>integer</td>
+                      <td><span class="optional">(optional)</span>
+                          tabId</td>
+                      <td>
+                      
+                      <p>
+                        The ID of the tab for which to modify the browser action.
+                      </p></td>
+                    </tr>
+                    <tr id="property-enable-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-disable">disable
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.browserAction.disable(<span class="optional">integer tabId</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Disables the browser action for a tab.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-disable-tabId">
+                      <td>integer</td>
+                      <td><span class="optional">(optional)</span>
+                          tabId</td>
+                      <td>
+                      
+                      <p>
+                        The ID of the tab for which to modify the browser action.
+                      </p></td>
+                    </tr>
+                    <tr id="property-disable-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onClicked">onClicked</h3>
+              <div class="description">
+            <p>
+                  Fired when a browser action icon is clicked. Does not fire if the browser action has a popup.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.browserAction.onClicked.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onClicked-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="tabs.html#type-Tab">tabs.Tab</a> tab) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onClicked-tab">
+                                    <td>    <a href="tabs.html#type-Tab">tabs.Tab</a></td>
+                                    <td>
+                                        tab</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

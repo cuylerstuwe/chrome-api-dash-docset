@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<p class="warning">
+  This API is experimental. It is only available to Chrome users on the
+  <a href="http://www.chromium.org/getting-involved/dev-channel">dev channel</a>.
+</p>
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.processes</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.processes</code> API to interact with the browser&apos;s
+             processes.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            <strong>Dev</strong> channel only.
+            
+             <a href="index.html#dev_apis">Learn more</a>.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;processes&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-Cache">Cache</a></td></tr>
+          <tr><td><a href="#type-Process">Process</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-getProcessIdForTab">getProcessIdForTab</a> &#x2212;
+            <code class="prettyprint">
+            chrome.processes.getProcessIdForTab(<span>integer tabId</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-terminate">terminate</a> &#x2212;
+            <code class="prettyprint">
+            chrome.processes.terminate(<span>integer processId</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getProcessInfo">getProcessInfo</a> &#x2212;
+            <code class="prettyprint">
+            chrome.processes.getProcessInfo(<span>integer or array of integer processIds</span>, <span>boolean includeMemory</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onUpdated">onUpdated</a></td></tr>
+          <tr><td><a href="#event-onUpdatedWithMemory">onUpdatedWithMemory</a></td></tr>
+          <tr><td><a href="#event-onCreated">onCreated</a></td></tr>
+          <tr><td><a href="#event-onUnresponsive">onUnresponsive</a></td></tr>
+          <tr><td><a href="#event-onExited">onExited</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-Cache">Cache</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="Cache-properties">properties</th></tr>
+                  <tr id="property-Cache-size">
+                    <td>double</td>
+                    <td>
+                        size</td>
+                    <td>
+                    
+                    <p>
+                      The size of the cache, in bytes.
+                    </p></td>
+                  </tr><tr id="property-Cache-liveSize">
+                    <td>double</td>
+                    <td>
+                        liveSize</td>
+                    <td>
+                    
+                    <p>
+                      The part of the cache that is utilized, in bytes.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-Process">Process</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="Process-properties">properties</th></tr>
+                  <tr id="property-Process-id">
+                    <td>integer</td>
+                    <td>
+                        id</td>
+                    <td>
+                    
+                    <p>
+                      Unique ID of the process provided by the browser.
+                    </p></td>
+                  </tr><tr id="property-Process-osProcessId">
+                    <td>integer</td>
+                    <td>
+                        osProcessId</td>
+                    <td>
+                    
+                    <p>
+                      The ID of the process, as provided by the OS.
+                    </p></td>
+                  </tr><tr id="property-Process-type">
+                    <td>enum of    <code>&quot;browser&quot;</code>,    <code>&quot;renderer&quot;</code>,    <code>&quot;extension&quot;</code>,    <code>&quot;notification&quot;</code>,    <code>&quot;plugin&quot;</code>,    <code>&quot;worker&quot;</code>,    <code>&quot;nacl&quot;</code>,    <code>&quot;service_worker&quot;</code>,    <code>&quot;utility&quot;</code>,    <code>&quot;gpu&quot;</code>,    or <code>&quot;other&quot;</code></td>
+                    <td>
+                        type</td>
+                    <td>
+                    
+                    <p>
+                      The type of process.
+                    </p></td>
+                  </tr><tr id="property-Process-profile">
+                    <td>string</td>
+                    <td>
+                        profile</td>
+                    <td>
+                    
+                    <p>
+                      The profile which the process is associated with.
+                    </p></td>
+                  </tr><tr id="property-Process-naclDebugPort">
+                    <td>integer</td>
+                    <td>
+                        naclDebugPort</td>
+                    <td>
+                    
+                    <p>
+                      The debugging port for Native Client processes. Zero for other process types and for NaCl processes that do not have debugging enabled.
+                    </p></td>
+                  </tr><tr id="property-Process-tasks">
+                    <td>array of object</td>
+                    <td>
+                        tasks</td>
+                    <td>
+                    
+                    <p>
+                      Array of TaskInfos representing the tasks running on this process.
+                    </p>  <h4 title>Properties of each object</h4>
+                      <dl>
+                        <div>
+                          <table>
+                              <tbody><tr id="property-tasksType-title">
+                                <td>string</td>
+                                <td>
+                                    title</td>
+                                <td>
+                                
+                                <p>
+                                  The title of the task.
+                                </p></td>
+                              </tr><tr id="property-tasksType-tabId">
+                                <td>integer</td>
+                                <td><span class="optional">(optional)</span>
+                                    tabId</td>
+                                <td>
+                                
+                                <p>
+                                  Optional tab ID, if this task represents a tab running on a renderer process.
+                                </p></td>
+                              </tr>
+                          </tbody></table>
+                        </div>
+                      </dl>
+                    </td>
+                  </tr><tr id="property-Process-cpu">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        cpu</td>
+                    <td>
+                    
+                    <p>
+                      The most recent measurement of the process&#x2019;s CPU usage, expressed as the percentage of a single CPU core used in total, by all of the process&#x2019;s threads. This gives a value from zero to CpuInfo.numOfProcessors*100, which can exceed 100% in multi-threaded processes. Only available when receiving the object as part of a callback from onUpdated or onUpdatedWithMemory.
+                    </p></td>
+                  </tr><tr id="property-Process-network">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        network</td>
+                    <td>
+                    
+                    <p>
+                      The most recent measurement of the process network usage, in bytes per second. Only available when receiving the object as part of a callback from onUpdated or onUpdatedWithMemory.
+                    </p></td>
+                  </tr><tr id="property-Process-privateMemory">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        privateMemory</td>
+                    <td>
+                    
+                    <p>
+                      The most recent measurement of the process private memory usage, in bytes. Only available when receiving the object as part of a callback from onUpdatedWithMemory or getProcessInfo with the includeMemory flag.
+                    </p></td>
+                  </tr><tr id="property-Process-jsMemoryAllocated">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        jsMemoryAllocated</td>
+                    <td>
+                    
+                    <p>
+                      The most recent measurement of the process JavaScript allocated memory, in bytes. Only available when receiving the object as part of a callback from onUpdated or onUpdatedWithMemory.
+                    </p></td>
+                  </tr><tr id="property-Process-jsMemoryUsed">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        jsMemoryUsed</td>
+                    <td>
+                    
+                    <p>
+                      The most recent measurement of the process JavaScript memory used, in bytes. Only available when receiving the object as part of a callback from onUpdated or onUpdatedWithMemory.
+                    </p></td>
+                  </tr><tr id="property-Process-sqliteMemory">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        sqliteMemory</td>
+                    <td>
+                    
+                    <p>
+                      The most recent measurement of the process&#x2019;s SQLite memory usage, in bytes. Only available when receiving the object as part of a callback from onUpdated or onUpdatedWithMemory.
+                    </p></td>
+                  </tr><tr id="property-Process-imageCache">
+                    <td>    <a href="#type-Cache">Cache</a></td>
+                    <td><span class="optional">(optional)</span>
+                        imageCache</td>
+                    <td>
+                    
+                    <p>
+                      The most recent information about the image cache for the process. Only available when receiving the object as part of a callback from onUpdated or onUpdatedWithMemory.
+                    </p></td>
+                  </tr><tr id="property-Process-scriptCache">
+                    <td>    <a href="#type-Cache">Cache</a></td>
+                    <td><span class="optional">(optional)</span>
+                        scriptCache</td>
+                    <td>
+                    
+                    <p>
+                      The most recent information about the script cache for the process. Only available when receiving the object as part of a callback from onUpdated or onUpdatedWithMemory.
+                    </p></td>
+                  </tr><tr id="property-Process-cssCache">
+                    <td>    <a href="#type-Cache">Cache</a></td>
+                    <td><span class="optional">(optional)</span>
+                        cssCache</td>
+                    <td>
+                    
+                    <p>
+                      The most recent information about the CSS cache for the process. Only available when receiving the object as part of a callback from onUpdated or onUpdatedWithMemory.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-getProcessIdForTab">getProcessIdForTab
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.processes.getProcessIdForTab(<span>integer tabId</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns the ID of the renderer process for the specified tab.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getProcessIdForTab-tabId">
+                      <td>integer</td>
+                      <td>
+                          tabId</td>
+                      <td>
+                      
+                      <p>
+                        The ID of the tab for which the renderer process ID is to be returned.
+                      </p></td>
+                    </tr>
+                    <tr id="property-getProcessIdForTab-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        A callback to return the ID of the renderer process of a tab.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(integer processId) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-processId">
+                              <td>integer</td>
+                              <td>
+                                  processId</td>
+                              <td>
+                              
+                              <p>
+                                Process ID of the tab&apos;s renderer process.
+                              </p></td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-terminate">terminate
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.processes.terminate(<span>integer processId</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Terminates the specified renderer process. Equivalent to visiting about:crash, but without changing the tab&apos;s URL.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-terminate-processId">
+                      <td>integer</td>
+                      <td>
+                          processId</td>
+                      <td>
+                      
+                      <p>
+                        The ID of the process to be terminated.
+                      </p></td>
+                    </tr>
+                    <tr id="property-terminate-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        A callback to report the status of the termination.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean didTerminate) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-didTerminate">
+                              <td>boolean</td>
+                              <td>
+                                  didTerminate</td>
+                              <td>
+                              
+                              <p>
+                                True if terminating the process was successful, and false otherwise.
+                              </p></td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getProcessInfo">getProcessInfo
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.processes.getProcessInfo(<span>integer or array of integer processIds</span>, <span>boolean includeMemory</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Retrieves the process information for each process ID specified.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getProcessInfo-processIds">
+                      <td>integer or array of integer</td>
+                      <td>
+                          processIds</td>
+                      <td>
+                      
+                      <p>
+                        The list of process IDs or single process ID for which to return the process information. An empty list indicates all processes are requested.
+                      </p></td>
+                    </tr>
+                    <tr id="property-getProcessInfo-includeMemory">
+                      <td>boolean</td>
+                      <td>
+                          includeMemory</td>
+                      <td>
+                      
+                      <p>
+                        True if detailed memory usage is required. Note, collecting memory usage information incurs extra CPU usage and should only be queried for when needed.
+                      </p></td>
+                    </tr>
+                    <tr id="property-getProcessInfo-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        A callback called when the processes information is collected.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object processes) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-processes">
+                              <td>object</td>
+                              <td>
+                                  processes</td>
+                              <td>
+                              
+                              <p>
+                                A dictionary of <a href="#type-Process">Process</a> objects for each requested process that is a live child process of the current browser process, indexed by process ID. Metrics requiring aggregation over time will not be populated in each Process object.
+                              </p></td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onUpdated">onUpdated</h3>
+              <div class="description">
+            <p>
+                  Fired each time the Task Manager updates its process statistics, providing the dictionary of updated Process objects, indexed by process ID.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.processes.onUpdated.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onUpdated-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object processes) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onUpdated-processes">
+                                    <td>object</td>
+                                    <td>
+                                        processes</td>
+                                    <td>
+                                    
+                                    <p>
+                                      A dictionary of updated <a href="#type-Process">Process</a> objects for each live process in the browser, indexed by process ID.  Metrics requiring aggregation over time will be populated in each Process object.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onUpdatedWithMemory">onUpdatedWithMemory</h3>
+              <div class="description">
+            <p>
+                  Fired each time the Task Manager updates its process statistics, providing the dictionary of updated Process objects, indexed by process ID. Identical to onUpdate, with the addition of memory usage details included in each Process object. Note, collecting memory usage information incurs extra CPU usage and should only be listened for when needed.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.processes.onUpdatedWithMemory.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onUpdatedWithMemory-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object processes) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onUpdatedWithMemory-processes">
+                                    <td>object</td>
+                                    <td>
+                                        processes</td>
+                                    <td>
+                                    
+                                    <p>
+                                      A dictionary of updated <a href="#type-Process">Process</a> objects for each live process in the browser, indexed by process ID.  Memory usage details will be included in each Process object.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onCreated">onCreated</h3>
+              <div class="description">
+            <p>
+                  Fired each time a process is created, providing the corrseponding Process object.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.processes.onCreated.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onCreated-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-Process">Process</a> process) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onCreated-process">
+                                    <td>    <a href="#type-Process">Process</a></td>
+                                    <td>
+                                        process</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Details of the process that was created. Metrics requiring aggregation over time will not be populated in the object.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onUnresponsive">onUnresponsive</h3>
+              <div class="description">
+            <p>
+                  Fired each time a process becomes unresponsive, providing the corrseponding Process object.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.processes.onUnresponsive.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onUnresponsive-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-Process">Process</a> process) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onUnresponsive-process">
+                                    <td>    <a href="#type-Process">Process</a></td>
+                                    <td>
+                                        process</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Details of the unresponsive process. Metrics requiring aggregation over time will not be populated in the object. Only available for renderer processes.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onExited">onExited</h3>
+              <div class="description">
+            <p>
+                  Fired each time a process is terminated, providing the type of exit.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.processes.onExited.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onExited-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(integer processId, integer exitType, integer exitCode) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onExited-processId">
+                                    <td>integer</td>
+                                    <td>
+                                        processId</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The ID of the process that exited.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onExited-exitType">
+                                    <td>integer</td>
+                                    <td>
+                                        exitType</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The type of exit that occurred for the process - normal, abnormal, killed, crashed. Only available for renderer processes.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onExited-exitCode">
+                                    <td>integer</td>
+                                    <td>
+                                        exitCode</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The exit code if the process exited abnormally. Only available for renderer processes.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

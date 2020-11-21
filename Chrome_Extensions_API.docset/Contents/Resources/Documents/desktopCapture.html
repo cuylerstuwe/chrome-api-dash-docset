@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.desktopCapture</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Desktop Capture API that can be used to capture content of screen, individual windows or tabs.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;desktopCapture&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-DesktopCaptureSourceType">DesktopCaptureSourceType</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-chooseDesktopMedia">chooseDesktopMedia</a> &#x2212;
+            <code class="prettyprint">
+            integer
+            chrome.desktopCapture.chooseDesktopMedia(<span>array of     <a href="#type-DesktopCaptureSourceType">DesktopCaptureSourceType</a> sources</span>, <span class="optional">    tabs.Tab targetTab</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-cancelChooseDesktopMedia">cancelChooseDesktopMedia</a> &#x2212;
+            <code class="prettyprint">
+            chrome.desktopCapture.cancelChooseDesktopMedia(<span>integer desktopMediaRequestId</span>)
+            </code>
+          </td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-DesktopCaptureSourceType">DesktopCaptureSourceType</h3>
+              <dd>Enum used to define set of desktop media sources used in chooseDesktopMedia().</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;screen&quot;</code>, 
+                        <code>&quot;window&quot;</code>, 
+                        <code>&quot;tab&quot;</code>, 
+                        or <code>&quot;audio&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-chooseDesktopMedia">chooseDesktopMedia
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              integer
+              chrome.desktopCapture.chooseDesktopMedia(<span>array of     <a href="#type-DesktopCaptureSourceType">DesktopCaptureSourceType</a> sources</span>, <span class="optional">    <a href="tabs.html#type-Tab">tabs.Tab</a> targetTab</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Shows desktop media picker UI with the specified set of sources.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-chooseDesktopMedia-sources">
+                      <td>array of     <a href="#type-DesktopCaptureSourceType">DesktopCaptureSourceType</a></td>
+                      <td>
+                          sources</td>
+                      <td>
+                      
+                      <p>
+                        Set of sources that should be shown to the user. The sources order in the set decides the tab order in the picker.
+                      </p></td>
+                    </tr>
+                    <tr id="property-chooseDesktopMedia-targetTab">
+                      <td>    <a href="tabs.html#type-Tab">tabs.Tab</a></td>
+                      <td><span class="optional">(optional)</span>
+                          targetTab</td>
+                      <td>
+                      
+                      <p>
+                        Optional tab for which the stream is created. If not specified then the resulting stream can be used only by the calling extension. The stream can only be used by frames in the given tab whose security origin matches <code>tab.url</code>. The tab&apos;s origin must be a secure origin, e.g. HTTPS.
+                      </p></td>
+                    </tr>
+                    <tr id="property-chooseDesktopMedia-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(string streamId, object options) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-streamId">
+                              <td>string</td>
+                              <td>
+                                  streamId</td>
+                              <td>
+                              
+                              <p>
+                                An opaque string that can be passed to <code>getUserMedia()</code> API to generate media stream that corresponds to the source selected by the user. If user didn&apos;t select any source (i.e. canceled the prompt) then the callback is called with an empty <code>streamId</code>. The created <code>streamId</code> can be used only once and expires after a few seconds when it is not used.
+                              </p></td>
+                            </tr>
+                            <tr id="property-callback-options">
+                              <td>object</td>
+                              <td>
+                                  options</td>
+                              <td>
+                              
+                              <p>
+                                Contains properties that describe the stream.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-options-canRequestAudioTrack">
+                                    <td>boolean</td>
+                                    <td>
+                                        canRequestAudioTrack</td>
+                                    <td>
+                                    
+                                    <p>
+                                      True if &quot;audio&quot; is included in parameter sources, and the end user does not uncheck the &quot;Share audio&quot; checkbox. Otherwise false, and in this case, one should not ask for audio stream through getUserMedia call.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-cancelChooseDesktopMedia">cancelChooseDesktopMedia
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.desktopCapture.cancelChooseDesktopMedia(<span>integer desktopMediaRequestId</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Hides desktop media picker dialog shown by chooseDesktopMedia().
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-cancelChooseDesktopMedia-desktopMediaRequestId">
+                      <td>integer</td>
+                      <td>
+                          desktopMediaRequestId</td>
+                      <td>
+                      
+                      <p>
+                        Id returned by chooseDesktopMedia()
+                      </p></td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

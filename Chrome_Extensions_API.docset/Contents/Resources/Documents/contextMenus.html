@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.contextMenus</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.contextMenus</code> API to add items to Google Chrome&apos;s context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;contextMenus&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <h2 id="usage">Usage</h2>
+      
+      <p>
+      Context menu items can appear in any document
+      (or frame within a document),
+      even those with file:// or chrome:// URLs.
+      To control which documents your items can appear in,
+      specify the documentUrlPatterns field
+      when you call the create() or update() method.
+      </p>
+      
+      <p>
+      You can create as many context menu items
+      as you need, but if more than one
+      from your extension is visible at once,
+      Google Chrome automatically collapses them
+      into a single parent menu.
+      </p>
+      
+      <h2 id="manifest">Manifest</h2>
+      <p>
+      You must declare the &quot;contextMenus&quot; permission
+      in your extension&apos;s manifest to use the API.
+      Also, you should specify a 16x16-pixel icon
+      for display next to your menu item.
+      For example:
+      </p>
+      
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My extension&quot;,
+        ...
+        &quot;permissions&quot;: [
+          <b>&quot;contextMenus&quot;</b>
+        ],
+        &quot;icons&quot;: {
+          <b>&quot;16&quot;: &quot;icon-bitty.png&quot;,</b>
+          &quot;48&quot;: &quot;icon-small.png&quot;,
+          &quot;128&quot;: &quot;icon-large.png&quot;
+        },
+        ...
+      }
+      </pre>
+      
+      <h2 id="examples">Examples</h2>
+      
+      <p>
+      You can find samples of this API on the
+      <a href="https://developer.chrome.com/extensions/samples#search:contextMenus">sample page</a>.
+    </p></section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-ContextType">ContextType</a></td></tr>
+          <tr><td><a href="#type-ItemType">ItemType</a></td></tr>
+        <tr><th colspan="2">Properties</th></tr>
+          <tr><td><a href="#property-ACTION_MENU_TOP_LEVEL_LIMIT">ACTION_MENU_TOP_LEVEL_LIMIT</a></td>
+        </tr><tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-create">create</a> &#x2212;
+            <code class="prettyprint">
+            integer or 
+            string
+            chrome.contextMenus.create(<span>object createProperties</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-update">update</a> &#x2212;
+            <code class="prettyprint">
+            chrome.contextMenus.update(<span>integer or string id</span>, <span>object updateProperties</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-remove">remove</a> &#x2212;
+            <code class="prettyprint">
+            chrome.contextMenus.remove(<span>integer or string menuItemId</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeAll">removeAll</a> &#x2212;
+            <code class="prettyprint">
+            chrome.contextMenus.removeAll(<span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onClicked">onClicked</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-ContextType">ContextType</h3>
+              <dd>The different contexts a menu can appear in. Specifying &apos;all&apos; is equivalent to the combination of all other contexts except for &apos;launcher&apos;. The &apos;launcher&apos; context is only supported by apps and is used to add menu items to the context menu that appears when clicking the app icon in the launcher/taskbar/dock/etc. Different platforms might put limitations on what is actually supported in a launcher context menu.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;all&quot;</code>, 
+                        <code>&quot;page&quot;</code>, 
+                        <code>&quot;frame&quot;</code>, 
+                        <code>&quot;selection&quot;</code>, 
+                        <code>&quot;link&quot;</code>, 
+                        <code>&quot;editable&quot;</code>, 
+                        <code>&quot;image&quot;</code>, 
+                        <code>&quot;video&quot;</code>, 
+                        <code>&quot;audio&quot;</code>, 
+                        <code>&quot;launcher&quot;</code>, 
+                        <code>&quot;browser_action&quot;</code>, 
+                        <code>&quot;page_action&quot;</code>, 
+                        or <code>&quot;action&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ItemType">ItemType</h3>
+              <dd>The type of menu item.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;normal&quot;</code>, 
+                        <code>&quot;checkbox&quot;</code>, 
+                        <code>&quot;radio&quot;</code>, 
+                        or <code>&quot;separator&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+          <h2 id="properties">Properties</h2>
+          <table>
+            <tbody><tr>
+              <td><span class="type_name">  <code>6</code></span></td>
+              <td><code id="property-ACTION_MENU_TOP_LEVEL_LIMIT">chrome.contextMenus.ACTION_MENU_TOP_LEVEL_LIMIT</code></td>
+              <td>
+                  The maximum number of top level extension items that can be added to an extension action context menu. Any items beyond this limit will be ignored.
+              </td>
+            </tr>
+          </tbody></table>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-create">create
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              integer or 
+              string
+              chrome.contextMenus.create(<span>object createProperties</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Creates a new context menu item. If an error occurs during creation, it may not be detected until the creation callback fires; details will be in <a href="runtime.html#property-lastError">runtime.lastError</a>.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-create-createProperties">
+                      <td>object</td>
+                      <td>
+                          createProperties</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-createProperties-type">
+                            <td>    <a href="#type-ItemType">ItemType</a></td>
+                            <td><span class="optional">(optional)</span>
+                                type</td>
+                            <td>
+                            
+                            <p>
+                              The type of menu item. Defaults to <code>normal</code>.
+                            </p></td>
+                          </tr><tr id="property-createProperties-id">
+                            <td>string</td>
+                            <td><span class="optional">(optional)</span>
+                                id</td>
+                            <td>
+                            
+                            <p>
+                              The unique ID to assign to this item. Mandatory for event pages. Cannot be the same as another ID for this extension.
+                            </p></td>
+                          </tr><tr id="property-createProperties-title">
+                            <td>string</td>
+                            <td><span class="optional">(optional)</span>
+                                title</td>
+                            <td>
+                            
+                            <p>
+                              The text to display in the item; this is <em>required</em> unless <code>type</code> is <code>separator</code>. When the context is <code>selection</code>, use <code>%s</code> within the string to show the selected text. For example, if this parameter&apos;s value is &quot;Translate &apos;%s&apos; to Pig Latin&quot; and the user selects the word &quot;cool&quot;, the context menu item for the selection is &quot;Translate &apos;cool&apos; to Pig Latin&quot;.
+                            </p></td>
+                          </tr><tr id="property-createProperties-checked">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                checked</td>
+                            <td>
+                            
+                            <p>
+                              The initial state of a checkbox or radio button: <code>true</code> for selected, <code>false</code> for unselected. Only one radio button can be selected at a time in a given group.
+                            </p></td>
+                          </tr><tr id="property-createProperties-contexts">
+                            <td>array of     <a href="#type-ContextType">ContextType</a></td>
+                            <td><span class="optional">(optional)</span>
+                                contexts</td>
+                            <td>
+                            
+                            <p>
+                              List of contexts this menu item will appear in. Defaults to <code>[&apos;page&apos;]</code>.
+                            </p></td>
+                          </tr><tr id="property-createProperties-visible">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                visible</td>
+                            <td>
+                            <p class="availability">
+                              Since Chrome 62.
+                            </p>
+                            
+                            <p>
+                              Whether the item is visible in the menu.
+                            </p></td>
+                          </tr><tr id="property-createProperties-onclick">
+                            <td>function</td>
+                            <td><span class="optional">(optional)</span>
+                                onclick</td>
+                            <td>
+                            
+                            <p>
+                              A function that is called back when the menu item is clicked. Event pages cannot use this; instead, they should register a listener for <a href="#event-onClicked">contextMenus.onClicked</a>.
+                            </p>  <table class="innerTable">
+                                <tbody><tr><th colspan="3">Parameters</th></tr>
+                                <tr id="property-onclick-info">
+                                  <td>object</td>
+                                  <td>
+                                      info</td>
+                                  <td>
+                                  
+                                  <p>
+                                    Information about the item clicked and the context where the click happened.
+                                  </p>  <table class="innerTable">
+                                      <tbody><tr id="property-info-menuItemId">
+                                        <td>integer or string</td>
+                                        <td>
+                                            menuItemId</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The ID of the menu item that was clicked.
+                                        </p></td>
+                                      </tr><tr id="property-info-parentMenuItemId">
+                                        <td>integer or string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            parentMenuItemId</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The parent ID, if any, for the item clicked.
+                                        </p></td>
+                                      </tr><tr id="property-info-mediaType">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            mediaType</td>
+                                        <td>
+                                        
+                                        <p>
+                                          One of &apos;image&apos;, &apos;video&apos;, or &apos;audio&apos; if the context menu was activated on one of these types of elements.
+                                        </p></td>
+                                      </tr><tr id="property-info-linkUrl">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            linkUrl</td>
+                                        <td>
+                                        
+                                        <p>
+                                          If the element is a link, the URL it points to.
+                                        </p></td>
+                                      </tr><tr id="property-info-srcUrl">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            srcUrl</td>
+                                        <td>
+                                        
+                                        <p>
+                                          Will be present for elements with a &apos;src&apos; URL.
+                                        </p></td>
+                                      </tr><tr id="property-info-pageUrl">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            pageUrl</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The URL of the page where the menu item was clicked. This property is not set if the click occured in a context where there is no current page, such as in a launcher context menu.
+                                        </p></td>
+                                      </tr><tr id="property-info-frameUrl">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            frameUrl</td>
+                                        <td>
+                                        
+                                        <p>
+                                           The URL of the frame of the element where the context menu was clicked, if it was in a frame.
+                                        </p></td>
+                                      </tr><tr id="property-info-frameId">
+                                        <td>integer</td>
+                                        <td><span class="optional">(optional)</span>
+                                            frameId</td>
+                                        <td>
+                                        
+                                        <p>
+                                           The <a href="webNavigation.html#frame_ids">ID of the frame</a> of the element where the context menu was clicked, if it was in a frame.
+                                        </p></td>
+                                      </tr><tr id="property-info-selectionText">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            selectionText</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The text for the context selection, if any.
+                                        </p></td>
+                                      </tr><tr id="property-info-editable">
+                                        <td>boolean</td>
+                                        <td>
+                                            editable</td>
+                                        <td>
+                                        
+                                        <p>
+                                          A flag indicating whether the element is editable (text input, textarea, etc.).
+                                        </p></td>
+                                      </tr><tr id="property-info-wasChecked">
+                                        <td>boolean</td>
+                                        <td><span class="optional">(optional)</span>
+                                            wasChecked</td>
+                                        <td>
+                                        
+                                        <p>
+                                          A flag indicating the state of a checkbox or radio item before it was clicked.
+                                        </p></td>
+                                      </tr><tr id="property-info-checked">
+                                        <td>boolean</td>
+                                        <td><span class="optional">(optional)</span>
+                                            checked</td>
+                                        <td>
+                                        
+                                        <p>
+                                          A flag indicating the state of a checkbox or radio item after it is clicked.
+                                        </p></td>
+                                      </tr>
+                                    </tbody></table>
+                                  </td>
+                                </tr><tr id="property-onclick-tab">
+                                  <td>    <a href="tabs.html#type-Tab">tabs.Tab</a></td>
+                                  <td>
+                                      tab</td>
+                                  <td>
+                                  
+                                  <p>
+                                    The details of the tab where the click took place. This parameter is not present for platform apps.
+                                  </p></td>
+                                </tr>
+                              </tbody></table>
+                            </td>
+                          </tr><tr id="property-createProperties-parentId">
+                            <td>integer or string</td>
+                            <td><span class="optional">(optional)</span>
+                                parentId</td>
+                            <td>
+                            
+                            <p>
+                              The ID of a parent menu item; this makes the item a child of a previously added item.
+                            </p></td>
+                          </tr><tr id="property-createProperties-documentUrlPatterns">
+                            <td>array of string</td>
+                            <td><span class="optional">(optional)</span>
+                                documentUrlPatterns</td>
+                            <td>
+                            
+                            <p>
+                              Restricts the item to apply only to documents or frames whose URL matches one of the given patterns. For details on pattern formats, see <a href="https://developer.chrome.com/extensions/match_patterns">Match Patterns</a>.
+                            </p></td>
+                          </tr><tr id="property-createProperties-targetUrlPatterns">
+                            <td>array of string</td>
+                            <td><span class="optional">(optional)</span>
+                                targetUrlPatterns</td>
+                            <td>
+                            
+                            <p>
+                              Similar to <code>documentUrlPatterns</code>, filters based on the <code>src</code> attribute of <code>img</code>, <code>audio</code>, and <code>video</code> tags and the <code>href</code> attribute of <code>a</code> tags.
+                            </p></td>
+                          </tr><tr id="property-createProperties-enabled">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                enabled</td>
+                            <td>
+                            
+                            <p>
+                              Whether this context menu item is enabled or disabled. Defaults to <code>true</code>.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-create-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the item has been created in the browser. If an error occurs during creation, details will be available in <a href="runtime.html#property-lastError">runtime.lastError</a>.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-update">update
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.contextMenus.update(<span>integer or string id</span>, <span>object updateProperties</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Updates a previously created context menu item.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-update-id">
+                      <td>integer or string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        The ID of the item to update.
+                      </p></td>
+                    </tr>
+                    <tr id="property-update-updateProperties">
+                      <td>object</td>
+                      <td>
+                          updateProperties</td>
+                      <td>
+                      
+                      <p>
+                        The properties to update. Accepts the same values as the <a href="#method-create">contextMenus.create</a> function.
+                      </p>  <table class="innerTable">
+                          <tbody><tr id="property-updateProperties-type">
+                            <td>    <a href="#type-ItemType">ItemType</a></td>
+                            <td><span class="optional">(optional)</span>
+                                type</td>
+                            <td>
+                            
+                            </td>
+                          </tr><tr id="property-updateProperties-title">
+                            <td>string</td>
+                            <td><span class="optional">(optional)</span>
+                                title</td>
+                            <td>
+                            
+                            </td>
+                          </tr><tr id="property-updateProperties-checked">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                checked</td>
+                            <td>
+                            
+                            </td>
+                          </tr><tr id="property-updateProperties-contexts">
+                            <td>array of     <a href="#type-ContextType">ContextType</a></td>
+                            <td><span class="optional">(optional)</span>
+                                contexts</td>
+                            <td>
+                            
+                            </td>
+                          </tr><tr id="property-updateProperties-visible">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                visible</td>
+                            <td>
+                            <p class="availability">
+                              Since Chrome 62.
+                            </p>
+                            
+                            <p>
+                              Whether the item is visible in the menu.
+                            </p></td>
+                          </tr><tr id="property-updateProperties-onclick">
+                            <td>function</td>
+                            <td><span class="optional">(optional)</span>
+                                onclick</td>
+                            <td>
+                            
+                              <table class="innerTable">
+                                <tbody><tr><th colspan="3">Parameters</th></tr>
+                                <tr id="property-onclick-info">
+                                  <td>object</td>
+                                  <td>
+                                      info</td>
+                                  <td>
+                                  <p class="availability">
+                                    Since Chrome 44.
+                                  </p>
+                                  
+                                  <p>
+                                    Information sent when a context menu item is clicked.
+                                  </p>  <table class="innerTable">
+                                      <tbody><tr id="property-info-menuItemId">
+                                        <td>integer or string</td>
+                                        <td>
+                                            menuItemId</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The ID of the menu item that was clicked.
+                                        </p></td>
+                                      </tr><tr id="property-info-parentMenuItemId">
+                                        <td>integer or string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            parentMenuItemId</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The parent ID, if any, for the item clicked.
+                                        </p></td>
+                                      </tr><tr id="property-info-mediaType">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            mediaType</td>
+                                        <td>
+                                        
+                                        <p>
+                                          One of &apos;image&apos;, &apos;video&apos;, or &apos;audio&apos; if the context menu was activated on one of these types of elements.
+                                        </p></td>
+                                      </tr><tr id="property-info-linkUrl">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            linkUrl</td>
+                                        <td>
+                                        
+                                        <p>
+                                          If the element is a link, the URL it points to.
+                                        </p></td>
+                                      </tr><tr id="property-info-srcUrl">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            srcUrl</td>
+                                        <td>
+                                        
+                                        <p>
+                                          Will be present for elements with a &apos;src&apos; URL.
+                                        </p></td>
+                                      </tr><tr id="property-info-pageUrl">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            pageUrl</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The URL of the page where the menu item was clicked. This property is not set if the click occured in a context where there is no current page, such as in a launcher context menu.
+                                        </p></td>
+                                      </tr><tr id="property-info-frameUrl">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            frameUrl</td>
+                                        <td>
+                                        
+                                        <p>
+                                           The URL of the frame of the element where the context menu was clicked, if it was in a frame.
+                                        </p></td>
+                                      </tr><tr id="property-info-frameId">
+                                        <td>integer</td>
+                                        <td><span class="optional">(optional)</span>
+                                            frameId</td>
+                                        <td>
+                                        
+                                        <p>
+                                           The <a href="webNavigation.html#frame_ids">ID of the frame</a> of the element where the context menu was clicked, if it was in a frame.
+                                        </p></td>
+                                      </tr><tr id="property-info-selectionText">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            selectionText</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The text for the context selection, if any.
+                                        </p></td>
+                                      </tr><tr id="property-info-editable">
+                                        <td>boolean</td>
+                                        <td>
+                                            editable</td>
+                                        <td>
+                                        
+                                        <p>
+                                          A flag indicating whether the element is editable (text input, textarea, etc.).
+                                        </p></td>
+                                      </tr><tr id="property-info-wasChecked">
+                                        <td>boolean</td>
+                                        <td><span class="optional">(optional)</span>
+                                            wasChecked</td>
+                                        <td>
+                                        
+                                        <p>
+                                          A flag indicating the state of a checkbox or radio item before it was clicked.
+                                        </p></td>
+                                      </tr><tr id="property-info-checked">
+                                        <td>boolean</td>
+                                        <td><span class="optional">(optional)</span>
+                                            checked</td>
+                                        <td>
+                                        
+                                        <p>
+                                          A flag indicating the state of a checkbox or radio item after it is clicked.
+                                        </p></td>
+                                      </tr>
+                                    </tbody></table>
+                                  </td>
+                                </tr><tr id="property-onclick-tab">
+                                  <td>    <a href="tabs.html#type-Tab">tabs.Tab</a></td>
+                                  <td>
+                                      tab</td>
+                                  <td>
+                                  <p class="availability">
+                                    Since Chrome 44.
+                                  </p>
+                                  
+                                  <p>
+                                    The details of the tab where the click took place. This parameter is not present for platform apps.
+                                  </p></td>
+                                </tr>
+                              </tbody></table>
+                            </td>
+                          </tr><tr id="property-updateProperties-parentId">
+                            <td>integer or string</td>
+                            <td><span class="optional">(optional)</span>
+                                parentId</td>
+                            <td>
+                            
+                            <p>
+                              The ID of the item to be made this item&apos;s parent. Note: You cannot set an item to become a child of its own descendant.
+                            </p></td>
+                          </tr><tr id="property-updateProperties-documentUrlPatterns">
+                            <td>array of string</td>
+                            <td><span class="optional">(optional)</span>
+                                documentUrlPatterns</td>
+                            <td>
+                            
+                            </td>
+                          </tr><tr id="property-updateProperties-targetUrlPatterns">
+                            <td>array of string</td>
+                            <td><span class="optional">(optional)</span>
+                                targetUrlPatterns</td>
+                            <td>
+                            
+                            </td>
+                          </tr><tr id="property-updateProperties-enabled">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                enabled</td>
+                            <td>
+                            
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-update-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the context menu has been updated.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-remove">remove
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.contextMenus.remove(<span>integer or string menuItemId</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Removes a context menu item.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-remove-menuItemId">
+                      <td>integer or string</td>
+                      <td>
+                          menuItemId</td>
+                      <td>
+                      
+                      <p>
+                        The ID of the context menu item to remove.
+                      </p></td>
+                    </tr>
+                    <tr id="property-remove-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the context menu has been removed.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeAll">removeAll
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.contextMenus.removeAll(<span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Removes all context menu items added by this extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeAll-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when removal is complete.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onClicked">onClicked</h3>
+              <div class="description">
+            <p>
+                  Fired when a context menu item is clicked.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.contextMenus.onClicked.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onClicked-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object info,     <a href="tabs.html#type-Tab">tabs.Tab</a> tab) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onClicked-info">
+                                    <td>object</td>
+                                    <td>
+                                        info</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Information about the item clicked and the context where the click happened.
+                                    </p>  <table class="innerTable">
+                                        <tbody><tr id="property-info-menuItemId">
+                                          <td>integer or string</td>
+                                          <td>
+                                              menuItemId</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The ID of the menu item that was clicked.
+                                          </p></td>
+                                        </tr><tr id="property-info-parentMenuItemId">
+                                          <td>integer or string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              parentMenuItemId</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The parent ID, if any, for the item clicked.
+                                          </p></td>
+                                        </tr><tr id="property-info-mediaType">
+                                          <td>string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              mediaType</td>
+                                          <td>
+                                          
+                                          <p>
+                                            One of &apos;image&apos;, &apos;video&apos;, or &apos;audio&apos; if the context menu was activated on one of these types of elements.
+                                          </p></td>
+                                        </tr><tr id="property-info-linkUrl">
+                                          <td>string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              linkUrl</td>
+                                          <td>
+                                          
+                                          <p>
+                                            If the element is a link, the URL it points to.
+                                          </p></td>
+                                        </tr><tr id="property-info-srcUrl">
+                                          <td>string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              srcUrl</td>
+                                          <td>
+                                          
+                                          <p>
+                                            Will be present for elements with a &apos;src&apos; URL.
+                                          </p></td>
+                                        </tr><tr id="property-info-pageUrl">
+                                          <td>string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              pageUrl</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The URL of the page where the menu item was clicked. This property is not set if the click occured in a context where there is no current page, such as in a launcher context menu.
+                                          </p></td>
+                                        </tr><tr id="property-info-frameUrl">
+                                          <td>string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              frameUrl</td>
+                                          <td>
+                                          
+                                          <p>
+                                             The URL of the frame of the element where the context menu was clicked, if it was in a frame.
+                                          </p></td>
+                                        </tr><tr id="property-info-frameId">
+                                          <td>integer</td>
+                                          <td><span class="optional">(optional)</span>
+                                              frameId</td>
+                                          <td>
+                                          
+                                          <p>
+                                             The <a href="webNavigation.html#frame_ids">ID of the frame</a> of the element where the context menu was clicked, if it was in a frame.
+                                          </p></td>
+                                        </tr><tr id="property-info-selectionText">
+                                          <td>string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              selectionText</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The text for the context selection, if any.
+                                          </p></td>
+                                        </tr><tr id="property-info-editable">
+                                          <td>boolean</td>
+                                          <td>
+                                              editable</td>
+                                          <td>
+                                          
+                                          <p>
+                                            A flag indicating whether the element is editable (text input, textarea, etc.).
+                                          </p></td>
+                                        </tr><tr id="property-info-wasChecked">
+                                          <td>boolean</td>
+                                          <td><span class="optional">(optional)</span>
+                                              wasChecked</td>
+                                          <td>
+                                          
+                                          <p>
+                                            A flag indicating the state of a checkbox or radio item before it was clicked.
+                                          </p></td>
+                                        </tr><tr id="property-info-checked">
+                                          <td>boolean</td>
+                                          <td><span class="optional">(optional)</span>
+                                              checked</td>
+                                          <td>
+                                          
+                                          <p>
+                                            A flag indicating the state of a checkbox or radio item after it is clicked.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onClicked-tab">
+                                    <td>    <a href="tabs.html#type-Tab">tabs.Tab</a></td>
+                                    <td><span class="optional">(optional)</span>
+                                        tab</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The details of the tab where the click took place. If the click did not take place in a tab, this parameter will be missing.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

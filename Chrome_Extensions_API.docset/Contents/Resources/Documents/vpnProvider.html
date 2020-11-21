@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.vpnProvider</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.vpnProvider</code> API to implement a VPN
+             client.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 43.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;vpnProvider&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <p class="caution">
+      <b>Important:</b>
+      This API works <b>only on Chrome OS</b>.
+    </p>
+    <section>
+      <h2 id="usage">Usage</h2>
+      <p>
+      Typical usage of vpnProvider is as follows:
+      
+      </p><ul>
+        <li>Create VPN configurations using the <a href="#method-createConfig">createConfig</a> method. A VPN
+          configuration is a persistent entry shown to the user in a native Chrome OS
+          UI. The user can select a VPN configuration from a list and connect to it or
+          disconnect from it.</li>
+        <li>Add listeners to the events <a href="#event-onPlatformMessage">onPlatformMessage</a>,
+          <a href="#event-onPacketReceived">onPacketReceived</a> and <a href="#event-onConfigRemoved">onConfigRemoved</a>.</li>
+        <li>When the user connects to the VPN configuration, <a href="#event-onPlatformMessage">onPlatformMessage</a>
+          will be received with the message <code>&quot;connected&quot;</code>. We refer to the
+          period between the messages <code>&quot;connected&quot;</code> and
+          <code>&quot;disconnected&quot;</code> as a VPN session. In this time period, the
+          extension that receives the message is said to own the VPN session.</li>
+        <li>Initiate connection to the VPN server and start the VPN client.</li>
+        <li>Set the Parameters of the connection using <a href="#method-setParameters">setParameters</a>.</li>
+        <li>Notify the connection state as <code>&quot;connected&quot;</code> using
+          <a href="#method-notifyConnectionStateChanged">notifyConnectionStateChanged</a>.</li>
+        <li>When the steps above are completed without errors, a virtual tunnel is
+          created to the network stack of Chrome OS. IP packets can be sent through
+          the tunnel using <a href="#method-sendPacket">sendPacket</a> and any packets originating on the Chrome
+          OS device will be received using the event <a href="#event-onPacketReceived">onPacketReceived</a>.</li>
+        <li>When the user disconnects from the VPN configuration,
+          <a href="#event-onPlatformMessage">onPlatformMessage</a> will be fired with the message
+          <code>&quot;disconnected&quot;</code>.</li>
+        <li>If the VPN configuration is no longer necessary, it can be destroyed using
+          <a href="#method-destroyConfig">destroyConfig</a>.</li>
+      </ul>
+      <p></p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-createConfig">createConfig</a> &#x2212;
+            <code class="prettyprint">
+            chrome.vpnProvider.createConfig(<span>string name</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-destroyConfig">destroyConfig</a> &#x2212;
+            <code class="prettyprint">
+            chrome.vpnProvider.destroyConfig(<span>string id</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setParameters">setParameters</a> &#x2212;
+            <code class="prettyprint">
+            chrome.vpnProvider.setParameters(<span>object parameters</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-sendPacket">sendPacket</a> &#x2212;
+            <code class="prettyprint">
+            chrome.vpnProvider.sendPacket(<span>ArrayBuffer data</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-notifyConnectionStateChanged">notifyConnectionStateChanged</a> &#x2212;
+            <code class="prettyprint">
+            chrome.vpnProvider.notifyConnectionStateChanged(<span>enum of    <code>&quot;connected&quot;</code>,    or <code>&quot;failure&quot;</code> state</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onPlatformMessage">onPlatformMessage</a></td></tr>
+          <tr><td><a href="#event-onPacketReceived">onPacketReceived</a></td></tr>
+          <tr><td><a href="#event-onConfigRemoved">onConfigRemoved</a></td></tr>
+          <tr><td><a href="#event-onConfigCreated">onConfigCreated</a></td></tr>
+          <tr><td><a href="#event-onUIEvent">onUIEvent</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-createConfig">createConfig
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.vpnProvider.createConfig(<span>string name</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Creates a new VPN configuration that persists across multiple login sessions of the user.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-createConfig-name">
+                      <td>string</td>
+                      <td>
+                          name</td>
+                      <td>
+                      
+                      <p>
+                        The name of the VPN configuration.
+                      </p></td>
+                    </tr>
+                    <tr id="property-createConfig-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the configuration is created or if there is an error.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(string id) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-id">
+                              <td>string</td>
+                              <td>
+                                  id</td>
+                              <td>
+                              
+                              <p>
+                                A unique ID for the created configuration, or <code>undefined</code> on failure.
+                              </p></td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-destroyConfig">destroyConfig
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.vpnProvider.destroyConfig(<span>string id</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Destroys a VPN configuration created by the extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-destroyConfig-id">
+                      <td>string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        ID of the VPN configuration to destroy.
+                      </p></td>
+                    </tr>
+                    <tr id="property-destroyConfig-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the configuration is destroyed or if there is an error.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setParameters">setParameters
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.vpnProvider.setParameters(<span>object parameters</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the parameters for the VPN session. This should be called immediately after <code>&quot;connected&quot;</code> is received from the platform. This will succeed only when the VPN session is owned by the extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setParameters-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                      <p>
+                        The parameters for the VPN session.
+                      </p>  <table class="innerTable">
+                          <tbody><tr id="property-parameters-address">
+                            <td>string</td>
+                            <td>
+                                address</td>
+                            <td>
+                            
+                            <p>
+                              IP address for the VPN interface in CIDR notation. IPv4 is currently the only supported mode.
+                            </p></td>
+                          </tr><tr id="property-parameters-broadcastAddress">
+                            <td>string</td>
+                            <td><span class="optional">(optional)</span>
+                                broadcastAddress</td>
+                            <td>
+                            
+                            <p>
+                              Broadcast address for the VPN interface. (default: deduced from IP address and mask)
+                            </p></td>
+                          </tr><tr id="property-parameters-mtu">
+                            <td>string</td>
+                            <td><span class="optional">(optional)</span>
+                                mtu</td>
+                            <td>
+                            
+                            <p>
+                              MTU setting for the VPN interface. (default: 1500 bytes)
+                            </p></td>
+                          </tr><tr id="property-parameters-exclusionList">
+                            <td>array of string</td>
+                            <td>
+                                exclusionList</td>
+                            <td>
+                            
+                            <p>
+                              Exclude network traffic to the list of IP blocks in CIDR notation from the tunnel. This can be used to bypass traffic to and from the VPN server. When many rules match a destination, the rule with the longest matching prefix wins. Entries that correspond to the same CIDR block are treated as duplicates. Such duplicates in the collated (exclusionList + inclusionList) list are eliminated and the exact duplicate entry that will be eliminated is undefined.
+                            </p></td>
+                          </tr><tr id="property-parameters-inclusionList">
+                            <td>array of string</td>
+                            <td>
+                                inclusionList</td>
+                            <td>
+                            
+                            <p>
+                              Include network traffic to the list of IP blocks in CIDR notation to the tunnel. This parameter can be used to set up a split tunnel. By default no traffic is directed to the tunnel. Adding the entry &quot;0.0.0.0/0&quot; to this list gets all the user traffic redirected to the tunnel. When many rules match a destination, the rule with the longest matching prefix wins. Entries that correspond to the same CIDR block are treated as duplicates. Such duplicates in the collated (exclusionList + inclusionList) list are eliminated and the exact duplicate entry that will be eliminated is undefined.
+                            </p></td>
+                          </tr><tr id="property-parameters-domainSearch">
+                            <td>array of string</td>
+                            <td><span class="optional">(optional)</span>
+                                domainSearch</td>
+                            <td>
+                            
+                            <p>
+                              A list of search domains. (default: no search domain)
+                            </p></td>
+                          </tr><tr id="property-parameters-dnsServers">
+                            <td>array of string</td>
+                            <td>
+                                dnsServers</td>
+                            <td>
+                            
+                            <p>
+                              A list of IPs for the DNS servers.
+                            </p></td>
+                          </tr><tr id="property-parameters-reconnect">
+                            <td>string</td>
+                            <td><span class="optional">(optional)</span>
+                                reconnect</td>
+                            <td>
+                            <p class="availability">
+                              Since Chrome 51.
+                            </p>
+                            
+                            <p>
+                              </p><p>Whether or not the VPN extension implements auto-reconnection.</p><p>If true, the <code>linkDown</code>, <code>linkUp</code>, <code>linkChanged</code>, <code>suspend</code>, and <code>resume</code> platform messages will be used to signal the respective events. If false, the system will forcibly disconnect the VPN if the network topology changes, and the user will need to reconnect manually. (default: false)</p><p>This property is new in Chrome 51; it will generate an exception in earlier versions. try/catch can be used to conditionally enable the feature based on browser support.</p>
+                            <p></p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setParameters-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the parameters are set or if there is an error.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-sendPacket">sendPacket
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.vpnProvider.sendPacket(<span>ArrayBuffer data</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sends an IP packet through the tunnel created for the VPN session. This will succeed only when the VPN session is owned by the extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-sendPacket-data">
+                      <td>ArrayBuffer</td>
+                      <td>
+                          data</td>
+                      <td>
+                      
+                      <p>
+                        The IP packet to be sent to the platform.
+                      </p></td>
+                    </tr>
+                    <tr id="property-sendPacket-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the packet is sent or if there is an error.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-notifyConnectionStateChanged">notifyConnectionStateChanged
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.vpnProvider.notifyConnectionStateChanged(<span>enum of    <code>&quot;connected&quot;</code>,    or <code>&quot;failure&quot;</code> state</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Notifies the VPN session state to the platform. This will succeed only when the VPN session is owned by the extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-notifyConnectionStateChanged-state">
+                      <td>enum of    <code>&quot;connected&quot;</code>,    or <code>&quot;failure&quot;</code></td>
+                      <td>
+                          state</td>
+                      <td>
+                      
+                      <p>
+                        The VPN session state of the VPN client.
+                      </p>    <dl>
+                            <dt>connected</dt>
+                            <dd>
+                              VPN connection was successful.
+                            </dd>
+                          </dl>
+                          <dl>
+                            <dt>failure</dt>
+                            <dd>
+                              VPN connection failed.
+                            </dd>
+                          </dl>
+                      </td>
+                    </tr>
+                    <tr id="property-notifyConnectionStateChanged-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the notification is complete or if there is an error.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onPlatformMessage">onPlatformMessage</h3>
+              <div class="description">
+            <p>
+                  Triggered when a message is received from the platform for a VPN configuration owned by the extension.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.vpnProvider.onPlatformMessage.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onPlatformMessage-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string id, enum of    <code>&quot;connected&quot;</code>,    <code>&quot;disconnected&quot;</code>,    <code>&quot;error&quot;</code>,    <code>&quot;linkDown&quot;</code>,    <code>&quot;linkUp&quot;</code>,    <code>&quot;linkChanged&quot;</code>,    <code>&quot;suspend&quot;</code>,    or <code>&quot;resume&quot;</code> message, string error) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onPlatformMessage-id">
+                                    <td>string</td>
+                                    <td>
+                                        id</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the configuration the message is intended for.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onPlatformMessage-message">
+                                    <td>enum of    <code>&quot;connected&quot;</code>,    <code>&quot;disconnected&quot;</code>,    <code>&quot;error&quot;</code>,    <code>&quot;linkDown&quot;</code>,    <code>&quot;linkUp&quot;</code>,    <code>&quot;linkChanged&quot;</code>,    <code>&quot;suspend&quot;</code>,    or <code>&quot;resume&quot;</code></td>
+                                    <td>
+                                        message</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The message received from the platform.  Note that new message types may be added in future Chrome versions to support new features.
+                                    </p>    <dl>
+                                          <dt>connected</dt>
+                                          <dd>
+                                            VPN configuration connected.
+                                          </dd>
+                                        </dl>
+                                        <dl>
+                                          <dt>disconnected</dt>
+                                          <dd>
+                                            VPN configuration disconnected.
+                                          </dd>
+                                        </dl>
+                                        <dl>
+                                          <dt>error</dt>
+                                          <dd>
+                                            An error occurred in VPN connection, for example a timeout. A description of the error is given as the <a href="#property-onPlatformMessage-error"> error argument to onPlatformMessage</a>.
+                                          </dd>
+                                        </dl>
+                                        <dl>
+                                          <dt>linkDown</dt>
+                                          <dd>
+                                            The default physical network connection is down.
+                                          </dd>
+                                        </dl>
+                                        <dl>
+                                          <dt>linkUp</dt>
+                                          <dd>
+                                            The default physical network connection is back up.
+                                          </dd>
+                                        </dl>
+                                        <dl>
+                                          <dt>linkChanged</dt>
+                                          <dd>
+                                            The default physical network connection changed, e.g. wifi-&gt;mobile.
+                                          </dd>
+                                        </dl>
+                                        <dl>
+                                          <dt>suspend</dt>
+                                          <dd>
+                                            The OS is preparing to suspend, so the VPN should drop its connection. The extension is not guaranteed to receive this event prior to suspending.
+                                          </dd>
+                                        </dl>
+                                        <dl>
+                                          <dt>resume</dt>
+                                          <dd>
+                                            The OS has resumed and the user has logged back in, so the VPN should try to reconnect.
+                                          </dd>
+                                        </dl>
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onPlatformMessage-error">
+                                    <td>string</td>
+                                    <td>
+                                        error</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Error message when there is an error.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onPacketReceived">onPacketReceived</h3>
+              <div class="description">
+            <p>
+                  Triggered when an IP packet is received via the tunnel for the VPN session owned by the extension.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.vpnProvider.onPacketReceived.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onPacketReceived-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(ArrayBuffer data) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onPacketReceived-data">
+                                    <td>ArrayBuffer</td>
+                                    <td>
+                                        data</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The IP packet received from the platform.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onConfigRemoved">onConfigRemoved</h3>
+              <div class="description">
+            <p>
+                  Triggered when a configuration created by the extension is removed by the platform.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.vpnProvider.onConfigRemoved.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onConfigRemoved-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string id) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onConfigRemoved-id">
+                                    <td>string</td>
+                                    <td>
+                                        id</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the removed configuration.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onConfigCreated">onConfigCreated</h3>
+              <div class="description">
+            <p>
+                  Triggered when a configuration is created by the platform for the extension.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.vpnProvider.onConfigCreated.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onConfigCreated-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string id, string name, object data) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onConfigCreated-id">
+                                    <td>string</td>
+                                    <td>
+                                        id</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the configuration created.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onConfigCreated-name">
+                                    <td>string</td>
+                                    <td>
+                                        name</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Name of the configuration created.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onConfigCreated-data">
+                                    <td>object</td>
+                                    <td>
+                                        data</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Configuration data provided by the administrator.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onUIEvent">onUIEvent</h3>
+              <div class="description">
+            <p>
+                  Triggered when there is a UI event for the extension. UI events are signals from the platform that indicate to the app that a UI dialog needs to be shown to the user.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.vpnProvider.onUIEvent.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onUIEvent-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(enum of    <code>&quot;showAddDialog&quot;</code>,    or <code>&quot;showConfigureDialog&quot;</code> event, string id) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onUIEvent-event">
+                                    <td>enum of    <code>&quot;showAddDialog&quot;</code>,    or <code>&quot;showConfigureDialog&quot;</code></td>
+                                    <td>
+                                        event</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The UI event that is triggered.
+                                    </p>    <dl>
+                                          <dt>showAddDialog</dt>
+                                          <dd>
+                                            Request the VPN client to show add configuration dialog to the user.
+                                          </dd>
+                                        </dl>
+                                        <dl>
+                                          <dt>showConfigureDialog</dt>
+                                          <dd>
+                                            Request the VPN client to show configuration settings dialog to the user.
+                                          </dd>
+                                        </dl>
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onUIEvent-id">
+                                    <td>string</td>
+                                    <td><span class="optional">(optional)</span>
+                                        id</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the configuration for which the UI event was triggered.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

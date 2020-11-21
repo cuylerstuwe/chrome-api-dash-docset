@@ -1,0 +1,3506 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.accessibilityFeatures</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.accessibilityFeatures</code> API to manage Chrome&apos;s accessibility features. This API relies on the <a href="types.html#ChromeSetting">ChromeSetting prototype of the type API</a> for getting and setting individual accessibility features. In order to get feature states the extension must request <code>accessibilityFeatures.read</code> permission. For modifying feature state, the extension needs <code>accessibilityFeatures.modify</code> permission. Note that <code>accessibilityFeatures.modify</code> does not imply <code>accessibilityFeatures.read</code> permission.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;accessibilityFeatures.read&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <p class="caution">
+      <b>Important:</b>
+      This API works <b>only on Chrome OS</b>.
+    </p>
+    <section>
+      <!-- TODO(dmazzoni): write intro to this API -->
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Properties</th></tr>
+          <tr><td><a href="#property-spokenFeedback">spokenFeedback</a></td>
+          </tr><tr><td><a href="#property-largeCursor">largeCursor</a></td>
+          </tr><tr><td><a href="#property-stickyKeys">stickyKeys</a></td>
+          </tr><tr><td><a href="#property-highContrast">highContrast</a></td>
+          </tr><tr><td><a href="#property-screenMagnifier">screenMagnifier</a></td>
+          </tr><tr><td><a href="#property-autoclick">autoclick</a></td>
+          </tr><tr><td><a href="#property-virtualKeyboard">virtualKeyboard</a></td>
+          </tr><tr><td><a href="#property-caretHighlight">caretHighlight</a></td>
+          </tr><tr><td><a href="#property-cursorHighlight">cursorHighlight</a></td>
+          </tr><tr><td><a href="#property-cursorColor">cursorColor</a></td>
+          </tr><tr><td><a href="#property-dockedMagnifier">dockedMagnifier</a></td>
+          </tr><tr><td><a href="#property-focusHighlight">focusHighlight</a></td>
+          </tr><tr><td><a href="#property-selectToSpeak">selectToSpeak</a></td>
+          </tr><tr><td><a href="#property-switchAccess">switchAccess</a></td>
+          </tr><tr><td><a href="#property-animationPolicy">animationPolicy</a></td>
+    </tr></tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="properties">Properties</h2>
+          <table>
+            <tbody><tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-spokenFeedback">chrome.accessibilityFeatures.spokenFeedback</code></td>
+              <td>
+                  <p><strong>ChromeOS only.</strong></p><p>Spoken feedback (text-to-speech). The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-spokenFeedback-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      spokenFeedback.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-spokenFeedback-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      spokenFeedback.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-spokenFeedback-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      spokenFeedback.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-largeCursor">chrome.accessibilityFeatures.largeCursor</code></td>
+              <td>
+                  <p><strong>ChromeOS only.</strong></p><p>Enlarged cursor. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-largeCursor-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      largeCursor.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-largeCursor-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      largeCursor.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-largeCursor-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      largeCursor.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-stickyKeys">chrome.accessibilityFeatures.stickyKeys</code></td>
+              <td>
+                  <p><strong>ChromeOS only.</strong></p><p>Sticky modifier keys (like shift or alt). The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-stickyKeys-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      stickyKeys.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-stickyKeys-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      stickyKeys.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-stickyKeys-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      stickyKeys.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-highContrast">chrome.accessibilityFeatures.highContrast</code></td>
+              <td>
+                  <p><strong>ChromeOS only.</strong></p><p>High contrast rendering mode. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-highContrast-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      highContrast.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-highContrast-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      highContrast.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-highContrast-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      highContrast.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-screenMagnifier">chrome.accessibilityFeatures.screenMagnifier</code></td>
+              <td>
+                  <p><strong>ChromeOS only.</strong></p><p>Full screen magnification. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-screenMagnifier-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      screenMagnifier.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-screenMagnifier-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      screenMagnifier.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-screenMagnifier-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      screenMagnifier.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-autoclick">chrome.accessibilityFeatures.autoclick</code></td>
+              <td>
+                  <p><strong>ChromeOS only.</strong></p><p>Auto mouse click after mouse stops moving. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-autoclick-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      autoclick.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-autoclick-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      autoclick.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-autoclick-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      autoclick.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-virtualKeyboard">chrome.accessibilityFeatures.virtualKeyboard</code></td>
+              <td>
+                  <p><strong>ChromeOS only.</strong></p><p>Virtual on-screen keyboard. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-virtualKeyboard-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      virtualKeyboard.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-virtualKeyboard-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      virtualKeyboard.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-virtualKeyboard-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      virtualKeyboard.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-caretHighlight">chrome.accessibilityFeatures.caretHighlight</code></td>
+              <td>
+                <p class="availability">
+                  Since Chrome 51.
+                </p>
+                  <p><strong>ChromeOS only.</strong></p><p>Caret highlighting. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-caretHighlight-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      caretHighlight.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-caretHighlight-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      caretHighlight.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-caretHighlight-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      caretHighlight.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-cursorHighlight">chrome.accessibilityFeatures.cursorHighlight</code></td>
+              <td>
+                <p class="availability">
+                  Since Chrome 51.
+                </p>
+                  <p><strong>ChromeOS only.</strong></p><p>Cursor highlighting. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-cursorHighlight-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      cursorHighlight.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-cursorHighlight-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      cursorHighlight.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-cursorHighlight-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      cursorHighlight.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-cursorColor">chrome.accessibilityFeatures.cursorColor</code></td>
+              <td>
+                <p class="availability">
+                  Since Chrome 85.
+                </p>
+                  <p><strong>ChromeOS only.</strong></p><p>Cursor color. The value indicates whether the feature is enabled or not, doesn&apos;t indicate the color of it. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-cursorColor-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      cursorColor.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-cursorColor-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      cursorColor.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-cursorColor-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      cursorColor.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-dockedMagnifier">chrome.accessibilityFeatures.dockedMagnifier</code></td>
+              <td>
+                <p class="availability">
+                  Since Chrome 87.
+                </p>
+                  <p><strong>ChromeOS only.</strong></p><p>Docked magnifier. The value indicates whether docked magnifier feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-dockedMagnifier-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      dockedMagnifier.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-dockedMagnifier-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      dockedMagnifier.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-dockedMagnifier-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      dockedMagnifier.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-focusHighlight">chrome.accessibilityFeatures.focusHighlight</code></td>
+              <td>
+                <p class="availability">
+                  Since Chrome 51.
+                </p>
+                  <p><strong>ChromeOS only.</strong></p><p>Focus highlighting. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-focusHighlight-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      focusHighlight.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-focusHighlight-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      focusHighlight.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-focusHighlight-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      focusHighlight.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-selectToSpeak">chrome.accessibilityFeatures.selectToSpeak</code></td>
+              <td>
+                <p class="availability">
+                  Since Chrome 51.
+                </p>
+                  <p><strong>ChromeOS only.</strong></p><p>Select-to-speak. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-selectToSpeak-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      selectToSpeak.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-selectToSpeak-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      selectToSpeak.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-selectToSpeak-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      selectToSpeak.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-switchAccess">chrome.accessibilityFeatures.switchAccess</code></td>
+              <td>
+                <p class="availability">
+                  Since Chrome 51.
+                </p>
+                  <p><strong>ChromeOS only.</strong></p><p>Switch Access. The value indicates whether the feature is enabled or not. <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.</p>
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-switchAccess-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      switchAccess.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-switchAccess-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      switchAccess.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-switchAccess-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      switchAccess.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-animationPolicy">chrome.accessibilityFeatures.animationPolicy</code></td>
+              <td>
+                <p class="availability">
+                  Since Chrome 42.
+                </p>
+                  <code>get()</code> requires <code>accessibilityFeatures.read</code> permission. <code>set()</code> and <code>clear()</code> require <code>accessibilityFeatures.modify</code> permission.
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-animationPolicy-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      animationPolicy.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-animationPolicy-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      animationPolicy.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-animationPolicy-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      animationPolicy.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+          </tbody></table>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

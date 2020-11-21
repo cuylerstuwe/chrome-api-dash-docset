@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.printingMetrics</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.printingMetrics</code> API to fetch data about
+             printing usage.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 79.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;printingMetrics&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <p class="caution">
+      <b>Important:</b>
+      This API works <b>only on Chrome OS</b>.
+    </p>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-PrintJobInfo">PrintJobInfo</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-getPrintJobs">getPrintJobs</a> &#x2212;
+            <code class="prettyprint">
+            chrome.printingMetrics.getPrintJobs(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onPrintJobFinished">onPrintJobFinished</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-PrintJobInfo">PrintJobInfo</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="PrintJobInfo-properties">properties</th></tr>
+                  <tr id="property-PrintJobInfo-id">
+                    <td>string</td>
+                    <td>
+                        id</td>
+                    <td>
+                    
+                    <p>
+                      The ID of the job.
+                    </p></td>
+                  </tr><tr id="property-PrintJobInfo-title">
+                    <td>string</td>
+                    <td>
+                        title</td>
+                    <td>
+                    
+                    <p>
+                      The title of the document which was printed.
+                    </p></td>
+                  </tr><tr id="property-PrintJobInfo-source">
+                    <td>enum of    <code>&quot;PRINT_PREVIEW&quot;</code>,    <code>&quot;ANDROID_APP&quot;</code>,    or <code>&quot;EXTENSION&quot;</code></td>
+                    <td>
+                        source</td>
+                    <td>
+                    
+                    <p>
+                      Source showing who initiated the print job.
+                    </p>    <dl>
+                          <dt>PRINT_PREVIEW</dt>
+                          <dd>
+                            The job was created from the Print Preview page initiated by the user.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>ANDROID_APP</dt>
+                          <dd>
+                            The job was created from an Android App.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>EXTENSION</dt>
+                          <dd>
+                            The job was created by extension via chrome API.
+                          </dd>
+                        </dl>
+                    </td>
+                  </tr><tr id="property-PrintJobInfo-sourceId">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        sourceId</td>
+                    <td>
+                    
+                    <p>
+                      ID of source. Null if source is PRINT_PREVIEW or ANDROID_APP.
+                    </p></td>
+                  </tr><tr id="property-PrintJobInfo-status">
+                    <td>enum of    <code>&quot;FAILED&quot;</code>,    <code>&quot;CANCELED&quot;</code>,    or <code>&quot;PRINTED&quot;</code></td>
+                    <td>
+                        status</td>
+                    <td>
+                    
+                    <p>
+                      The final status of the job.
+                    </p>    <dl>
+                          <dt>FAILED</dt>
+                          <dd>
+                            Print job was interrupted due to some error.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>CANCELED</dt>
+                          <dd>
+                            Print job was canceled by the user or via API.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>PRINTED</dt>
+                          <dd>
+                            Print job was printed without any errors.
+                          </dd>
+                        </dl>
+                    </td>
+                  </tr><tr id="property-PrintJobInfo-creationTime">
+                    <td>double</td>
+                    <td>
+                        creationTime</td>
+                    <td>
+                    
+                    <p>
+                      The job creation time (in milliseconds past the Unix epoch).
+                    </p></td>
+                  </tr><tr id="property-PrintJobInfo-completionTime">
+                    <td>double</td>
+                    <td>
+                        completionTime</td>
+                    <td>
+                    
+                    <p>
+                      The job completion time (in milliseconds past the Unix epoch).
+                    </p></td>
+                  </tr><tr id="property-PrintJobInfo-printer">
+                    <td>object</td>
+                    <td>
+                        printer</td>
+                    <td>
+                    
+                    <p>
+                      The info about the printer which printed the document.
+                    </p>  <table class="innerTable">
+                        <tbody><tr id="property-printer-name">
+                          <td>string</td>
+                          <td>
+                              name</td>
+                          <td>
+                          
+                          <p>
+                            Displayed name of the printer.
+                          </p></td>
+                        </tr><tr id="property-printer-uri">
+                          <td>string</td>
+                          <td>
+                              uri</td>
+                          <td>
+                          
+                          <p>
+                            The full path for the printer. Contains protocol, hostname, port, and queue.
+                          </p></td>
+                        </tr><tr id="property-printer-source">
+                          <td>enum of    <code>&quot;USER&quot;</code>,    or <code>&quot;POLICY&quot;</code></td>
+                          <td>
+                              source</td>
+                          <td>
+                          
+                          <p>
+                            The source of the printer.
+                          </p>    <dl>
+                                <dt>USER</dt>
+                                <dd>
+                                  Printer was added by user.
+                                </dd>
+                              </dl>
+                              <dl>
+                                <dt>POLICY</dt>
+                                <dd>
+                                  Printer was added via policy.
+                                </dd>
+                              </dl>
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-PrintJobInfo-settings">
+                    <td>object</td>
+                    <td>
+                        settings</td>
+                    <td>
+                    
+                    <p>
+                      The settings of the print job.
+                    </p>  <table class="innerTable">
+                        <tbody><tr id="property-settings-color">
+                          <td>enum of    <code>&quot;BLACK_AND_WHITE&quot;</code>,    or <code>&quot;COLOR&quot;</code></td>
+                          <td>
+                              color</td>
+                          <td>
+                          
+                          <p>
+                            The requested color mode.
+                          </p>    <dl>
+                                <dt>BLACK_AND_WHITE</dt>
+                                <dd>
+                                  Black and white mode was used.
+                                </dd>
+                              </dl>
+                              <dl>
+                                <dt>COLOR</dt>
+                                <dd>
+                                  Color mode was used.
+                                </dd>
+                              </dl>
+                          </td>
+                        </tr><tr id="property-settings-duplex">
+                          <td>enum of    <code>&quot;ONE_SIDED&quot;</code>,    <code>&quot;TWO_SIDED_LONG_EDGE&quot;</code>,    or <code>&quot;TWO_SIDED_SHORT_EDGE&quot;</code></td>
+                          <td>
+                              duplex</td>
+                          <td>
+                          
+                          <p>
+                            The requested duplex mode.
+                          </p>    <dl>
+                                <dt>ONE_SIDED</dt>
+                                <dd>
+                                  One-sided printing was used.
+                                </dd>
+                              </dl>
+                              <dl>
+                                <dt>TWO_SIDED_LONG_EDGE</dt>
+                                <dd>
+                                  Two-sided printing was used, flipping on long edge.
+                                </dd>
+                              </dl>
+                              <dl>
+                                <dt>TWO_SIDED_SHORT_EDGE</dt>
+                                <dd>
+                                  Two-sided printing was used, flipping on short edge.
+                                </dd>
+                              </dl>
+                          </td>
+                        </tr><tr id="property-settings-mediaSize">
+                          <td>object</td>
+                          <td>
+                              mediaSize</td>
+                          <td>
+                          
+                          <p>
+                            The requested media size.
+                          </p>  <table class="innerTable">
+                              <tbody><tr id="property-mediaSize-width">
+                                <td>integer</td>
+                                <td>
+                                    width</td>
+                                <td>
+                                
+                                <p>
+                                  Width (in micrometers) of the media used for printing.
+                                </p></td>
+                              </tr><tr id="property-mediaSize-height">
+                                <td>integer</td>
+                                <td>
+                                    height</td>
+                                <td>
+                                
+                                <p>
+                                  Height (in micrometers) of the media used for printing.
+                                </p></td>
+                              </tr><tr id="property-mediaSize-vendorId">
+                                <td>string</td>
+                                <td>
+                                    vendorId</td>
+                                <td>
+                                
+                                <p>
+                                  Vendor-provided ID, e.g. &quot;iso_a3_297x420mm&quot; or &quot;na_index-3x5_3x5in&quot;. Possible values are values of &quot;media&quot; IPP attribute and can be found on <a href="https://www.iana.org/assignments/ipp-registrations/ipp-registrations.xhtml"> IANA page</a> .
+                                </p></td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr><tr id="property-settings-copies">
+                          <td>integer</td>
+                          <td>
+                              copies</td>
+                          <td>
+                          
+                          <p>
+                            The requested number of copies.
+                          </p></td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-PrintJobInfo-numberOfPages">
+                    <td>integer</td>
+                    <td>
+                        numberOfPages</td>
+                    <td>
+                    
+                    <p>
+                      The number of pages in the document.
+                    </p></td>
+                  </tr><tr id="property-PrintJobInfo-printer_status">
+                    <td>    <a href="https://developer.chrome.com/extensions/#type-PrinterStatus">printing.PrinterStatus</a></td>
+                    <td>
+                        printer_status</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 85.
+                    </p>
+                    
+                    <p>
+                      The status of the printer.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-getPrintJobs">getPrintJobs
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.printingMetrics.getPrintJobs(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns the list of the finished print jobs.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getPrintJobs-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(array of     <a href="#type-PrintJobInfo">PrintJobInfo</a> jobs) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-jobs">
+                              <td>array of     <a href="#type-PrintJobInfo">PrintJobInfo</a></td>
+                              <td>
+                                  jobs</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onPrintJobFinished">onPrintJobFinished</h3>
+              <div class="description">
+            <p>
+                  Event fired when the print job is finished. This includes any of termination statuses: FAILED, CANCELED and PRINTED.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.printingMetrics.onPrintJobFinished.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onPrintJobFinished-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-PrintJobInfo">PrintJobInfo</a> jobInfo) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onPrintJobFinished-jobInfo">
+                                    <td>    <a href="#type-PrintJobInfo">PrintJobInfo</a></td>
+                                    <td>
+                                        jobInfo</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

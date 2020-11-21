@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.enterprise.hardwarePlatform</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.enterprise.hardwarePlatform</code> API to get the
+             manufacturer and model of the hardware platform where the browser runs.
+             Note: This API is only available to extensions installed by enterprise
+             policy.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 71.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;enterprise.hardwarePlatform&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-getHardwarePlatformInfo">getHardwarePlatformInfo</a> &#x2212;
+            <code class="prettyprint">
+            chrome.enterprise.hardwarePlatform.getHardwarePlatformInfo(<span>function callback</span>)
+            </code>
+          </td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-getHardwarePlatformInfo">getHardwarePlatformInfo
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.enterprise.hardwarePlatform.getHardwarePlatformInfo(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Obtains the manufacturer and model for the hardware platform and, if the extension is authorized, returns it via |callback|.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getHardwarePlatformInfo-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called with the hardware platform info.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object info) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-info">
+                              <td>object</td>
+                              <td>
+                                  info</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-info-model">
+                                    <td>string</td>
+                                    <td>
+                                        model</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr><tr id="property-info-manufacturer">
+                                    <td>string</td>
+                                    <td>
+                                        manufacturer</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

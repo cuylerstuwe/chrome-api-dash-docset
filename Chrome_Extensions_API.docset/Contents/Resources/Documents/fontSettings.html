@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.fontSettings</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.fontSettings</code> API to manage Chrome&apos;s font settings.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;fontSettings&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <h2 id="manifest">Manifest</h2>
+      <p>To use the Font Settings API, you must declare the &quot;fontSettings&quot; permission
+      in the <a href="https://developer.chrome.com/extensions/manifest">extension manifest</a>.
+      For example:</p>
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My Font Settings Extension&quot;,
+        &quot;description&quot;: &quot;Customize your fonts&quot;,
+        &quot;version&quot;: &quot;0.2&quot;,
+        <b>&quot;permissions&quot;: [
+          &quot;fontSettings&quot;
+        ]</b>,
+        ...
+      }
+      </pre>
+      
+      <h2 id="scripts">Generic Font Families and Scripts</h2>
+      <p>Chrome allows for some font settings to depend on certain generic font
+      families and language scripts. For example, the font used for sans-serif
+      Simplified Chinese may be different than the font used for serif Japanese.</p>
+      
+      <p>The generic font families supported by Chrome are based on
+      <a href="http://www.w3.org/TR/CSS21/fonts.html#generic-font-families">CSS generic font families</a>
+      and are listed in the API reference below. When a webpage specifies a generic
+      font family, Chrome selects the font based on the corresponding setting. If no
+      generic font family is specified, Chrome uses the setting for the &quot;standard&quot;
+      generic font family.</p>
+      
+      <p>When a webpage specifies a language, Chrome selects the font based on the
+      setting for the corresponding language script. If no language is specified,
+      Chrome uses the setting for the default, or global, script.</p>
+      
+      <p>The supported language scripts are specified by ISO 15924 script code and
+      listed in the API reference below. Technically, Chrome settings are not strictly
+      per-script but also depend on language. For example, Chrome chooses the font for
+      Cyrillic (ISO 15924 script code &quot;Cyrl&quot;) when a webpage specifies the Russian
+      language, and uses this font not just for Cyrillic script but for everything the
+      font covers, such as Latin.</p>
+      
+      <h2 id="examples">Examples</h2>
+      <p>The following code gets the standard font for Arabic.</p>
+      <pre>      chrome.fontSettings.getFont(
+        { genericFamily: &apos;standard&apos;, script: &apos;Arab&apos; },
+        function(details) { console.log(details.fontId); }
+      );
+      </pre>
+      
+      <p>The next snippet sets the sans-serif font for Japanese.</p>
+      <pre>      chrome.fontSettings.setFont(
+        { genericFamily: &apos;sansserif&apos;, script: &apos;Jpan&apos;, fontId: &apos;MS PGothic&apos; }
+      );
+      </pre>
+      
+      <p>You can find a sample extension using the Font Settings API in the
+      <a href="https://chromium.googlesource.com/chromium/src/+/master/chrome/common/extensions/docs/examples/api/fontSettings/">examples/api/fontSettings</a>
+      directory. For other examples and for help in viewing the source code, see
+      <a href="https://developer.chrome.com/extensions/samples">Samples</a>.</p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-FontName">FontName</a></td></tr>
+          <tr><td><a href="#type-ScriptCode">ScriptCode</a></td></tr>
+          <tr><td><a href="#type-GenericFamily">GenericFamily</a></td></tr>
+          <tr><td><a href="#type-LevelOfControl">LevelOfControl</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-clearFont">clearFont</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.clearFont(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getFont">getFont</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.getFont(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setFont">setFont</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.setFont(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getFontList">getFontList</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.getFontList(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-clearDefaultFontSize">clearDefaultFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.clearDefaultFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getDefaultFontSize">getDefaultFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.getDefaultFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setDefaultFontSize">setDefaultFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.setDefaultFontSize(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-clearDefaultFixedFontSize">clearDefaultFixedFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.clearDefaultFixedFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getDefaultFixedFontSize">getDefaultFixedFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.getDefaultFixedFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setDefaultFixedFontSize">setDefaultFixedFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.setDefaultFixedFontSize(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-clearMinimumFontSize">clearMinimumFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.clearMinimumFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getMinimumFontSize">getMinimumFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.getMinimumFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setMinimumFontSize">setMinimumFontSize</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fontSettings.setMinimumFontSize(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onFontChanged">onFontChanged</a></td></tr>
+          <tr><td><a href="#event-onDefaultFontSizeChanged">onDefaultFontSizeChanged</a></td></tr>
+          <tr><td><a href="#event-onDefaultFixedFontSizeChanged">onDefaultFixedFontSizeChanged</a></td></tr>
+          <tr><td><a href="#event-onMinimumFontSizeChanged">onMinimumFontSizeChanged</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-FontName">FontName</h3>
+              <dd>Represents a font name.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="FontName-properties">properties</th></tr>
+                  <tr id="property-FontName-fontId">
+                    <td>string</td>
+                    <td>
+                        fontId</td>
+                    <td>
+                    
+                    <p>
+                      The font ID.
+                    </p></td>
+                  </tr><tr id="property-FontName-displayName">
+                    <td>string</td>
+                    <td>
+                        displayName</td>
+                    <td>
+                    
+                    <p>
+                      The display name of the font.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ScriptCode">ScriptCode</h3>
+              <dd>An ISO 15924 script code. The default, or global, script is represented by script code &quot;Zyyy&quot;.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;Afak&quot;</code>, 
+                        <code>&quot;Arab&quot;</code>, 
+                        <code>&quot;Armi&quot;</code>, 
+                        <code>&quot;Armn&quot;</code>, 
+                        <code>&quot;Avst&quot;</code>, 
+                        <code>&quot;Bali&quot;</code>, 
+                        <code>&quot;Bamu&quot;</code>, 
+                        <code>&quot;Bass&quot;</code>, 
+                        <code>&quot;Batk&quot;</code>, 
+                        <code>&quot;Beng&quot;</code>, 
+                        <code>&quot;Blis&quot;</code>, 
+                        <code>&quot;Bopo&quot;</code>, 
+                        <code>&quot;Brah&quot;</code>, 
+                        <code>&quot;Brai&quot;</code>, 
+                        <code>&quot;Bugi&quot;</code>, 
+                        <code>&quot;Buhd&quot;</code>, 
+                        <code>&quot;Cakm&quot;</code>, 
+                        <code>&quot;Cans&quot;</code>, 
+                        <code>&quot;Cari&quot;</code>, 
+                        <code>&quot;Cham&quot;</code>, 
+                        <code>&quot;Cher&quot;</code>, 
+                        <code>&quot;Cirt&quot;</code>, 
+                        <code>&quot;Copt&quot;</code>, 
+                        <code>&quot;Cprt&quot;</code>, 
+                        <code>&quot;Cyrl&quot;</code>, 
+                        <code>&quot;Cyrs&quot;</code>, 
+                        <code>&quot;Deva&quot;</code>, 
+                        <code>&quot;Dsrt&quot;</code>, 
+                        <code>&quot;Dupl&quot;</code>, 
+                        <code>&quot;Egyd&quot;</code>, 
+                        <code>&quot;Egyh&quot;</code>, 
+                        <code>&quot;Egyp&quot;</code>, 
+                        <code>&quot;Elba&quot;</code>, 
+                        <code>&quot;Ethi&quot;</code>, 
+                        <code>&quot;Geor&quot;</code>, 
+                        <code>&quot;Geok&quot;</code>, 
+                        <code>&quot;Glag&quot;</code>, 
+                        <code>&quot;Goth&quot;</code>, 
+                        <code>&quot;Gran&quot;</code>, 
+                        <code>&quot;Grek&quot;</code>, 
+                        <code>&quot;Gujr&quot;</code>, 
+                        <code>&quot;Guru&quot;</code>, 
+                        <code>&quot;Hang&quot;</code>, 
+                        <code>&quot;Hani&quot;</code>, 
+                        <code>&quot;Hano&quot;</code>, 
+                        <code>&quot;Hans&quot;</code>, 
+                        <code>&quot;Hant&quot;</code>, 
+                        <code>&quot;Hebr&quot;</code>, 
+                        <code>&quot;Hluw&quot;</code>, 
+                        <code>&quot;Hmng&quot;</code>, 
+                        <code>&quot;Hung&quot;</code>, 
+                        <code>&quot;Inds&quot;</code>, 
+                        <code>&quot;Ital&quot;</code>, 
+                        <code>&quot;Java&quot;</code>, 
+                        <code>&quot;Jpan&quot;</code>, 
+                        <code>&quot;Jurc&quot;</code>, 
+                        <code>&quot;Kali&quot;</code>, 
+                        <code>&quot;Khar&quot;</code>, 
+                        <code>&quot;Khmr&quot;</code>, 
+                        <code>&quot;Khoj&quot;</code>, 
+                        <code>&quot;Knda&quot;</code>, 
+                        <code>&quot;Kpel&quot;</code>, 
+                        <code>&quot;Kthi&quot;</code>, 
+                        <code>&quot;Lana&quot;</code>, 
+                        <code>&quot;Laoo&quot;</code>, 
+                        <code>&quot;Latf&quot;</code>, 
+                        <code>&quot;Latg&quot;</code>, 
+                        <code>&quot;Latn&quot;</code>, 
+                        <code>&quot;Lepc&quot;</code>, 
+                        <code>&quot;Limb&quot;</code>, 
+                        <code>&quot;Lina&quot;</code>, 
+                        <code>&quot;Linb&quot;</code>, 
+                        <code>&quot;Lisu&quot;</code>, 
+                        <code>&quot;Loma&quot;</code>, 
+                        <code>&quot;Lyci&quot;</code>, 
+                        <code>&quot;Lydi&quot;</code>, 
+                        <code>&quot;Mand&quot;</code>, 
+                        <code>&quot;Mani&quot;</code>, 
+                        <code>&quot;Maya&quot;</code>, 
+                        <code>&quot;Mend&quot;</code>, 
+                        <code>&quot;Merc&quot;</code>, 
+                        <code>&quot;Mero&quot;</code>, 
+                        <code>&quot;Mlym&quot;</code>, 
+                        <code>&quot;Moon&quot;</code>, 
+                        <code>&quot;Mong&quot;</code>, 
+                        <code>&quot;Mroo&quot;</code>, 
+                        <code>&quot;Mtei&quot;</code>, 
+                        <code>&quot;Mymr&quot;</code>, 
+                        <code>&quot;Narb&quot;</code>, 
+                        <code>&quot;Nbat&quot;</code>, 
+                        <code>&quot;Nkgb&quot;</code>, 
+                        <code>&quot;Nkoo&quot;</code>, 
+                        <code>&quot;Nshu&quot;</code>, 
+                        <code>&quot;Ogam&quot;</code>, 
+                        <code>&quot;Olck&quot;</code>, 
+                        <code>&quot;Orkh&quot;</code>, 
+                        <code>&quot;Orya&quot;</code>, 
+                        <code>&quot;Osma&quot;</code>, 
+                        <code>&quot;Palm&quot;</code>, 
+                        <code>&quot;Perm&quot;</code>, 
+                        <code>&quot;Phag&quot;</code>, 
+                        <code>&quot;Phli&quot;</code>, 
+                        <code>&quot;Phlp&quot;</code>, 
+                        <code>&quot;Phlv&quot;</code>, 
+                        <code>&quot;Phnx&quot;</code>, 
+                        <code>&quot;Plrd&quot;</code>, 
+                        <code>&quot;Prti&quot;</code>, 
+                        <code>&quot;Rjng&quot;</code>, 
+                        <code>&quot;Roro&quot;</code>, 
+                        <code>&quot;Runr&quot;</code>, 
+                        <code>&quot;Samr&quot;</code>, 
+                        <code>&quot;Sara&quot;</code>, 
+                        <code>&quot;Sarb&quot;</code>, 
+                        <code>&quot;Saur&quot;</code>, 
+                        <code>&quot;Sgnw&quot;</code>, 
+                        <code>&quot;Shaw&quot;</code>, 
+                        <code>&quot;Shrd&quot;</code>, 
+                        <code>&quot;Sind&quot;</code>, 
+                        <code>&quot;Sinh&quot;</code>, 
+                        <code>&quot;Sora&quot;</code>, 
+                        <code>&quot;Sund&quot;</code>, 
+                        <code>&quot;Sylo&quot;</code>, 
+                        <code>&quot;Syrc&quot;</code>, 
+                        <code>&quot;Syre&quot;</code>, 
+                        <code>&quot;Syrj&quot;</code>, 
+                        <code>&quot;Syrn&quot;</code>, 
+                        <code>&quot;Tagb&quot;</code>, 
+                        <code>&quot;Takr&quot;</code>, 
+                        <code>&quot;Tale&quot;</code>, 
+                        <code>&quot;Talu&quot;</code>, 
+                        <code>&quot;Taml&quot;</code>, 
+                        <code>&quot;Tang&quot;</code>, 
+                        <code>&quot;Tavt&quot;</code>, 
+                        <code>&quot;Telu&quot;</code>, 
+                        <code>&quot;Teng&quot;</code>, 
+                        <code>&quot;Tfng&quot;</code>, 
+                        <code>&quot;Tglg&quot;</code>, 
+                        <code>&quot;Thaa&quot;</code>, 
+                        <code>&quot;Thai&quot;</code>, 
+                        <code>&quot;Tibt&quot;</code>, 
+                        <code>&quot;Tirh&quot;</code>, 
+                        <code>&quot;Ugar&quot;</code>, 
+                        <code>&quot;Vaii&quot;</code>, 
+                        <code>&quot;Visp&quot;</code>, 
+                        <code>&quot;Wara&quot;</code>, 
+                        <code>&quot;Wole&quot;</code>, 
+                        <code>&quot;Xpeo&quot;</code>, 
+                        <code>&quot;Xsux&quot;</code>, 
+                        <code>&quot;Yiii&quot;</code>, 
+                        <code>&quot;Zmth&quot;</code>, 
+                        <code>&quot;Zsym&quot;</code>, 
+                        or <code>&quot;Zyyy&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-GenericFamily">GenericFamily</h3>
+              <dd>A CSS generic font family.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;standard&quot;</code>, 
+                        <code>&quot;sansserif&quot;</code>, 
+                        <code>&quot;serif&quot;</code>, 
+                        <code>&quot;fixed&quot;</code>, 
+                        <code>&quot;cursive&quot;</code>, 
+                        or <code>&quot;fantasy&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-LevelOfControl">LevelOfControl</h3>
+              <dd>One of<br><var>not_controllable</var>: cannot be controlled by any extension<br><var>controlled_by_other_extensions</var>: controlled by extensions with higher precedence<br><var>controllable_by_this_extension</var>: can be controlled by this extension<br><var>controlled_by_this_extension</var>: controlled by this extension</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;not_controllable&quot;</code>, 
+                        <code>&quot;controlled_by_other_extensions&quot;</code>, 
+                        <code>&quot;controllable_by_this_extension&quot;</code>, 
+                        or <code>&quot;controlled_by_this_extension&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-clearFont">clearFont
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.clearFont(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the font set by this extension, if any.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-clearFont-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-script">
+                            <td>    <a href="#type-ScriptCode">ScriptCode</a></td>
+                            <td><span class="optional">(optional)</span>
+                                script</td>
+                            <td>
+                            
+                            <p>
+                              The script for which the font should be cleared. If omitted, the global script font setting is cleared.
+                            </p></td>
+                          </tr><tr id="property-details-genericFamily">
+                            <td>    <a href="#type-GenericFamily">GenericFamily</a></td>
+                            <td>
+                                genericFamily</td>
+                            <td>
+                            
+                            <p>
+                              The generic font family for which the font should be cleared.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-clearFont-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getFont">getFont
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.getFont(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the font for a given script and generic font family.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getFont-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-script">
+                            <td>    <a href="#type-ScriptCode">ScriptCode</a></td>
+                            <td><span class="optional">(optional)</span>
+                                script</td>
+                            <td>
+                            
+                            <p>
+                              The script for which the font should be retrieved. If omitted, the font setting for the global script (script code &quot;Zyyy&quot;) is retrieved.
+                            </p></td>
+                          </tr><tr id="property-details-genericFamily">
+                            <td>    <a href="#type-GenericFamily">GenericFamily</a></td>
+                            <td>
+                                genericFamily</td>
+                            <td>
+                            
+                            <p>
+                              The generic font family for which the font should be retrieved.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-getFont-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-details-fontId">
+                                    <td>string</td>
+                                    <td>
+                                        fontId</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The font ID. Rather than the literal font ID preference value, this may be the ID of the font that the system resolves the preference value to. So, <var>fontId</var> can differ from the font passed to <code>setFont</code>, if, for example, the font is not available on the system. The empty string signifies fallback to the global script font setting.
+                                    </p></td>
+                                  </tr><tr id="property-details-levelOfControl">
+                                    <td>    <a href="#type-LevelOfControl">LevelOfControl</a></td>
+                                    <td>
+                                        levelOfControl</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The level of control this extension has over the setting.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setFont">setFont
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.setFont(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the font for a given script and generic font family.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setFont-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-script">
+                            <td>    <a href="#type-ScriptCode">ScriptCode</a></td>
+                            <td><span class="optional">(optional)</span>
+                                script</td>
+                            <td>
+                            
+                            <p>
+                              The script code which the font should be set. If omitted, the font setting for the global script (script code &quot;Zyyy&quot;) is set.
+                            </p></td>
+                          </tr><tr id="property-details-genericFamily">
+                            <td>    <a href="#type-GenericFamily">GenericFamily</a></td>
+                            <td>
+                                genericFamily</td>
+                            <td>
+                            
+                            <p>
+                              The generic font family for which the font should be set.
+                            </p></td>
+                          </tr><tr id="property-details-fontId">
+                            <td>string</td>
+                            <td>
+                                fontId</td>
+                            <td>
+                            
+                            <p>
+                              The font ID. The empty string means to fallback to the global script font setting.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setFont-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getFontList">getFontList
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.getFontList(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets a list of fonts on the system.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getFontList-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(array of     <a href="#type-FontName">FontName</a> results) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-results">
+                              <td>array of     <a href="#type-FontName">FontName</a></td>
+                              <td>
+                                  results</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-clearDefaultFontSize">clearDefaultFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.clearDefaultFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the default font size set by this extension, if any.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-clearDefaultFontSize-details">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        This parameter is currently unused.
+                      </p></td>
+                    </tr>
+                    <tr id="property-clearDefaultFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getDefaultFontSize">getDefaultFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.getDefaultFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the default font size.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getDefaultFontSize-details">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        This parameter is currently unused.
+                      </p></td>
+                    </tr>
+                    <tr id="property-getDefaultFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-details-pixelSize">
+                                    <td>integer</td>
+                                    <td>
+                                        pixelSize</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The font size in pixels.
+                                    </p></td>
+                                  </tr><tr id="property-details-levelOfControl">
+                                    <td>    <a href="#type-LevelOfControl">LevelOfControl</a></td>
+                                    <td>
+                                        levelOfControl</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The level of control this extension has over the setting.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setDefaultFontSize">setDefaultFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.setDefaultFontSize(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the default font size.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setDefaultFontSize-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-pixelSize">
+                            <td>integer</td>
+                            <td>
+                                pixelSize</td>
+                            <td>
+                            
+                            <p>
+                              The font size in pixels.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setDefaultFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-clearDefaultFixedFontSize">clearDefaultFixedFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.clearDefaultFixedFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the default fixed font size set by this extension, if any.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-clearDefaultFixedFontSize-details">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        This parameter is currently unused.
+                      </p></td>
+                    </tr>
+                    <tr id="property-clearDefaultFixedFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getDefaultFixedFontSize">getDefaultFixedFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.getDefaultFixedFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the default size for fixed width fonts.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getDefaultFixedFontSize-details">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        This parameter is currently unused.
+                      </p></td>
+                    </tr>
+                    <tr id="property-getDefaultFixedFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-details-pixelSize">
+                                    <td>integer</td>
+                                    <td>
+                                        pixelSize</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The font size in pixels.
+                                    </p></td>
+                                  </tr><tr id="property-details-levelOfControl">
+                                    <td>    <a href="#type-LevelOfControl">LevelOfControl</a></td>
+                                    <td>
+                                        levelOfControl</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The level of control this extension has over the setting.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setDefaultFixedFontSize">setDefaultFixedFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.setDefaultFixedFontSize(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the default size for fixed width fonts.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setDefaultFixedFontSize-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-pixelSize">
+                            <td>integer</td>
+                            <td>
+                                pixelSize</td>
+                            <td>
+                            
+                            <p>
+                              The font size in pixels.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setDefaultFixedFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-clearMinimumFontSize">clearMinimumFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.clearMinimumFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the minimum font size set by this extension, if any.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-clearMinimumFontSize-details">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        This parameter is currently unused.
+                      </p></td>
+                    </tr>
+                    <tr id="property-clearMinimumFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getMinimumFontSize">getMinimumFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.getMinimumFontSize(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the minimum font size.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getMinimumFontSize-details">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        This parameter is currently unused.
+                      </p></td>
+                    </tr>
+                    <tr id="property-getMinimumFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-details-pixelSize">
+                                    <td>integer</td>
+                                    <td>
+                                        pixelSize</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The font size in pixels.
+                                    </p></td>
+                                  </tr><tr id="property-details-levelOfControl">
+                                    <td>    <a href="#type-LevelOfControl">LevelOfControl</a></td>
+                                    <td>
+                                        levelOfControl</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The level of control this extension has over the setting.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setMinimumFontSize">setMinimumFontSize
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fontSettings.setMinimumFontSize(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the minimum font size.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setMinimumFontSize-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-details-pixelSize">
+                            <td>integer</td>
+                            <td>
+                                pixelSize</td>
+                            <td>
+                            
+                            <p>
+                              The font size in pixels.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setMinimumFontSize-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onFontChanged">onFontChanged</h3>
+              <div class="description">
+            <p>
+                  Fired when a font setting changes.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.fontSettings.onFontChanged.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onFontChanged-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onFontChanged-details">
+                                    <td>object</td>
+                                    <td>
+                                        details</td>
+                                    <td>
+                                    
+                                      <table class="innerTable">
+                                        <tbody><tr id="property-details-fontId">
+                                          <td>string</td>
+                                          <td>
+                                              fontId</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The font ID. See the description in <code>getFont</code>.
+                                          </p></td>
+                                        </tr><tr id="property-details-script">
+                                          <td>    <a href="#type-ScriptCode">ScriptCode</a></td>
+                                          <td><span class="optional">(optional)</span>
+                                              script</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The script code for which the font setting has changed.
+                                          </p></td>
+                                        </tr><tr id="property-details-genericFamily">
+                                          <td>    <a href="#type-GenericFamily">GenericFamily</a></td>
+                                          <td>
+                                              genericFamily</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The generic font family for which the font setting has changed.
+                                          </p></td>
+                                        </tr><tr id="property-details-levelOfControl">
+                                          <td>    <a href="#type-LevelOfControl">LevelOfControl</a></td>
+                                          <td>
+                                              levelOfControl</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The level of control this extension has over the setting.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onDefaultFontSizeChanged">onDefaultFontSizeChanged</h3>
+              <div class="description">
+            <p>
+                  Fired when the default font size setting changes.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.fontSettings.onDefaultFontSizeChanged.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onDefaultFontSizeChanged-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onDefaultFontSizeChanged-details">
+                                    <td>object</td>
+                                    <td>
+                                        details</td>
+                                    <td>
+                                    
+                                      <table class="innerTable">
+                                        <tbody><tr id="property-details-pixelSize">
+                                          <td>integer</td>
+                                          <td>
+                                              pixelSize</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The font size in pixels.
+                                          </p></td>
+                                        </tr><tr id="property-details-levelOfControl">
+                                          <td>    <a href="#type-LevelOfControl">LevelOfControl</a></td>
+                                          <td>
+                                              levelOfControl</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The level of control this extension has over the setting.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onDefaultFixedFontSizeChanged">onDefaultFixedFontSizeChanged</h3>
+              <div class="description">
+            <p>
+                  Fired when the default fixed font size setting changes.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.fontSettings.onDefaultFixedFontSizeChanged.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onDefaultFixedFontSizeChanged-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onDefaultFixedFontSizeChanged-details">
+                                    <td>object</td>
+                                    <td>
+                                        details</td>
+                                    <td>
+                                    
+                                      <table class="innerTable">
+                                        <tbody><tr id="property-details-pixelSize">
+                                          <td>integer</td>
+                                          <td>
+                                              pixelSize</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The font size in pixels.
+                                          </p></td>
+                                        </tr><tr id="property-details-levelOfControl">
+                                          <td>    <a href="#type-LevelOfControl">LevelOfControl</a></td>
+                                          <td>
+                                              levelOfControl</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The level of control this extension has over the setting.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onMinimumFontSizeChanged">onMinimumFontSizeChanged</h3>
+              <div class="description">
+            <p>
+                  Fired when the minimum font size setting changes.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.fontSettings.onMinimumFontSizeChanged.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onMinimumFontSizeChanged-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onMinimumFontSizeChanged-details">
+                                    <td>object</td>
+                                    <td>
+                                        details</td>
+                                    <td>
+                                    
+                                      <table class="innerTable">
+                                        <tbody><tr id="property-details-pixelSize">
+                                          <td>integer</td>
+                                          <td>
+                                              pixelSize</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The font size in pixels.
+                                          </p></td>
+                                        </tr><tr id="property-details-levelOfControl">
+                                          <td>    <a href="#type-LevelOfControl">LevelOfControl</a></td>
+                                          <td>
+                                              levelOfControl</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The level of control this extension has over the setting.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

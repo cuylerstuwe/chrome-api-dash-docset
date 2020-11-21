@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.devtools.network</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.devtools.network</code> API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <p>
+      See <a href="https://developer.chrome.com/extensions/devtools">DevTools APIs summary</a> for
+      general introduction to using Developer Tools APIs.
+      </p>
+      
+      <h2 id="overview">Overview</h2>
+      
+      <p>
+      Network requests information is represented in the HTTP Archive format
+      (<em>HAR</em>). The description of HAR is outside of scope of this document,
+      please refer to <a href="http://www.softwareishard.com/blog/har-12-spec/">
+      HAR v1.2 Specification</a>.
+      </p><p>
+      In terms of HAR, the
+      <code>chrome.devtools.network.getHAR()</code> method returns
+      entire <em>HAR log</em>, while
+      <code>chrome.devtools.network.onRequestFinished</code> event
+      provides <em>HAR entry</em> as an argument to the event callback.
+      </p>
+      <p>Note that request content is not provided as part of HAR for efficieny
+      reasons. You may call request&apos;s <code>getContent()</code> method to retrieve
+      content.
+      </p><p>If the Developer Tools window is opened after the page is loaded,
+      some requests may be missing
+      in the array of entries returned by <code>getHAR()</code>.
+      Reload the page to get all requests.
+      In general, the list of
+      requests returned by <code>getHAR()</code> should match that displayed in
+      the Network panel.
+      </p><h2 id="overview-examples">Examples</h2>
+      
+      <p>The following code logs URLs of all images larger than 40KB as they are
+      loaded:</p>
+      
+      <pre>      chrome.devtools.network.onRequestFinished.addListener(
+          function(request) {
+            if (request.response.bodySize &gt; 40*1024) {
+              chrome.devtools.inspectedWindow.eval(
+                  &apos;console.log(&quot;Large image: &quot; + unescape(&quot;&apos; +
+                  escape(request.request.url) + &apos;&quot;))&apos;);
+            }
+      });
+      </pre>
+      
+      <p>
+      You can find more examples that use this API in
+      <a href="https://developer.chrome.com/extensions/samples#search:devtools.network">Samples</a>.
+      </p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-Request">Request</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-getHAR">getHAR</a> &#x2212;
+            <code class="prettyprint">
+            chrome.devtools.network.getHAR(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onRequestFinished">onRequestFinished</a></td></tr>
+          <tr><td><a href="#event-onNavigated">onNavigated</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-Request">Request</h3>
+              <dd>Represents a network request for a document resource (script, image and so on). See HAR Specification for reference.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="Request-methods">methods</th></tr>
+                  <tr><td>
+                  <div>
+                    <h4 id="method-Request-getContent">getContent
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    Request.getContent(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <p>
+                        Returns content of the response body.
+                      </p>
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-getContent-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                            <p>
+                              A function that receives the response body when the request completes.
+                            </p>    <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string content, string encoding) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-callback-content">
+                                    <td>string</td>
+                                    <td>
+                                        content</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Content of the response body (potentially encoded).
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-callback-encoding">
+                                    <td>string</td>
+                                    <td>
+                                        encoding</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Empty if content is not encoded, encoding name otherwise. Currently, only base64 is supported.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  </td></tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-getHAR">getHAR
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.devtools.network.getHAR(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns HAR log that contains all known network requests.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getHAR-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        A function that receives the HAR log when the request completes.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object harLog) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-harLog">
+                              <td>object</td>
+                              <td>
+                                  harLog</td>
+                              <td>
+                              
+                              <p>
+                                A HAR log. See HAR specification for details.
+                              </p></td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onRequestFinished">onRequestFinished</h3>
+              <div class="description">
+            <p>
+                  Fired when a network request is finished and all request data are available.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.devtools.network.onRequestFinished.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onRequestFinished-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-Request">Request</a> request) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onRequestFinished-request">
+                                    <td>    <a href="#type-Request">Request</a></td>
+                                    <td>
+                                        request</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Description of a network request in the form of a HAR entry. See HAR specification for details.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onNavigated">onNavigated</h3>
+              <div class="description">
+            <p>
+                  Fired when the inspected window navigates to a new page.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.devtools.network.onNavigated.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onNavigated-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string url) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onNavigated-url">
+                                    <td>string</td>
+                                    <td>
+                                        url</td>
+                                    <td>
+                                    
+                                    <p>
+                                      URL of the new page.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

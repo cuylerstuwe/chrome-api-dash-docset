@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.fileBrowserHandler</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.fileBrowserHandler</code> API to extend the Chrome OS file browser. For example, you can use this API to enable users to upload files to your website.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;fileBrowserHandler&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <p class="caution">
+      <b>Important:</b>
+      This API works <b>only on Chrome OS</b>.
+    </p>
+    <section>
+      <p>
+      The Chrome OS file browser comes up when
+      the user either presses Alt+Shift+M
+      or connects an external storage device,
+      such as an SD card, USB key, external drive, or digital camera.
+      Besides showing the files on external devices,
+      the file browser can also display files
+      that the user has previously saved to the system.
+      </p>
+      
+      <p>
+      When the user selects one or more files,
+      the file browser adds buttons
+      representing the valid handlers for those files.
+      For example, in the following screenshot,
+      selecting a file with a &quot;.jpg&quot; suffix
+      results in an &quot;Upload to Picasa&quot; button that the user can click.
+      </p>
+      
+      <p>
+      <img src="assets/filebrowserhandler.png" width="640" height="400" alt="file browser screenshot">
+      </p>
+      
+      
+      <h2 id="manifest">Manifest</h2>
+      
+      <p>
+      You must declare the &quot;fileBrowserHandler&quot; permission
+      in the <a href="https://developer.chrome.com/extensions/manifest">extension manifest</a>,
+      and you must use the &quot;file_browser_handlers&quot; field
+      to register the extension as a handler of at least one file type.
+      You should also provide a 16x16 icon
+      to be displayed on the button.
+      For example:
+      </p>
+      
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My extension&quot;,
+        ...
+        <b>&quot;file_browser_handlers&quot;</b>: [
+          {
+            <b>&quot;id&quot;</b>: &quot;upload&quot;,
+            <b>&quot;default_title&quot;</b>: &quot;Save to Gallery&quot;, <em>// What the button will display</em>
+            <b>&quot;file_filters&quot;</b>: [
+              &quot;filesystem:*.jpg&quot;, <em>// To match all files, use &quot;filesystem:*.*&quot;</em>
+              &quot;filesystem:*.jpeg&quot;,
+              &quot;filesystem:*.png&quot;
+            ]
+          }
+        ],
+        &quot;permissions&quot; : [
+          <b>&quot;fileBrowserHandler&quot;</b>
+        ],
+        &quot;icons&quot;: { <b>&quot;16&quot;</b>: &quot;icon16.png&quot;,
+                   &quot;48&quot;: &quot;icon48.png&quot;,
+                  &quot;128&quot;: &quot;icon128.png&quot; },
+        ...
+      }
+      </pre>
+      
+      <p class="note">
+      <b>Note:</b>
+      You can specify locale-specific strings for the value of &quot;default_title&quot;.
+      See <a href="i18n.html">Internationalization (i18n)</a> for details.
+      </p>
+      
+      <h2 id="code">Implementing a file browser handler</h2>
+      
+      <p>
+      To use this API,
+      you must implement a function that handles the <code>onExecute</code> event
+      of <code>chrome.fileBrowserHandler</code>.
+      Your function will be called whenever the user clicks the button
+      that represents your file browser handler.
+      In your function, use the HTML5
+      <a href="http://www.html5rocks.com/tutorials/file/filesystem/">FileSystem API</a>
+      to get access to the file contents.
+      Here is an example:
+      </p>
+      
+      <pre data-filename="background.js">      chrome.fileBrowserHandler.onExecute.addListener(function(id, details) {
+        if (id == &apos;upload&apos;) {
+          var fileEntries = details.entries;
+          for (var i = 0, entry; entry = fileEntries[i]; ++i) {
+            entry.file(function(file) {
+              <em>// send file somewhere</em>
+            });
+          }
+        }
+      });
+      </pre>
+      
+      <p>
+      Your event handler is passed two arguments:
+      </p>
+      
+      <dl>
+        <dt> id </dt>
+        <dd> The &quot;id&quot; value from the manifest file.
+             If your extension implements multiple handlers,
+             you can check the <code>id</code> value
+             to see which handler has been triggered.
+             </dd>
+        <dt> details </dt>
+        <dd> An object describing the event.
+             You can get the file or files that the user has selected
+             from the <code>entries</code> field of this object,
+             which is an array of
+             FileSystem <code>Entry</code> objects.
+             </dd>
+      <p></p>
+      
+      
+      <!--
+      <h2 id="manifest_details">Manifest details</h2>
+      
+      <p class="authornote">
+      {PENDING: give details about "id" and "default_title".
+      It should be unique within your extension -- don't worry about other extensions.
+      "default_title" implies that you can change the title,
+      but you can't aside from internationalizing it.
+      </p>
+      
+      <p class="authornote">
+      {PENDING: give details about the file_filters entry.
+      File filters are currently case-sensitive, but we plan to change that.
+      Mention <code>filesystem:*.*</code>.
+      </p>
+      -->
+      
+      <!--
+      <h2 id="examples">Examples</h2>
+      
+      <p>
+      For examples of using this API, see ...
+      For other examples and for help in viewing the source code, see
+      <a href="samples">Samples</a>.
+      </p>
+      -->
+    </dl></section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-FileHandlerExecuteEventDetails">FileHandlerExecuteEventDetails</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-selectFile">selectFile</a> &#x2212;
+            <code class="prettyprint">
+            chrome.fileBrowserHandler.selectFile(<span>object selectionParams</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onExecute">onExecute</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-FileHandlerExecuteEventDetails">FileHandlerExecuteEventDetails</h3>
+              <dd>Event details payload for fileBrowserHandler.onExecute event.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="FileHandlerExecuteEventDetails-properties">properties</th></tr>
+                  <tr id="property-FileHandlerExecuteEventDetails-entries">
+                    <td>array of any</td>
+                    <td>
+                        entries</td>
+                    <td>
+                    
+                    <p>
+                      Array of Entry instances representing files that are targets of this action (selected in ChromeOS file browser).
+                    </p></td>
+                  </tr><tr id="property-FileHandlerExecuteEventDetails-tab_id">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tab_id</td>
+                    <td>
+                    
+                    <p>
+                      The ID of the tab that raised this event. Tab IDs are unique within a browser session.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-selectFile">selectFile
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.fileBrowserHandler.selectFile(<span>object selectionParams</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Prompts user to select file path under which file should be saved. When the file is selected, file access permission required to use the file (read, write and create) are granted to the caller. The file will not actually get created during the function call, so function caller must ensure its existence before using it. The function has to be invoked with a user gesture.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-selectFile-selectionParams">
+                      <td>object</td>
+                      <td>
+                          selectionParams</td>
+                      <td>
+                      
+                      <p>
+                        Parameters that will be used while selecting the file.
+                      </p>  <table class="innerTable">
+                          <tbody><tr id="property-selectionParams-suggestedName">
+                            <td>string</td>
+                            <td>
+                                suggestedName</td>
+                            <td>
+                            
+                            <p>
+                              Suggested name for the file.
+                            </p></td>
+                          </tr><tr id="property-selectionParams-allowedFileExtensions">
+                            <td>array of string</td>
+                            <td><span class="optional">(optional)</span>
+                                allowedFileExtensions</td>
+                            <td>
+                            
+                            <p>
+                              List of file extensions that the selected file can have. The list is also used to specify what files to be shown in the select file dialog. Files with the listed extensions are only shown in the dialog. Extensions should not include the leading &apos;.&apos;. Example: [&apos;jpg&apos;, &apos;png&apos;]
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-selectFile-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Function called upon completion.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>object</td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              <p>
+                                Result of the method.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-result-success">
+                                    <td>boolean</td>
+                                    <td>
+                                        success</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether the file has been selected.
+                                    </p></td>
+                                  </tr><tr id="property-result-entry">
+                                    <td>object</td>
+                                    <td><span class="optional">(optional)</span>
+                                        entry</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Selected file entry. It will be null if a file hasn&apos;t been selected.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onExecute">onExecute</h3>
+              <div class="description">
+            <p>
+                  Fired when file system action is executed from ChromeOS file browser.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.fileBrowserHandler.onExecute.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onExecute-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string id,     <a href="#type-FileHandlerExecuteEventDetails">FileHandlerExecuteEventDetails</a> details) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onExecute-id">
+                                    <td>string</td>
+                                    <td>
+                                        id</td>
+                                    <td>
+                                    
+                                    <p>
+                                      File browser action id as specified in the listener component&apos;s manifest.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onExecute-details">
+                                    <td>    <a href="#type-FileHandlerExecuteEventDetails">FileHandlerExecuteEventDetails</a></td>
+                                    <td>
+                                        details</td>
+                                    <td>
+                                    
+                                    <p>
+                                      File handler execute event details.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

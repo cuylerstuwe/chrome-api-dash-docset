@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.notifications</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.notifications</code> API to create rich notifications
+             using templates and show these notifications to users in the system tray.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;notifications&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Learn More:</td>
+        <td>
+            <a href="https://developer.chrome.com/extensions/richNotifications">
+            Rich Notifications
+                    </a>
+            <br>
+            <a href="https://developer.chrome.com/extensions/inform_users">
+            Keep Users Informed
+                    </a>
+            <br>
+            <a href="https://developers.google.com/live/shows/83992232-1001/">
+            Chrome Apps Office Hours: Rich Notifications
+                    </a>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-TemplateType">TemplateType</a></td></tr>
+          <tr><td><a href="#type-PermissionLevel">PermissionLevel</a></td></tr>
+          <tr><td><a href="#type-NotificationOptions">NotificationOptions</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-create">create</a> &#x2212;
+            <code class="prettyprint">
+            chrome.notifications.create(<span class="optional">string notificationId</span>, <span>    NotificationOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-update">update</a> &#x2212;
+            <code class="prettyprint">
+            chrome.notifications.update(<span>string notificationId</span>, <span>    NotificationOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-clear">clear</a> &#x2212;
+            <code class="prettyprint">
+            chrome.notifications.clear(<span>string notificationId</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getAll">getAll</a> &#x2212;
+            <code class="prettyprint">
+            chrome.notifications.getAll(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getPermissionLevel">getPermissionLevel</a> &#x2212;
+            <code class="prettyprint">
+            chrome.notifications.getPermissionLevel(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onClosed">onClosed</a></td></tr>
+          <tr><td><a href="#event-onClicked">onClicked</a></td></tr>
+          <tr><td><a href="#event-onButtonClicked">onButtonClicked</a></td></tr>
+          <tr><td><a href="#event-onPermissionLevelChanged">onPermissionLevelChanged</a></td></tr>
+          <tr><td><a href="#event-onShowSettings">onShowSettings</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-TemplateType">TemplateType</h3>
+              <dd></dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                      <dl>
+                        <dt><code>&quot;basic&quot;</code></dt>
+                        <dd>
+                          icon, title, message, expandedMessage, up to two buttons
+                        </dd>
+                      </dl>
+                      <dl>
+                        <dt><code>&quot;image&quot;</code></dt>
+                        <dd>
+                          icon, title, message, expandedMessage, image, up to two buttons
+                        </dd>
+                      </dl>
+                      <dl>
+                        <dt><code>&quot;list&quot;</code></dt>
+                        <dd>
+                          icon, title, message, items, up to two buttons. Users on Mac OS X only see the first item.
+                        </dd>
+                      </dl>
+                      <dl>
+                        <dt><code>&quot;progress&quot;</code></dt>
+                        <dd>
+                          icon, title, message, progress, up to two buttons
+                        </dd>
+                      </dl>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-PermissionLevel">PermissionLevel</h3>
+              <dd></dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                      <dl>
+                        <dt><code>&quot;granted&quot;</code></dt>
+                        <dd>
+                          User has elected to show notifications from the app or extension. This is the default at install time.
+                        </dd>
+                      </dl>
+                      <dl>
+                        <dt><code>&quot;denied&quot;</code></dt>
+                        <dd>
+                          User has elected not to show notifications from the app or extension.
+                        </dd>
+                      </dl>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-NotificationOptions">NotificationOptions</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="NotificationOptions-properties">properties</th></tr>
+                  <tr id="property-NotificationOptions-type">
+                    <td>    <a href="#type-TemplateType">TemplateType</a></td>
+                    <td><span class="optional">(optional)</span>
+                        type</td>
+                    <td>
+                    
+                    <p>
+                      Which type of notification to display. <em>Required for <a href="#method-create">notifications.create</a></em> method.
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-iconUrl">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        iconUrl</td>
+                    <td>
+                    
+                    <p>
+                      </p><p>A URL to the sender&apos;s avatar, app icon, or a thumbnail for image notifications.</p><p>URLs can be a data URL, a blob URL, or a URL relative to a resource within this extension&apos;s .crx file <em>Required for <a href="#method-create">notifications.create</a></em> method.</p>
+                    <p></p></td>
+                  </tr><tr id="property-NotificationOptions-appIconMaskUrl">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        appIconMaskUrl</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Deprecated</strong> since Chrome 59.
+                        The app icon mask is not visible for Mac OS X users.
+                    </p>
+                    
+                    <p>
+                      </p><p>A URL to the app icon mask. URLs have the same restrictions as <a href="#property-NotificationOptions-iconUrl">iconUrl</a>.</p><p>The app icon mask should be in alpha channel, as only the alpha channel of the image will be considered.</p>
+                    <p></p></td>
+                  </tr><tr id="property-NotificationOptions-title">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        title</td>
+                    <td>
+                    
+                    <p>
+                      Title of the notification (e.g. sender name for email). <em>Required for <a href="#method-create">notifications.create</a></em> method.
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-message">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        message</td>
+                    <td>
+                    
+                    <p>
+                      Main notification content. <em>Required for <a href="#method-create">notifications.create</a></em> method.
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-contextMessage">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        contextMessage</td>
+                    <td>
+                    
+                    <p>
+                      Alternate notification content with a lower-weight font.
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-priority">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        priority</td>
+                    <td>
+                    
+                    <p>
+                      Priority ranges from -2 to 2. -2 is lowest priority. 2 is highest. Zero is default.  On platforms that don&apos;t support a notification center (Windows, Linux &amp; Mac), -2 and -1 result in an error as notifications with those priorities will not be shown at all.
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-eventTime">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        eventTime</td>
+                    <td>
+                    
+                    <p>
+                      A timestamp associated with the notification, in milliseconds past the epoch (e.g. <code>Date.now() + n</code>).
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-buttons">
+                    <td>array of object</td>
+                    <td><span class="optional">(optional)</span>
+                        buttons</td>
+                    <td>
+                    
+                    <p>
+                      Text and icons for up to two notification action buttons.
+                    </p>  <h4 title>Properties of each object</h4>
+                      <dl>
+                        <div>
+                          <table>
+                              <tbody><tr id="property-buttonsType-title">
+                                <td>string</td>
+                                <td>
+                                    title</td>
+                                <td>
+                                
+                                </td>
+                              </tr><tr id="property-buttonsType-iconUrl">
+                                <td>string</td>
+                                <td><span class="optional">(optional)</span>
+                                    iconUrl</td>
+                                <td>
+                                
+                                </td>
+                              </tr>
+                          </tbody></table>
+                        </div>
+                      </dl>
+                    </td>
+                  </tr><tr id="property-NotificationOptions-imageUrl">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        imageUrl</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Deprecated</strong> since Chrome 59.
+                        The image is not visible for Mac OS X users.
+                    </p>
+                    
+                    <p>
+                      A URL to the image thumbnail for image-type notifications. URLs have the same restrictions as <a href="#property-NotificationOptions-iconUrl">iconUrl</a>.
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-items">
+                    <td>array of object</td>
+                    <td><span class="optional">(optional)</span>
+                        items</td>
+                    <td>
+                    
+                    <p>
+                      Items for multi-item notifications. Users on Mac OS X only see the first item.
+                    </p>  <h4 title>Properties of each object</h4>
+                      <dl>
+                        <div>
+                          <table>
+                              <tbody><tr id="property-itemsType-title">
+                                <td>string</td>
+                                <td>
+                                    title</td>
+                                <td>
+                                
+                                <p>
+                                  Title of one item of a list notification.
+                                </p></td>
+                              </tr><tr id="property-itemsType-message">
+                                <td>string</td>
+                                <td>
+                                    message</td>
+                                <td>
+                                
+                                <p>
+                                  Additional details about this item.
+                                </p></td>
+                              </tr>
+                          </tbody></table>
+                        </div>
+                      </dl>
+                    </td>
+                  </tr><tr id="property-NotificationOptions-progress">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        progress</td>
+                    <td>
+                    
+                    <p>
+                      Current progress ranges from 0 to 100.
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-isClickable">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        isClickable</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Deprecated</strong> since Chrome 67.
+                        This UI hint is ignored as of Chrome 67
+                    </p>
+                    
+                    </td>
+                  </tr><tr id="property-NotificationOptions-requireInteraction">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        requireInteraction</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 50.
+                    </p>
+                    
+                    <p>
+                      Indicates that the notification should remain visible on screen until the user activates or dismisses the notification. This defaults to false.
+                    </p></td>
+                  </tr><tr id="property-NotificationOptions-silent">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        silent</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 70.
+                    </p>
+                    
+                    <p>
+                      Indicates that no sounds or vibrations should be made when the notification is being shown. This defaults to false.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-create">create
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.notifications.create(<span class="optional">string notificationId</span>, <span>    <a href="#type-NotificationOptions">NotificationOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Creates and displays a notification.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-create-notificationId">
+                      <td>string</td>
+                      <td><span class="optional">(optional)</span>
+                          notificationId</td>
+                      <td>
+                      
+                      <p>
+                        </p><p>Identifier of the notification. If not set or empty, an ID will automatically be generated. If it matches an existing notification, this method first clears that notification before proceeding with the create operation. The identifier may not be longer than 500 characters.</p><p>The <code>notificationId</code> parameter is required before Chrome 42.</p>
+                      <p></p></td>
+                    </tr>
+                    <tr id="property-create-options">
+                      <td>    <a href="#type-NotificationOptions">NotificationOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      <p>
+                        Contents of the notification.
+                      </p></td>
+                    </tr>
+                    <tr id="property-create-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        </p><p>Returns the notification id (either supplied or generated) that represents the created notification.</p><p>The callback is required before Chrome 42.</p>
+                      <p></p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(string notificationId) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-notificationId">
+                              <td>string</td>
+                              <td>
+                                  notificationId</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-update">update
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.notifications.update(<span>string notificationId</span>, <span>    <a href="#type-NotificationOptions">NotificationOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Updates an existing notification.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-update-notificationId">
+                      <td>string</td>
+                      <td>
+                          notificationId</td>
+                      <td>
+                      
+                      <p>
+                        The id of the notification to be updated. This is returned by <a href="#method-create">notifications.create</a> method.
+                      </p></td>
+                    </tr>
+                    <tr id="property-update-options">
+                      <td>    <a href="#type-NotificationOptions">NotificationOptions</a></td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      <p>
+                        Contents of the notification to update to.
+                      </p></td>
+                    </tr>
+                    <tr id="property-update-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        </p><p>Called to indicate whether a matching notification existed.</p><p>The callback is required before Chrome 42.</p>
+                      <p></p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean wasUpdated) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-wasUpdated">
+                              <td>boolean</td>
+                              <td>
+                                  wasUpdated</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-clear">clear
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.notifications.clear(<span>string notificationId</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clears the specified notification.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-clear-notificationId">
+                      <td>string</td>
+                      <td>
+                          notificationId</td>
+                      <td>
+                      
+                      <p>
+                        The id of the notification to be cleared. This is returned by <a href="#method-create">notifications.create</a> method.
+                      </p></td>
+                    </tr>
+                    <tr id="property-clear-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        </p><p>Called to indicate whether a matching notification existed.</p><p>The callback is required before Chrome 42.</p>
+                      <p></p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean wasCleared) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-wasCleared">
+                              <td>boolean</td>
+                              <td>
+                                  wasCleared</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getAll">getAll
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.notifications.getAll(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Retrieves all the notifications of this app or extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getAll-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Returns the set of notification_ids currently in the system.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object notifications) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-notifications">
+                              <td>object</td>
+                              <td>
+                                  notifications</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getPermissionLevel">getPermissionLevel
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.notifications.getPermissionLevel(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Retrieves whether the user has enabled notifications from this app or extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getPermissionLevel-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Returns the current permission level.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-PermissionLevel">PermissionLevel</a> level) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-level">
+                              <td>    <a href="#type-PermissionLevel">PermissionLevel</a></td>
+                              <td>
+                                  level</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onClosed">onClosed</h3>
+              <div class="description">
+            <p>
+                  The notification closed, either by the system or by user action.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.notifications.onClosed.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onClosed-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string notificationId, boolean byUser) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onClosed-notificationId">
+                                    <td>string</td>
+                                    <td>
+                                        notificationId</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onClosed-byUser">
+                                    <td>boolean</td>
+                                    <td>
+                                        byUser</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onClicked">onClicked</h3>
+              <div class="description">
+            <p>
+                  The user clicked in a non-button area of the notification.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.notifications.onClicked.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onClicked-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string notificationId) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onClicked-notificationId">
+                                    <td>string</td>
+                                    <td>
+                                        notificationId</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onButtonClicked">onButtonClicked</h3>
+              <div class="description">
+            <p>
+                  The user pressed a button in the notification.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.notifications.onButtonClicked.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onButtonClicked-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string notificationId, integer buttonIndex) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onButtonClicked-notificationId">
+                                    <td>string</td>
+                                    <td>
+                                        notificationId</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onButtonClicked-buttonIndex">
+                                    <td>integer</td>
+                                    <td>
+                                        buttonIndex</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onPermissionLevelChanged">onPermissionLevelChanged</h3>
+              <div class="description">
+            <p>
+                  The user changes the permission level.  As of Chrome 47, only ChromeOS has UI that dispatches this event.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.notifications.onPermissionLevelChanged.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onPermissionLevelChanged-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-PermissionLevel">PermissionLevel</a> level) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onPermissionLevelChanged-level">
+                                    <td>    <a href="#type-PermissionLevel">PermissionLevel</a></td>
+                                    <td>
+                                        level</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onShowSettings">onShowSettings</h3>
+              <div class="description">
+                <p class="availability">
+                  <strong>Deprecated</strong> since Chrome 65.
+                    Custom notification settings button is no longer supported.
+                </p>
+            <p>
+                  The user clicked on a link for the app&apos;s notification settings.  As of Chrome 47, only ChromeOS has UI that dispatches this event. As of Chrome 65, that UI has been removed from ChromeOS, too.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.notifications.onShowSettings.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onShowSettings-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

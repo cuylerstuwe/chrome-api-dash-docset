@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.management</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            The <code>chrome.management</code> API provides ways to manage the list of extensions/apps that are installed and running. It is particularly useful for extensions that <a href="https://developer.chrome.com/extensions/override">override</a> the built-in New Tab page.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;management&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <h2 id="manifest">Manifest</h2>
+      
+      <p>You must declare the &quot;management&quot; permission
+      in the <a href="https://developer.chrome.com/extensions/manifest">extension manifest</a>
+      to use the management API.
+      For example:</p>
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My extension&quot;,
+        ...
+        <b>&quot;permissions&quot;: [
+          &quot;management&quot;
+        ]</b>,
+        ...
+      }</pre>
+      
+      <p>
+      <a href="#method-getPermissionWarningsByManifest">management.getPermissionWarningsByManifest</a>,
+      <a href="#method-uninstallSelf">management.uninstallSelf</a>, and <a href="#method-getSelf">management.getSelf</a> do not require
+      the management permission.
+      </p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-IconInfo">IconInfo</a></td></tr>
+          <tr><td><a href="#type-LaunchType">LaunchType</a></td></tr>
+          <tr><td><a href="#type-ExtensionDisabledReason">ExtensionDisabledReason</a></td></tr>
+          <tr><td><a href="#type-ExtensionType">ExtensionType</a></td></tr>
+          <tr><td><a href="#type-ExtensionInstallType">ExtensionInstallType</a></td></tr>
+          <tr><td><a href="#type-ExtensionInfo">ExtensionInfo</a></td></tr>
+          <tr><td><a href="#type-UninstallOptions">UninstallOptions</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-getAll">getAll</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.getAll(<span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-get">get</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.get(<span>string id</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getSelf">getSelf</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.getSelf(<span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getPermissionWarningsById">getPermissionWarningsById</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.getPermissionWarningsById(<span>string id</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getPermissionWarningsByManifest">getPermissionWarningsByManifest</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.getPermissionWarningsByManifest(<span>string manifestStr</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setEnabled">setEnabled</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.setEnabled(<span>string id</span>, <span>boolean enabled</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-uninstall">uninstall</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.uninstall(<span>string id</span>, <span class="optional">    UninstallOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-uninstallSelf">uninstallSelf</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.uninstallSelf(<span class="optional">    UninstallOptions options</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-launchApp">launchApp</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.launchApp(<span>string id</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-createAppShortcut">createAppShortcut</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.createAppShortcut(<span>string id</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setLaunchType">setLaunchType</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.setLaunchType(<span>string id</span>, <span>    LaunchType launchType</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-generateAppForLink">generateAppForLink</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.generateAppForLink(<span>string url</span>, <span>string title</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-canInstallReplacementAndroidApp">canInstallReplacementAndroidApp</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.canInstallReplacementAndroidApp(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-installReplacementAndroidApp">installReplacementAndroidApp</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.installReplacementAndroidApp(<span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-installReplacementWebApp">installReplacementWebApp</a> &#x2212;
+            <code class="prettyprint">
+            chrome.management.installReplacementWebApp(<span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onInstalled">onInstalled</a></td></tr>
+          <tr><td><a href="#event-onUninstalled">onUninstalled</a></td></tr>
+          <tr><td><a href="#event-onEnabled">onEnabled</a></td></tr>
+          <tr><td><a href="#event-onDisabled">onDisabled</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-IconInfo">IconInfo</h3>
+              <dd>Information about an icon belonging to an extension, app, or theme.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="IconInfo-properties">properties</th></tr>
+                  <tr id="property-IconInfo-size">
+                    <td>integer</td>
+                    <td>
+                        size</td>
+                    <td>
+                    
+                    <p>
+                      A number representing the width and height of the icon. Likely values include (but are not limited to) 128, 48, 24, and 16.
+                    </p></td>
+                  </tr><tr id="property-IconInfo-url">
+                    <td>string</td>
+                    <td>
+                        url</td>
+                    <td>
+                    
+                    <p>
+                      The URL for this icon image. To display a grayscale version of the icon (to indicate that an extension is disabled, for example), append <code>?grayscale=true</code> to the URL.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-LaunchType">LaunchType</h3>
+              <dd>These are all possible app launch types.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;OPEN_AS_REGULAR_TAB&quot;</code>, 
+                        <code>&quot;OPEN_AS_PINNED_TAB&quot;</code>, 
+                        <code>&quot;OPEN_AS_WINDOW&quot;</code>, 
+                        or <code>&quot;OPEN_FULL_SCREEN&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ExtensionDisabledReason">ExtensionDisabledReason</h3>
+              <dd>A reason the item is disabled.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;unknown&quot;</code>, 
+                        or <code>&quot;permissions_increase&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ExtensionType">ExtensionType</h3>
+              <dd>The type of this extension, app, or theme.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;extension&quot;</code>, 
+                        <code>&quot;hosted_app&quot;</code>, 
+                        <code>&quot;packaged_app&quot;</code>, 
+                        <code>&quot;legacy_packaged_app&quot;</code>, 
+                        <code>&quot;theme&quot;</code>, 
+                        or <code>&quot;login_screen_extension&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ExtensionInstallType">ExtensionInstallType</h3>
+              <dd>How the extension was installed. One of<br><var>admin</var>: The extension was installed because of an administrative policy,<br><var>development</var>: The extension was loaded unpacked in developer mode,<br><var>normal</var>: The extension was installed normally via a .crx file,<br><var>sideload</var>: The extension was installed by other software on the machine,<br><var>other</var>: The extension was installed by other means.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;admin&quot;</code>, 
+                        <code>&quot;development&quot;</code>, 
+                        <code>&quot;normal&quot;</code>, 
+                        <code>&quot;sideload&quot;</code>, 
+                        or <code>&quot;other&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ExtensionInfo">ExtensionInfo</h3>
+              <dd>Information about an installed extension, app, or theme.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="ExtensionInfo-properties">properties</th></tr>
+                  <tr id="property-ExtensionInfo-id">
+                    <td>string</td>
+                    <td>
+                        id</td>
+                    <td>
+                    
+                    <p>
+                      The extension&apos;s unique identifier.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-name">
+                    <td>string</td>
+                    <td>
+                        name</td>
+                    <td>
+                    
+                    <p>
+                      The name of this extension, app, or theme.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-shortName">
+                    <td>string</td>
+                    <td>
+                        shortName</td>
+                    <td>
+                    
+                    <p>
+                      A short version of the name of this extension, app, or theme.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-description">
+                    <td>string</td>
+                    <td>
+                        description</td>
+                    <td>
+                    
+                    <p>
+                      The description of this extension, app, or theme.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-version">
+                    <td>string</td>
+                    <td>
+                        version</td>
+                    <td>
+                    
+                    <p>
+                      The <a href="https://developer.chrome.com/extensions/manifest/version">version</a> of this extension, app, or theme.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-versionName">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        versionName</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 50.
+                    </p>
+                    
+                    <p>
+                      The <a href="https://developer.chrome.com/extensions/manifest/version#version_name">version name</a> of this extension, app, or theme if the manifest specified one.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-mayDisable">
+                    <td>boolean</td>
+                    <td>
+                        mayDisable</td>
+                    <td>
+                    
+                    <p>
+                      Whether this extension can be disabled or uninstalled by the user.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-mayEnable">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        mayEnable</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 62.
+                    </p>
+                    
+                    <p>
+                      Whether this extension can be enabled by the user. This is only returned for extensions which are not enabled.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-enabled">
+                    <td>boolean</td>
+                    <td>
+                        enabled</td>
+                    <td>
+                    
+                    <p>
+                      Whether it is currently enabled or disabled.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-disabledReason">
+                    <td>    <a href="#type-ExtensionDisabledReason">ExtensionDisabledReason</a></td>
+                    <td><span class="optional">(optional)</span>
+                        disabledReason</td>
+                    <td>
+                    
+                    <p>
+                      A reason the item is disabled.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-isApp">
+                    <td>boolean</td>
+                    <td>
+                        isApp</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Deprecated</strong> since Chrome 38.
+                        Please use <a href="#property-ExtensionInfo-type">management.ExtensionInfo.type</a>.
+                    </p>
+                    
+                    <p>
+                      True if this is an app.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-type">
+                    <td>    <a href="#type-ExtensionType">ExtensionType</a></td>
+                    <td>
+                        type</td>
+                    <td>
+                    
+                    <p>
+                      The type of this extension, app, or theme.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-appLaunchUrl">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        appLaunchUrl</td>
+                    <td>
+                    
+                    <p>
+                      The launch url (only present for apps).
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-homepageUrl">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        homepageUrl</td>
+                    <td>
+                    
+                    <p>
+                      The URL of the homepage of this extension, app, or theme.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-updateUrl">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        updateUrl</td>
+                    <td>
+                    
+                    <p>
+                      The update URL of this extension, app, or theme.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-offlineEnabled">
+                    <td>boolean</td>
+                    <td>
+                        offlineEnabled</td>
+                    <td>
+                    
+                    <p>
+                      Whether the extension, app, or theme declares that it supports offline.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-optionsUrl">
+                    <td>string</td>
+                    <td>
+                        optionsUrl</td>
+                    <td>
+                    
+                    <p>
+                      The url for the item&apos;s options page, if it has one.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-icons">
+                    <td>array of     <a href="#type-IconInfo">IconInfo</a></td>
+                    <td><span class="optional">(optional)</span>
+                        icons</td>
+                    <td>
+                    
+                    <p>
+                      A list of icon information. Note that this just reflects what was declared in the manifest, and the actual image at that url may be larger or smaller than what was declared, so you might consider using explicit width and height attributes on img tags referencing these images. See the <a href="https://developer.chrome.com/extensions/manifest/icons">manifest documentation on icons</a> for more details.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-permissions">
+                    <td>array of string</td>
+                    <td>
+                        permissions</td>
+                    <td>
+                    
+                    <p>
+                      Returns a list of API based permissions.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-hostPermissions">
+                    <td>array of string</td>
+                    <td>
+                        hostPermissions</td>
+                    <td>
+                    
+                    <p>
+                      Returns a list of host based permissions.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-installType">
+                    <td>    <a href="#type-ExtensionInstallType">ExtensionInstallType</a></td>
+                    <td>
+                        installType</td>
+                    <td>
+                    
+                    <p>
+                      How the extension was installed.
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-launchType">
+                    <td>    <a href="#type-LaunchType">LaunchType</a></td>
+                    <td><span class="optional">(optional)</span>
+                        launchType</td>
+                    <td>
+                    
+                    <p>
+                      The app launch type (only present for apps).
+                    </p></td>
+                  </tr><tr id="property-ExtensionInfo-availableLaunchTypes">
+                    <td>array of     <a href="#type-LaunchType">LaunchType</a></td>
+                    <td><span class="optional">(optional)</span>
+                        availableLaunchTypes</td>
+                    <td>
+                    
+                    <p>
+                      The currently available launch types (only present for apps).
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-UninstallOptions">UninstallOptions</h3>
+              <p class="availability">
+                Since Chrome 88.
+                 <em>Warning:</em> this is the current <strong>Dev</strong> channel.
+                
+                 <a href="index.html#dev_apis">Learn more</a>.
+              </p>
+              <dd>Information about an icon belonging to an extension, app, or theme.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="UninstallOptions-properties">properties</th></tr>
+                  <tr id="property-UninstallOptions-showConfirmDialog">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        showConfirmDialog</td>
+                    <td>
+                    
+                    <p>
+                      Whether or not a confirm-uninstall dialog should prompt the user. Defaults to false for self uninstalls. If an extension uninstalls another extension, this parameter is ignored and the dialog is always shown.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-getAll">getAll
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.getAll(<span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns a list of information about installed extensions and apps.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getAll-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(array of     <a href="#type-ExtensionInfo">ExtensionInfo</a> result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>array of     <a href="#type-ExtensionInfo">ExtensionInfo</a></td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-get">get
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.get(<span>string id</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns information about the installed extension, app, or theme that has the given ID.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-get-id">
+                      <td>string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        The ID from an item of <a href="#type-ExtensionInfo">management.ExtensionInfo</a>.
+                      </p></td>
+                    </tr>
+                    <tr id="property-get-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-ExtensionInfo">ExtensionInfo</a> result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>    <a href="#type-ExtensionInfo">ExtensionInfo</a></td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getSelf">getSelf
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.getSelf(<span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 39.
+                </p>
+                <p>
+                  Returns information about the calling extension, app, or theme. Note: This function can be used without requesting the &apos;management&apos; permission in the manifest.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getSelf-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-ExtensionInfo">ExtensionInfo</a> result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>    <a href="#type-ExtensionInfo">ExtensionInfo</a></td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getPermissionWarningsById">getPermissionWarningsById
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.getPermissionWarningsById(<span>string id</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns a list of <a href="https://developer.chrome.com/extensions/permission_warnings">permission warnings</a> for the given extension id.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getPermissionWarningsById-id">
+                      <td>string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        The ID of an already installed extension.
+                      </p></td>
+                    </tr>
+                    <tr id="property-getPermissionWarningsById-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(array of string permissionWarnings) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-permissionWarnings">
+                              <td>array of string</td>
+                              <td>
+                                  permissionWarnings</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getPermissionWarningsByManifest">getPermissionWarningsByManifest
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.getPermissionWarningsByManifest(<span>string manifestStr</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns a list of <a href="https://developer.chrome.com/extensions/permission_warnings">permission warnings</a> for the given extension manifest string. Note: This function can be used without requesting the &apos;management&apos; permission in the manifest.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getPermissionWarningsByManifest-manifestStr">
+                      <td>string</td>
+                      <td>
+                          manifestStr</td>
+                      <td>
+                      
+                      <p>
+                        Extension manifest JSON string.
+                      </p></td>
+                    </tr>
+                    <tr id="property-getPermissionWarningsByManifest-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(array of string permissionWarnings) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-permissionWarnings">
+                              <td>array of string</td>
+                              <td>
+                                  permissionWarnings</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setEnabled">setEnabled
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.setEnabled(<span>string id</span>, <span>boolean enabled</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Enables or disables an app or extension. In most cases this function must be called in the context of a user gesture (e.g. an onclick handler for a button), and may present the user with a native confirmation UI as a way of preventing abuse.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setEnabled-id">
+                      <td>string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        This should be the id from an item of <a href="#type-ExtensionInfo">management.ExtensionInfo</a>.
+                      </p></td>
+                    </tr>
+                    <tr id="property-setEnabled-enabled">
+                      <td>boolean</td>
+                      <td>
+                          enabled</td>
+                      <td>
+                      
+                      <p>
+                        Whether this item should be enabled or disabled.
+                      </p></td>
+                    </tr>
+                    <tr id="property-setEnabled-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-uninstall">uninstall
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.uninstall(<span>string id</span>, <span class="optional">    <a href="#type-UninstallOptions">UninstallOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Uninstalls a currently installed app or extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-uninstall-id">
+                      <td>string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        This should be the id from an item of <a href="#type-ExtensionInfo">management.ExtensionInfo</a>.
+                      </p></td>
+                    </tr>
+                    <tr id="property-uninstall-options">
+                      <td>    <a href="#type-UninstallOptions">UninstallOptions</a></td>
+                      <td><span class="optional">(optional)</span>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-uninstall-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-uninstallSelf">uninstallSelf
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.uninstallSelf(<span class="optional">    <a href="#type-UninstallOptions">UninstallOptions</a> options</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Uninstalls the calling extension. Note: This function can be used without requesting the &apos;management&apos; permission in the manifest.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-uninstallSelf-options">
+                      <td>    <a href="#type-UninstallOptions">UninstallOptions</a></td>
+                      <td><span class="optional">(optional)</span>
+                          options</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-uninstallSelf-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-launchApp">launchApp
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.launchApp(<span>string id</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Launches an application.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-launchApp-id">
+                      <td>string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        The extension id of the application.
+                      </p></td>
+                    </tr>
+                    <tr id="property-launchApp-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-createAppShortcut">createAppShortcut
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.createAppShortcut(<span>string id</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Display options to create shortcuts for an app. On Mac, only packaged app shortcuts can be created.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-createAppShortcut-id">
+                      <td>string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        This should be the id from an app item of <a href="#type-ExtensionInfo">management.ExtensionInfo</a>.
+                      </p></td>
+                    </tr>
+                    <tr id="property-createAppShortcut-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setLaunchType">setLaunchType
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.setLaunchType(<span>string id</span>, <span>    <a href="#type-LaunchType">LaunchType</a> launchType</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Set the launch type of an app.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setLaunchType-id">
+                      <td>string</td>
+                      <td>
+                          id</td>
+                      <td>
+                      
+                      <p>
+                        This should be the id from an app item of <a href="#type-ExtensionInfo">management.ExtensionInfo</a>.
+                      </p></td>
+                    </tr>
+                    <tr id="property-setLaunchType-launchType">
+                      <td>    <a href="#type-LaunchType">LaunchType</a></td>
+                      <td>
+                          launchType</td>
+                      <td>
+                      
+                      <p>
+                        The target launch type. Always check and make sure this launch type is in <a href="#property-ExtensionInfo-availableLaunchTypes">ExtensionInfo.availableLaunchTypes</a>, because the available launch types vary on different platforms and configurations.
+                      </p></td>
+                    </tr>
+                    <tr id="property-setLaunchType-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-generateAppForLink">generateAppForLink
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.generateAppForLink(<span>string url</span>, <span>string title</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Generate an app for a URL. Returns the generated bookmark app.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-generateAppForLink-url">
+                      <td>string</td>
+                      <td>
+                          url</td>
+                      <td>
+                      
+                      <p>
+                        The URL of a web page. The scheme of the URL can only be &quot;http&quot; or &quot;https&quot;.
+                      </p></td>
+                    </tr>
+                    <tr id="property-generateAppForLink-title">
+                      <td>string</td>
+                      <td>
+                          title</td>
+                      <td>
+                      
+                      <p>
+                        The title of the generated app.
+                      </p></td>
+                    </tr>
+                    <tr id="property-generateAppForLink-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-ExtensionInfo">ExtensionInfo</a> result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>    <a href="#type-ExtensionInfo">ExtensionInfo</a></td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-canInstallReplacementAndroidApp">canInstallReplacementAndroidApp
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.canInstallReplacementAndroidApp(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 78.
+                </p>
+                <p>
+                  Checks if the replacement android app can be installed. Errors generated by this API are reported by setting <a href="runtime.html#property-lastError">runtime.lastError</a> and executing the function&apos;s regular callback.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-canInstallReplacementAndroidApp-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>boolean</td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-installReplacementAndroidApp">installReplacementAndroidApp
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.installReplacementAndroidApp(<span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 78.
+                </p>
+                <p>
+                  Prompts the user to install the replacement Android app from the manifest. Errors generated by this API are reported by setting <a href="runtime.html#property-lastError">runtime.lastError</a> and executing the function&apos;s regular callback.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-installReplacementAndroidApp-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-installReplacementWebApp">installReplacementWebApp
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.management.installReplacementWebApp(<span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 75.
+                </p>
+                <p>
+                  Launches the replacement_web_app specified in the manifest. Prompts the user to install if not already installed.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-installReplacementWebApp-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onInstalled">onInstalled</h3>
+              <div class="description">
+            <p>
+                  Fired when an app or extension has been installed.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.management.onInstalled.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onInstalled-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-ExtensionInfo">ExtensionInfo</a> info) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onInstalled-info">
+                                    <td>    <a href="#type-ExtensionInfo">ExtensionInfo</a></td>
+                                    <td>
+                                        info</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onUninstalled">onUninstalled</h3>
+              <div class="description">
+            <p>
+                  Fired when an app or extension has been uninstalled.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.management.onUninstalled.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onUninstalled-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string id) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onUninstalled-id">
+                                    <td>string</td>
+                                    <td>
+                                        id</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The id of the extension, app, or theme that was uninstalled.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onEnabled">onEnabled</h3>
+              <div class="description">
+            <p>
+                  Fired when an app or extension has been enabled.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.management.onEnabled.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onEnabled-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-ExtensionInfo">ExtensionInfo</a> info) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onEnabled-info">
+                                    <td>    <a href="#type-ExtensionInfo">ExtensionInfo</a></td>
+                                    <td>
+                                        info</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onDisabled">onDisabled</h3>
+              <div class="description">
+            <p>
+                  Fired when an app or extension has been disabled.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.management.onDisabled.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onDisabled-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-ExtensionInfo">ExtensionInfo</a> info) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onDisabled-info">
+                                    <td>    <a href="#type-ExtensionInfo">ExtensionInfo</a></td>
+                                    <td>
+                                        info</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

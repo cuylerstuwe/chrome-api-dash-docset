@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<p class="warning">
+  This API is experimental. It is only available to Chrome users on the
+  <a href="http://www.chromium.org/getting-involved/dev-channel">dev channel</a>.
+</p>
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.signedInDevices</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.signedInDevices</code> API to get a list of devices
+             signed into chrome with the same account as the current profile.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            <strong>Dev</strong> channel only.
+            
+             <a href="index.html#dev_apis">Learn more</a>.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;signedInDevices&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-DeviceInfo">DeviceInfo</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-get">get</a> &#x2212;
+            <code class="prettyprint">
+            chrome.signedInDevices.get(<span class="optional">boolean isLocal</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onDeviceInfoChange">onDeviceInfoChange</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-DeviceInfo">DeviceInfo</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="DeviceInfo-properties">properties</th></tr>
+                  <tr id="property-DeviceInfo-name">
+                    <td>string</td>
+                    <td>
+                        name</td>
+                    <td>
+                    
+                    <p>
+                      Name of the device. This name is usually set by the user when setting up a device.
+                    </p></td>
+                  </tr><tr id="property-DeviceInfo-id">
+                    <td>string</td>
+                    <td>
+                        id</td>
+                    <td>
+                    
+                    <p>
+                      Unique Id for this device. Note: The id is meaningful only in the current device. This id cannot be used to refer to the same device from another device or extension.
+                    </p></td>
+                  </tr><tr id="property-DeviceInfo-os">
+                    <td>enum of    <code>&quot;win&quot;</code>,    <code>&quot;mac&quot;</code>,    <code>&quot;linux&quot;</code>,    <code>&quot;chrome_os&quot;</code>,    <code>&quot;android&quot;</code>,    <code>&quot;ios&quot;</code>,    or <code>&quot;unknown&quot;</code></td>
+                    <td>
+                        os</td>
+                    <td>
+                    
+                    <p>
+                      The OS of the device.
+                    </p></td>
+                  </tr><tr id="property-DeviceInfo-type">
+                    <td>enum of    <code>&quot;desktop_or_laptop&quot;</code>,    <code>&quot;phone&quot;</code>,    <code>&quot;tablet&quot;</code>,    or <code>&quot;unknown&quot;</code></td>
+                    <td>
+                        type</td>
+                    <td>
+                    
+                    <p>
+                      Device Type.
+                    </p></td>
+                  </tr><tr id="property-DeviceInfo-chromeVersion">
+                    <td>string</td>
+                    <td>
+                        chromeVersion</td>
+                    <td>
+                    
+                    <p>
+                      Version of chrome running in this device.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-get">get
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.signedInDevices.get(<span class="optional">boolean isLocal</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Gets the array of signed in devices, signed into the same account as the current profile.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-get-isLocal">
+                      <td>boolean</td>
+                      <td><span class="optional">(optional)</span>
+                          isLocal</td>
+                      <td>
+                      
+                      <p>
+                        If true only return the information for the local device. If false or omitted return the list of all devices including the local device.
+                      </p></td>
+                    </tr>
+                    <tr id="property-get-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        The callback to be invoked with the array of DeviceInfo objects.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(array of     <a href="#type-DeviceInfo">DeviceInfo</a> devices) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-devices">
+                              <td>array of     <a href="#type-DeviceInfo">DeviceInfo</a></td>
+                              <td>
+                                  devices</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onDeviceInfoChange">onDeviceInfoChange</h3>
+              <div class="description">
+            <p>
+                  Fired when the DeviceInfo object of any of the signed in devices changes, or when a device is added or removed.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.signedInDevices.onDeviceInfoChange.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onDeviceInfoChange-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(array of     <a href="#type-DeviceInfo">DeviceInfo</a> devices) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onDeviceInfoChange-devices">
+                                    <td>array of     <a href="#type-DeviceInfo">DeviceInfo</a></td>
+                                    <td>
+                                        devices</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The array of all signed in devices.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

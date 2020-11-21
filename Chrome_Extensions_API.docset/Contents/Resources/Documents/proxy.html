@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.proxy</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.proxy</code> API to manage Chrome&apos;s proxy settings. This API relies on the <a href="types.html#ChromeSetting">ChromeSetting prototype of the type API</a> for getting and setting the proxy configuration.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;proxy&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <h2 id="manifest">Manifest</h2>
+      <p>You must declare the &quot;proxy&quot; permission
+      in the <a href="https://developer.chrome.com/extensions/manifest">extension manifest</a>
+      to use the proxy settings API.
+      For example:</p>
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My extension&quot;,
+        ...
+        <b>&quot;permissions&quot;: [
+          &quot;proxy&quot;
+        ]</b>,
+        ...
+      }
+      </pre>
+      
+      <h2 id="description">Objects and properties</h2>
+      
+      <p>
+      Proxy settings are defined in a
+      <a href="#type-ProxyConfig">proxy.ProxyConfig</a> object. Depending on
+      Chrome&apos;s proxy settings, the settings may contain
+      <a href="#type-ProxyRules">proxy.ProxyRules</a> or a
+      <a href="#type-PacScript">proxy.PacScript</a>.
+      </p>
+      
+      <h3 id="proxy_modes">Proxy modes</h3>
+      
+      <p>
+      A ProxyConfig object&apos;s <code>mode</code> attribute determines the overall
+      behavior of Chrome with regards to proxy usage. It can take the following
+      values:
+      </p><dl>
+      <dt><code>direct</code></dt>
+      <dd>In <code>direct</code> mode all connections are created directly, without
+      any proxy involved. This mode allows no further parameters in the
+      <code>ProxyConfig</code> object.</dd>
+      
+      <dt><code>auto_detect</code></dt>
+      <dd>In <code>auto_detect</code> mode the proxy configuration is determined by
+      a PAC script that can be downloaded at
+      <a href="http://wpad/wpad.dat">http://wpad/wpad.dat</a>.
+      This mode allows no further parameters in the <code>ProxyConfig</code>
+      object.</dd>
+      
+      <dt><code>pac_script</code></dt>
+      <dd>In <code>pac_script</code> mode the proxy configuration is determined by
+      a PAC script that is either retrieved from the URL specified in the
+      <a href="#type-PacScript">proxy.PacScript</a> object or
+      taken literally from the <code>data</code> element specified in the
+      <a href="#type-PacScript">proxy.PacScript</a> object.
+      Besides this, this mode allows no further parameters in the
+      <code>ProxyConfig</code> object.</dd>
+      
+      <dt><code>fixed_servers</code></dt>
+      <dd>In <code>fixed_servers</code> mode the proxy configuration is codified in
+      a <a href="#type-ProxyRules">proxy.ProxyRules</a>
+      object. Its structure is described in <a href="#proxy_rules">Proxy rules</a>.
+      Besides this, the <code>fixed_servers</code> mode allows no further parameters
+      in the <code>ProxyConfig</code> object.</dd>
+      
+      <dt><code>system</code></dt>
+      <dd>In <code>system</code> mode the proxy configuration is taken from the
+      operating system. This mode allows no further parameters in the
+      <code>ProxyConfig</code> object. Note that the <code>system</code> mode is
+      different from setting no proxy configuration. In the latter case, Chrome
+      falls back to the system settings only if no command-line options influence
+      the proxy configuration.</dd>
+      </dl>
+      <p></p>
+      
+      <h3 id="proxy_rules">Proxy rules</h3>
+      
+      <p>
+      The <a href="#type-ProxyRules">proxy.ProxyRules</a> object can contain
+      either a <code>singleProxy</code> attribute or a subset of
+      <code>proxyForHttp</code>, <code>proxyForHttps</code>, <code>proxyForFtp</code>,
+      and <code>fallbackProxy</code>.
+      </p>
+      
+      <p>
+      In the first case, HTTP, HTTPS and FTP traffic is proxied through the specified
+      proxy server. Other traffic is sent directly. In the latter case the behavior is
+      slightly more subtle: If a proxy server is configured for the HTTP, HTTPS or FTP
+      protocol, the respective traffic is proxied through the specified server. If no
+      such proxy server is specified or traffic uses a different protocol than HTTP,
+      HTTPS or FTP, the <code>fallbackProxy</code> is used. If no
+      <code>fallbackProxy</code> is specified, traffic is sent directly without a
+      proxy server.
+      </p>
+      
+      <h3 id="proxy_server_objects">Proxy server objects</h3>
+      
+      <p>
+      A proxy server is configured in a
+      <a href="#type-ProxyServer">proxy.ProxyServer</a> object. The connection
+      to the proxy server (defined by the <code>host</code> attribute) uses the
+      protocol defined in the <code>scheme</code> attribute. If no <code>scheme</code>
+      is specified, the proxy connection defaults to <code>http</code>.
+      </p>
+      
+      <p>
+      If no <code>port</code> is defined in a
+      <a href="#type-ProxyServer">proxy.ProxyServer</a> object, the port is
+      derived from the scheme. The default ports are:
+      </p><table>
+      <tbody><tr><th>Scheme</th><th>Port</th></tr>
+      <tr><td>http</td><td>80</td></tr>
+      <tr><td>https</td><td>443</td></tr>
+      <tr><td>socks4</td><td>1080</td></tr>
+      <tr><td>socks5</td><td>1080</td></tr>
+      </tbody></table>
+      <p></p>
+      
+      <h3 id="bypass_list">Bypass list</h3>
+      
+      <p>
+      Individual servers may be excluded from being proxied with the
+      <code>bypassList</code>. This list may contain the following entries:
+      </p><dl>
+      <dt><code>[<em>&lt;scheme&gt;</em>://]<em>&lt;host-pattern&gt;</em>[:<em>&lt;port&gt;</em>]</code></dt>
+      <dd>Match all hostnames that match the pattern <em>&lt;host-pattern&gt;</em>.
+      A leading <code>&quot;.&quot;</code> is interpreted as a <code>&quot;*.&quot;</code>.<br>
+      Examples: <code>&quot;foobar.com&quot;, &quot;*foobar.com&quot;, &quot;*.foobar.com&quot;, &quot;*foobar.com:99&quot;,
+        &quot;https://x.*.y.com:99&quot;</code>.<br>
+      <table>
+        <tbody><tr>
+          <th>Pattern
+          </th><th>Matches
+          </th><th>Does not match
+        </th></tr><tr>
+          <td><code>&quot;.foobar.com&quot;</code>
+          </td><td><code>&quot;www.foobar.com&quot;</code>
+          </td><td><code>&quot;foobar.com&quot;</code>
+        </td></tr><tr>
+          <td><code>&quot;*.foobar.com&quot;</code>
+          </td><td><code>&quot;www.foobar.com&quot;</code>
+          </td><td><code>&quot;foobar.com&quot;</code>
+        </td></tr><tr>
+          <td><code>&quot;foobar.com&quot;</code>
+          </td><td><code>&quot;foobar.com&quot;</code>
+          </td><td><code>&quot;www.foobar.com&quot;</code>
+        </td></tr><tr>
+          <td><code>&quot;*foobar.com&quot;</code>
+          </td><td><code>&quot;foobar.com&quot;</code>, <code>&quot;www.foobar.com&quot;</code>,
+              <code>&quot;foofoobar.com&quot;</code>
+          </td><td>
+      </td></tr></tbody></table>
+      </dd>
+      
+      <dt><code>[<em>&lt;scheme&gt;</em>://]<em>&lt;ip-literal&gt;</em>[:<em>&lt;port&gt;</em>]</code></dt>
+      <dd>Match URLs that are IP address literals.<br>
+      Conceptually this is the similar to the first case, but with special cases
+      to handle IP literal canonicalization. For example, matching
+      on &quot;[0:0:0::1]&quot; is the same as matching on &quot;[::1]&quot; because
+      the IPv6 canonicalization is done internally.<br>
+      Examples: <code>&quot;127.0.1&quot;, &quot;[0:0::1]&quot;, &quot;[::1]&quot;, &quot;http://[::1]:99&quot;</code></dd>
+      
+      <dt><code><em>&lt;ip-literal&gt;</em>/<em>&lt;prefix-length-in-bits&gt;</em></code></dt>
+      <dd>Match any URL containing an IP literal within the given range. The IP
+      range is specified using CIDR notation.<br>
+      Examples: <code>&quot;192.168.1.1/16&quot;, &quot;fefe:13::abc/33&quot;</code></dd>
+      
+      <dt><code>&lt;local&gt;</code></dt>
+      <dd>Matches simple hostnames. A simple hostname is one that contains no dots
+        and is not an IP literal. For instance <code>example</code> and <code>localhost</code> are
+        simple hostnames, whereas <code>example.com</code>, <code>example.</code>, and
+        <code>[::1]</code> are not.
+      <br>
+        Example: <code>&quot;&lt;local&gt;&quot;</code></dd>
+      </dl>
+      
+      
+      <h2 id="overview-examples">Examples</h2>
+      
+      <p>
+      The following code sets a SOCKS 5 proxy for HTTP connections to all servers but
+      foobar.com and uses direct connections for all other protocols. The settings
+      apply to regular and incognito windows, as incognito windows inherit settings
+      from regular windows. Please also consult the <a href="types.html#ChromeSetting">Types API</a> documentation.
+      </p>
+      
+      <pre>      var config = {
+        mode: &quot;fixed_servers&quot;,
+        rules: {
+          proxyForHttp: {
+            scheme: &quot;socks5&quot;,
+            host: &quot;1.2.3.4&quot;
+          },
+          bypassList: [&quot;foobar.com&quot;]
+        }
+      };
+      chrome.proxy.settings.set(
+          {value: config, scope: &apos;regular&apos;},
+          function() {});
+      </pre>
+      
+      <p>
+      The following code sets a custom PAC script.
+      </p>
+      
+      <pre>      var config = {
+        mode: &quot;pac_script&quot;,
+        pacScript: {
+          data: &quot;function FindProxyForURL(url, host) {\n&quot; +
+                &quot;  if (host == &apos;foobar.com&apos;)\n&quot; +
+                &quot;    return &apos;PROXY blackhole:80&apos;;\n&quot; +
+                &quot;  return &apos;DIRECT&apos;;\n&quot; +
+                &quot;}&quot;
+        }
+      };
+      chrome.proxy.settings.set(
+          {value: config, scope: &apos;regular&apos;},
+          function() {});
+      </pre>
+      
+      <p>
+      The next snippet queries the currently effective proxy settings. The effective
+      proxy settings can be determined by another extension or by a policy. See the <a href="types.html#ChromeSetting">Types API</a> documentation for details.
+      </p>
+      
+      <pre>      chrome.proxy.settings.get(
+          {&apos;incognito&apos;: false},
+          function(config) {console.log(JSON.stringify(config));});
+      </pre>
+      
+      <p>
+      Note that the <code>value</code> object passed to <code>set()</code> is not
+      identical to the <code>value</code> object passed to callback function of
+      <code>get()</code>. The latter will contain a
+      <code>rules.proxyForHttp.port</code> element.
+      </p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-Scheme">Scheme</a></td></tr>
+          <tr><td><a href="#type-Mode">Mode</a></td></tr>
+          <tr><td><a href="#type-ProxyServer">ProxyServer</a></td></tr>
+          <tr><td><a href="#type-ProxyRules">ProxyRules</a></td></tr>
+          <tr><td><a href="#type-PacScript">PacScript</a></td></tr>
+          <tr><td><a href="#type-ProxyConfig">ProxyConfig</a></td></tr>
+        <tr><th colspan="2">Properties</th></tr>
+          <tr><td><a href="#property-settings">settings</a></td>
+        </tr><tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onProxyError">onProxyError</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-Scheme">Scheme</h3>
+              <table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;http&quot;</code>, 
+                        <code>&quot;https&quot;</code>, 
+                        <code>&quot;quic&quot;</code>, 
+                        <code>&quot;socks4&quot;</code>, 
+                        or <code>&quot;socks5&quot;</code>
+                </td></tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-Mode">Mode</h3>
+              <table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;direct&quot;</code>, 
+                        <code>&quot;auto_detect&quot;</code>, 
+                        <code>&quot;pac_script&quot;</code>, 
+                        <code>&quot;fixed_servers&quot;</code>, 
+                        or <code>&quot;system&quot;</code>
+                </td></tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ProxyServer">ProxyServer</h3>
+              <dd>An object encapsulating a single proxy server&apos;s specification.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="ProxyServer-properties">properties</th></tr>
+                  <tr id="property-ProxyServer-scheme">
+                    <td>    <a href="#type-Scheme">Scheme</a></td>
+                    <td><span class="optional">(optional)</span>
+                        scheme</td>
+                    <td>
+                    
+                    <p>
+                      The scheme (protocol) of the proxy server itself. Defaults to &apos;http&apos;.
+                    </p></td>
+                  </tr><tr id="property-ProxyServer-host">
+                    <td>string</td>
+                    <td>
+                        host</td>
+                    <td>
+                    
+                    <p>
+                      The hostname or IP address of the proxy server. Hostnames must be in ASCII (in Punycode format). IDNA is not supported, yet.
+                    </p></td>
+                  </tr><tr id="property-ProxyServer-port">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        port</td>
+                    <td>
+                    
+                    <p>
+                      The port of the proxy server. Defaults to a port that depends on the scheme.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ProxyRules">ProxyRules</h3>
+              <dd>An object encapsulating the set of proxy rules for all protocols. Use either &apos;singleProxy&apos; or (a subset of) &apos;proxyForHttp&apos;, &apos;proxyForHttps&apos;, &apos;proxyForFtp&apos; and &apos;fallbackProxy&apos;.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="ProxyRules-properties">properties</th></tr>
+                  <tr id="property-ProxyRules-singleProxy">
+                    <td>    <a href="#type-ProxyServer">ProxyServer</a></td>
+                    <td><span class="optional">(optional)</span>
+                        singleProxy</td>
+                    <td>
+                    
+                    <p>
+                      The proxy server to be used for all per-URL requests (that is http, https, and ftp).
+                    </p></td>
+                  </tr><tr id="property-ProxyRules-proxyForHttp">
+                    <td>    <a href="#type-ProxyServer">ProxyServer</a></td>
+                    <td><span class="optional">(optional)</span>
+                        proxyForHttp</td>
+                    <td>
+                    
+                    <p>
+                      The proxy server to be used for HTTP requests.
+                    </p></td>
+                  </tr><tr id="property-ProxyRules-proxyForHttps">
+                    <td>    <a href="#type-ProxyServer">ProxyServer</a></td>
+                    <td><span class="optional">(optional)</span>
+                        proxyForHttps</td>
+                    <td>
+                    
+                    <p>
+                      The proxy server to be used for HTTPS requests.
+                    </p></td>
+                  </tr><tr id="property-ProxyRules-proxyForFtp">
+                    <td>    <a href="#type-ProxyServer">ProxyServer</a></td>
+                    <td><span class="optional">(optional)</span>
+                        proxyForFtp</td>
+                    <td>
+                    
+                    <p>
+                      The proxy server to be used for FTP requests.
+                    </p></td>
+                  </tr><tr id="property-ProxyRules-fallbackProxy">
+                    <td>    <a href="#type-ProxyServer">ProxyServer</a></td>
+                    <td><span class="optional">(optional)</span>
+                        fallbackProxy</td>
+                    <td>
+                    
+                    <p>
+                      The proxy server to be used for everthing else or if any of the specific proxyFor... is not specified.
+                    </p></td>
+                  </tr><tr id="property-ProxyRules-bypassList">
+                    <td>array of string</td>
+                    <td><span class="optional">(optional)</span>
+                        bypassList</td>
+                    <td>
+                    
+                    <p>
+                      List of servers to connect to without a proxy server.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-PacScript">PacScript</h3>
+              <dd>An object holding proxy auto-config information. Exactly one of the fields should be non-empty.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="PacScript-properties">properties</th></tr>
+                  <tr id="property-PacScript-url">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        url</td>
+                    <td>
+                    
+                    <p>
+                      URL of the PAC file to be used.
+                    </p></td>
+                  </tr><tr id="property-PacScript-data">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        data</td>
+                    <td>
+                    
+                    <p>
+                      A PAC script.
+                    </p></td>
+                  </tr><tr id="property-PacScript-mandatory">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        mandatory</td>
+                    <td>
+                    
+                    <p>
+                      If true, an invalid PAC script will prevent the network stack from falling back to direct connections. Defaults to false.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ProxyConfig">ProxyConfig</h3>
+              <dd>An object encapsulating a complete proxy configuration.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="ProxyConfig-properties">properties</th></tr>
+                  <tr id="property-ProxyConfig-rules">
+                    <td>    <a href="#type-ProxyRules">ProxyRules</a></td>
+                    <td><span class="optional">(optional)</span>
+                        rules</td>
+                    <td>
+                    
+                    <p>
+                      The proxy rules describing this configuration. Use this for &apos;fixed_servers&apos; mode.
+                    </p></td>
+                  </tr><tr id="property-ProxyConfig-pacScript">
+                    <td>    <a href="#type-PacScript">PacScript</a></td>
+                    <td><span class="optional">(optional)</span>
+                        pacScript</td>
+                    <td>
+                    
+                    <p>
+                      The proxy auto-config (PAC) script for this configuration. Use this for &apos;pac_script&apos; mode.
+                    </p></td>
+                  </tr><tr id="property-ProxyConfig-mode">
+                    <td>    <a href="#type-Mode">Mode</a></td>
+                    <td>
+                        mode</td>
+                    <td>
+                    
+                    <p>
+                      &apos;direct&apos; = Never use a proxy<br>&apos;auto_detect&apos; = Auto detect proxy settings<br>&apos;pac_script&apos; = Use specified PAC script<br>&apos;fixed_servers&apos; = Manually specify proxy servers<br>&apos;system&apos; = Use system proxy settings
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="properties">Properties</h2>
+          <table>
+            <tbody><tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-settings">chrome.proxy.settings</code></td>
+              <td>
+                  Proxy settings to be used. The value of this setting is a ProxyConfig object.
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Functions</th></tr></thead>
+                  <tbody><tr><td>
+                    <div>
+                      <h3 id="method-settings-get">get
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      settings.get(<span>object details</span>, <span>function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Gets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-get-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to consider.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-incognito">
+                                    <td>boolean</td>
+                                    <td><span class="optional">(optional)</span>
+                                        incognito</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Whether to return the value that applies to the incognito session (default false).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-get-callback">
+                              <td>function</td>
+                              <td>
+                                  callback</td>
+                              <td>
+                              
+                                  <p>
+                                      The <em>callback</em> parameter should be a function
+                                      that looks like this:
+                                  </p>
+                                <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                  <table class="innerTable">
+                                    <tbody><tr id="property-callback-details">
+                                      <td>object</td>
+                                      <td>
+                                          details</td>
+                                      <td>
+                                      
+                                      <p>
+                                        Details of the currently effective value.
+                                      </p>  <table class="innerTable">
+                                          <tbody><tr id="property-details-value">
+                                            <td>any</td>
+                                            <td>
+                                                value</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The value of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-levelOfControl">
+                                            <td>enum of    <code>&quot;not_controllable&quot;</code>,    <code>&quot;controlled_by_other_extensions&quot;</code>,    <code>&quot;controllable_by_this_extension&quot;</code>,    or <code>&quot;controlled_by_this_extension&quot;</code></td>
+                                            <td>
+                                                levelOfControl</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The level of control of the setting.
+                                            </p></td>
+                                          </tr><tr id="property-details-incognitoSpecific">
+                                            <td>boolean</td>
+                                            <td><span class="optional">(optional)</span>
+                                                incognitoSpecific</td>
+                                            <td>
+                                            
+                                            <p>
+                                              Whether the effective value is specific to the incognito session.<br>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-settings-set">set
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      settings.set(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Sets the value of a setting.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-set-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to change.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-value">
+                                    <td>any</td>
+                                    <td>
+                                        value</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The value of the setting. <br>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.
+                                    </p></td>
+                                  </tr><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to set the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-set-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the set operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <div>
+                      <h3 id="method-settings-clear">clear
+                      </h3>
+                      <div class="summary">
+                      <code class="prettyprint">
+                      settings.clear(<span>object details</span>, <span class="optional">function callback</span>)
+                      </code>
+                      </div>
+                      <div class="description">
+                        <p>
+                          Clears the setting, restoring any default value.
+                        </p>
+                        <table class="innerTable">
+                          <tbody><tr><th colspan="3">Parameters</th></tr>
+                            <tr id="property-clear-details">
+                              <td>object</td>
+                              <td>
+                                  details</td>
+                              <td>
+                              
+                              <p>
+                                Which setting to clear.
+                              </p>  <table class="innerTable">
+                                  <tbody><tr id="property-details-scope">
+                                    <td>enum of    <code>&quot;regular&quot;</code>,    <code>&quot;regular_only&quot;</code>,    <code>&quot;incognito_persistent&quot;</code>,    or <code>&quot;incognito_session_only&quot;</code></td>
+                                    <td><span class="optional">(optional)</span>
+                                        scope</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Where to clear the setting (default: regular).
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                            <tr id="property-clear-callback">
+                              <td>function</td>
+                              <td><span class="optional">(optional)</span>
+                                  callback</td>
+                              <td>
+                              
+                              <p>
+                                Called at the completion of the clear operation.
+                              </p>    <p>
+                                      If you specify the <em>callback</em> parameter, it should
+                                      be a function that looks like this:
+                                  </p>
+                                <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                              </td>
+                            </tr>
+                        </tbody></table>
+                      </div>
+                    </div>
+                  </td></tr>
+                </tbody></table>
+              </td>
+            </tr>
+          </tbody></table>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onProxyError">onProxyError</h3>
+              <div class="description">
+            <p>
+                  Notifies about proxy errors.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.proxy.onProxyError.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onProxyError-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onProxyError-details">
+                                    <td>object</td>
+                                    <td>
+                                        details</td>
+                                    <td>
+                                    
+                                      <table class="innerTable">
+                                        <tbody><tr id="property-details-fatal">
+                                          <td>boolean</td>
+                                          <td>
+                                              fatal</td>
+                                          <td>
+                                          
+                                          <p>
+                                            If true, the error was fatal and the network transaction was aborted. Otherwise, a direct connection is used instead.
+                                          </p></td>
+                                        </tr><tr id="property-details-error">
+                                          <td>string</td>
+                                          <td>
+                                              error</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The error description.
+                                          </p></td>
+                                        </tr><tr id="property-details-details">
+                                          <td>string</td>
+                                          <td>
+                                              details</td>
+                                          <td>
+                                          
+                                          <p>
+                                            Additional details about the error such as a JavaScript runtime error.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

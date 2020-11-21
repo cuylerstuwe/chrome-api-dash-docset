@@ -1,0 +1,15 @@
+{
+  "name": "chrome-api-docset",
+  "version": "87.0.0",
+  "description": "",
+  "main": "chromeapi_docset.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Georg Barikin, Cuyler Stuwe",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "sqlite3": "^5.0.0"
+  }
+}

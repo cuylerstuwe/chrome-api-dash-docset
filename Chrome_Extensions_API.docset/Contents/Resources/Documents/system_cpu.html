@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.system.cpu</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>system.cpu</code> API to query CPU metadata.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;system.cpu&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-getInfo">getInfo</a> &#x2212;
+            <code class="prettyprint">
+            chrome.system.cpu.getInfo(<span>function callback</span>)
+            </code>
+          </td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-getInfo">getInfo
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.system.cpu.getInfo(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Queries basic CPU information of the system.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getInfo-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object info) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-info">
+                              <td>object</td>
+                              <td>
+                                  info</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-info-numOfProcessors">
+                                    <td>integer</td>
+                                    <td>
+                                        numOfProcessors</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The number of logical processors.
+                                    </p></td>
+                                  </tr><tr id="property-info-archName">
+                                    <td>string</td>
+                                    <td>
+                                        archName</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The architecture name of the processors.
+                                    </p></td>
+                                  </tr><tr id="property-info-modelName">
+                                    <td>string</td>
+                                    <td>
+                                        modelName</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The model name of the processors.
+                                    </p></td>
+                                  </tr><tr id="property-info-features">
+                                    <td>array of string</td>
+                                    <td>
+                                        features</td>
+                                    <td>
+                                    
+                                    <p>
+                                      A set of feature codes indicating some of the processor&apos;s capabilities. The currently supported codes are &quot;mmx&quot;, &quot;sse&quot;, &quot;sse2&quot;, &quot;sse3&quot;, &quot;ssse3&quot;, &quot;sse4_1&quot;, &quot;sse4_2&quot;, and &quot;avx&quot;.
+                                    </p></td>
+                                  </tr><tr id="property-info-processors">
+                                    <td>array of object</td>
+                                    <td>
+                                        processors</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Information about each logical processor.
+                                    </p>  <h4 title>Properties of each object</h4>
+                                      <dl>
+                                        <div>
+                                          <table>
+                                              <tbody><tr id="property-processorsType-usage">
+                                                <td>object</td>
+                                                <td>
+                                                    usage</td>
+                                                <td>
+                                                
+                                                <p>
+                                                  Cumulative usage info for this logical processor.
+                                                </p>  <table class="innerTable">
+                                                    <tbody><tr id="property-usage-user">
+                                                      <td>double</td>
+                                                      <td>
+                                                          user</td>
+                                                      <td>
+                                                      
+                                                      <p>
+                                                        The cumulative time used by userspace programs on this processor.
+                                                      </p></td>
+                                                    </tr><tr id="property-usage-kernel">
+                                                      <td>double</td>
+                                                      <td>
+                                                          kernel</td>
+                                                      <td>
+                                                      
+                                                      <p>
+                                                        The cumulative time used by kernel programs on this processor.
+                                                      </p></td>
+                                                    </tr><tr id="property-usage-idle">
+                                                      <td>double</td>
+                                                      <td>
+                                                          idle</td>
+                                                      <td>
+                                                      
+                                                      <p>
+                                                        The cumulative time spent idle by this processor.
+                                                      </p></td>
+                                                    </tr><tr id="property-usage-total">
+                                                      <td>double</td>
+                                                      <td>
+                                                          total</td>
+                                                      <td>
+                                                      
+                                                      <p>
+                                                        The total cumulative time for this processor.  This value is equal to user + kernel + idle.
+                                                      </p></td>
+                                                    </tr>
+                                                  </tbody></table>
+                                                </td>
+                                              </tr>
+                                          </tbody></table>
+                                        </div>
+                                      </dl>
+                                    </td>
+                                  </tr><tr id="property-info-temperatures">
+                                    <td>array of double</td>
+                                    <td>
+                                        temperatures</td>
+                                    <td>
+                                    
+                                    <p>
+                                      </p><p>List of CPU temperature readings from each thermal zone of the CPU. Temperatures are in degrees Celsius.</p><p><b>Currently supported on Chrome OS only.</b></p>
+                                    <p></p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

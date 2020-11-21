@@ -1,0 +1,2403 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.input.ime</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.input.ime</code> API to implement a custom IME for Chrome OS. This allows your extension to handle keystrokes, set the composition, and manage the candidate window.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;input&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <h2 id="manifest">Manifest</h2>
+      <p>You must declare the &quot;input&quot; permission
+      in the <a href="https://developer.chrome.com/extensions/manifest">extension manifest</a>
+      to use the input.ime API.
+      For example:</p>
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My extension&quot;,
+        ...
+        <b>&quot;permissions&quot;: [
+          &quot;input&quot;
+        ]</b>,
+        ...
+      }</pre>
+      
+      <h2 id="overview-examples">Examples</h2>
+      
+      <p>
+      The following code creates an IME that converts typed letters to upper case.
+      </p>
+      
+      <pre>      var context_id = -1;
+      
+      chrome.input.ime.onFocus.addListener(function(context) {
+        context_id = context.contextID;
+      });
+      
+      chrome.input.ime.onKeyEvent.addListener(
+        function(engineID, keyData) {
+          if (keyData.type == &quot;keydown&quot; &amp;&amp; keyData.key.match(/^[a-z]$/)) {
+            chrome.input.ime.commitText({&quot;contextID&quot;: context_id,
+                                         &quot;text&quot;: keyData.key.toUpperCase()});
+            return true;
+          } else {
+            return false;
+          }
+        });
+      </pre>
+      
+      <p>
+      For an example of using this API, see the
+      <a href="https://chromium.googlesource.com/chromium/src/+/master/chrome/common/extensions/docs/examples/api/input.ime/basic/">basic input.ime sample</a>.
+      For other examples and for help in viewing the source code, see
+      <a href="https://developer.chrome.com/extensions/samples">Samples</a>.
+      </p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-KeyboardEventType">KeyboardEventType</a></td></tr>
+          <tr><td><a href="#type-KeyboardEvent">KeyboardEvent</a></td></tr>
+          <tr><td><a href="#type-InputContextType">InputContextType</a></td></tr>
+          <tr><td><a href="#type-AutoCapitalizeType">AutoCapitalizeType</a></td></tr>
+          <tr><td><a href="#type-InputContext">InputContext</a></td></tr>
+          <tr><td><a href="#type-MenuItemStyle">MenuItemStyle</a></td></tr>
+          <tr><td><a href="#type-MenuItem">MenuItem</a></td></tr>
+          <tr><td><a href="#type-UnderlineStyle">UnderlineStyle</a></td></tr>
+          <tr><td><a href="#type-WindowPosition">WindowPosition</a></td></tr>
+          <tr><td><a href="#type-ScreenType">ScreenType</a></td></tr>
+          <tr><td><a href="#type-MouseButton">MouseButton</a></td></tr>
+          <tr><td><a href="#type-AssistiveWindowType">AssistiveWindowType</a></td></tr>
+          <tr><td><a href="#type-AssistiveWindowProperties">AssistiveWindowProperties</a></td></tr>
+          <tr><td><a href="#type-AssistiveWindowButton">AssistiveWindowButton</a></td></tr>
+          <tr><td><a href="#type-MenuParameters">MenuParameters</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-setComposition">setComposition</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.setComposition(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-clearComposition">clearComposition</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.clearComposition(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-commitText">commitText</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.commitText(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-sendKeyEvents">sendKeyEvents</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.sendKeyEvents(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-hideInputView">hideInputView</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.hideInputView()
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setCandidateWindowProperties">setCandidateWindowProperties</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.setCandidateWindowProperties(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setCandidates">setCandidates</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.setCandidates(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setCursorPosition">setCursorPosition</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.setCursorPosition(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setAssistiveWindowProperties">setAssistiveWindowProperties</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.setAssistiveWindowProperties(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setAssistiveWindowButtonHighlighted">setAssistiveWindowButtonHighlighted</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.setAssistiveWindowButtonHighlighted(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setMenuItems">setMenuItems</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.setMenuItems(<span>    MenuParameters parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-updateMenuItems">updateMenuItems</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.updateMenuItems(<span>    MenuParameters parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-deleteSurroundingText">deleteSurroundingText</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.deleteSurroundingText(<span>object parameters</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-keyEventHandled">keyEventHandled</a> &#x2212;
+            <code class="prettyprint">
+            chrome.input.ime.keyEventHandled(<span>string requestId</span>, <span>boolean response</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onActivate">onActivate</a></td></tr>
+          <tr><td><a href="#event-onDeactivated">onDeactivated</a></td></tr>
+          <tr><td><a href="#event-onFocus">onFocus</a></td></tr>
+          <tr><td><a href="#event-onBlur">onBlur</a></td></tr>
+          <tr><td><a href="#event-onInputContextUpdate">onInputContextUpdate</a></td></tr>
+          <tr><td><a href="#event-onKeyEvent">onKeyEvent</a></td></tr>
+          <tr><td><a href="#event-onCandidateClicked">onCandidateClicked</a></td></tr>
+          <tr><td><a href="#event-onMenuItemActivated">onMenuItemActivated</a></td></tr>
+          <tr><td><a href="#event-onSurroundingTextChanged">onSurroundingTextChanged</a></td></tr>
+          <tr><td><a href="#event-onReset">onReset</a></td></tr>
+          <tr><td><a href="#event-onAssistiveWindowButtonClicked">onAssistiveWindowButtonClicked</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-KeyboardEventType">KeyboardEventType</h3>
+              <table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;keyup&quot;</code>, 
+                        or <code>&quot;keydown&quot;</code>
+                </td></tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-KeyboardEvent">KeyboardEvent</h3>
+              <dd>See http://www.w3.org/TR/DOM-Level-3-Events/#events-KeyboardEvent</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="KeyboardEvent-properties">properties</th></tr>
+                  <tr id="property-KeyboardEvent-type">
+                    <td>    <a href="#type-KeyboardEventType">KeyboardEventType</a></td>
+                    <td>
+                        type</td>
+                    <td>
+                    
+                    <p>
+                      One of keyup or keydown.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-requestId">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        requestId</td>
+                    <td>
+                    
+                    <p>
+                      (Deprecated) The ID of the request. Use the <code>requestId</code> param from the <code>onKeyEvent</code> event instead.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-extensionId">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        extensionId</td>
+                    <td>
+                    
+                    <p>
+                      The extension ID of the sender of this keyevent.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-key">
+                    <td>string</td>
+                    <td>
+                        key</td>
+                    <td>
+                    
+                    <p>
+                      Value of the key being pressed
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-code">
+                    <td>string</td>
+                    <td>
+                        code</td>
+                    <td>
+                    
+                    <p>
+                      Value of the physical key being pressed. The value is not affected by current keyboard layout or modifier state.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-keyCode">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        keyCode</td>
+                    <td>
+                    
+                    <p>
+                      The deprecated HTML keyCode, which is system- and implementation-dependent numerical code signifying the unmodified identifier associated with the key pressed.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-altKey">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        altKey</td>
+                    <td>
+                    
+                    <p>
+                      Whether or not the ALT key is pressed.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-altgrKey">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        altgrKey</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 79.
+                    </p>
+                    
+                    <p>
+                      Whether or not the ALTGR key is pressed.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-ctrlKey">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        ctrlKey</td>
+                    <td>
+                    
+                    <p>
+                      Whether or not the CTRL key is pressed.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-shiftKey">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        shiftKey</td>
+                    <td>
+                    
+                    <p>
+                      Whether or not the SHIFT key is pressed.
+                    </p></td>
+                  </tr><tr id="property-KeyboardEvent-capsLock">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        capsLock</td>
+                    <td>
+                    
+                    <p>
+                      Whether or not the CAPS_LOCK is enabled.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-InputContextType">InputContextType</h3>
+              <dd>Type of value this text field edits, (Text, Number, URL, etc)</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;text&quot;</code>, 
+                        <code>&quot;search&quot;</code>, 
+                        <code>&quot;tel&quot;</code>, 
+                        <code>&quot;url&quot;</code>, 
+                        <code>&quot;email&quot;</code>, 
+                        <code>&quot;number&quot;</code>, 
+                        <code>&quot;password&quot;</code>, 
+                        or <code>&quot;null&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-AutoCapitalizeType">AutoCapitalizeType</h3>
+              <dd>The auto-capitalize type of the text field.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;characters&quot;</code>, 
+                        <code>&quot;words&quot;</code>, 
+                        or <code>&quot;sentences&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-InputContext">InputContext</h3>
+              <dd>Describes an input Context</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="InputContext-properties">properties</th></tr>
+                  <tr id="property-InputContext-contextID">
+                    <td>integer</td>
+                    <td>
+                        contextID</td>
+                    <td>
+                    
+                    <p>
+                      This is used to specify targets of text field operations.  This ID becomes invalid as soon as onBlur is called.
+                    </p></td>
+                  </tr><tr id="property-InputContext-type">
+                    <td>    <a href="#type-InputContextType">InputContextType</a></td>
+                    <td>
+                        type</td>
+                    <td>
+                    
+                    <p>
+                      Type of value this text field edits, (Text, Number, URL, etc)
+                    </p></td>
+                  </tr><tr id="property-InputContext-autoCorrect">
+                    <td>boolean</td>
+                    <td>
+                        autoCorrect</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 40.
+                    </p>
+                    
+                    <p>
+                      Whether the text field wants auto-correct.
+                    </p></td>
+                  </tr><tr id="property-InputContext-autoComplete">
+                    <td>boolean</td>
+                    <td>
+                        autoComplete</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 40.
+                    </p>
+                    
+                    <p>
+                      Whether the text field wants auto-complete.
+                    </p></td>
+                  </tr><tr id="property-InputContext-autoCapitalize">
+                    <td>    <a href="#type-AutoCapitalizeType">AutoCapitalizeType</a></td>
+                    <td>
+                        autoCapitalize</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 69.
+                    </p>
+                    
+                    <p>
+                      The auto-capitalize type of the text field.
+                    </p></td>
+                  </tr><tr id="property-InputContext-spellCheck">
+                    <td>boolean</td>
+                    <td>
+                        spellCheck</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 40.
+                    </p>
+                    
+                    <p>
+                      Whether the text field wants spell-check.
+                    </p></td>
+                  </tr><tr id="property-InputContext-shouldDoLearning">
+                    <td>boolean</td>
+                    <td>
+                        shouldDoLearning</td>
+                    <td>
+                    <p class="availability">
+                      Since Chrome 68.
+                    </p>
+                    
+                    <p>
+                      Whether text entered into the text field should be used to improve typing suggestions for the user.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-MenuItemStyle">MenuItemStyle</h3>
+              <dd>The type of menu item. Radio buttons between separators are considered grouped.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;check&quot;</code>, 
+                        <code>&quot;radio&quot;</code>, 
+                        or <code>&quot;separator&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-MenuItem">MenuItem</h3>
+              <dd>A menu item used by an input method to interact with the user from the language menu.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="MenuItem-properties">properties</th></tr>
+                  <tr id="property-MenuItem-id">
+                    <td>string</td>
+                    <td>
+                        id</td>
+                    <td>
+                    
+                    <p>
+                      String that will be passed to callbacks referencing this MenuItem.
+                    </p></td>
+                  </tr><tr id="property-MenuItem-label">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        label</td>
+                    <td>
+                    
+                    <p>
+                      Text displayed in the menu for this item.
+                    </p></td>
+                  </tr><tr id="property-MenuItem-style">
+                    <td>    <a href="#type-MenuItemStyle">MenuItemStyle</a></td>
+                    <td><span class="optional">(optional)</span>
+                        style</td>
+                    <td>
+                    
+                    <p>
+                      The type of menu item.
+                    </p></td>
+                  </tr><tr id="property-MenuItem-visible">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        visible</td>
+                    <td>
+                    
+                    <p>
+                      Indicates this item is visible.
+                    </p></td>
+                  </tr><tr id="property-MenuItem-checked">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        checked</td>
+                    <td>
+                    
+                    <p>
+                      Indicates this item should be drawn with a check.
+                    </p></td>
+                  </tr><tr id="property-MenuItem-enabled">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        enabled</td>
+                    <td>
+                    
+                    <p>
+                      Indicates this item is enabled.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-UnderlineStyle">UnderlineStyle</h3>
+              <dd>The type of the underline to modify this segment.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;underline&quot;</code>, 
+                        <code>&quot;doubleUnderline&quot;</code>, 
+                        or <code>&quot;noUnderline&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-WindowPosition">WindowPosition</h3>
+              <dd>Where to display the candidate window. If set to &apos;cursor&apos;, the window follows the cursor. If set to &apos;composition&apos;, the window is locked to the beginning of the composition.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;cursor&quot;</code>, 
+                        or <code>&quot;composition&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ScreenType">ScreenType</h3>
+              <dd>The screen type under which the IME is activated.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;normal&quot;</code>, 
+                        <code>&quot;login&quot;</code>, 
+                        <code>&quot;lock&quot;</code>, 
+                        or <code>&quot;secondary-login&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-MouseButton">MouseButton</h3>
+              <dd>Which mouse buttons was clicked.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;left&quot;</code>, 
+                        <code>&quot;middle&quot;</code>, 
+                        or <code>&quot;right&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-AssistiveWindowType">AssistiveWindowType</h3>
+              <dd>Type of assistive window.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;undo&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-AssistiveWindowProperties">AssistiveWindowProperties</h3>
+              <p class="availability">
+                Since Chrome 85.
+              </p>
+              <dd>Properties of the assistive window.</dd><table>
+                
+                  <tbody><tr><th colspan="3" id="AssistiveWindowProperties-properties">properties</th></tr>
+                  <tr id="property-AssistiveWindowProperties-type">
+                    <td>    <a href="#type-AssistiveWindowType">AssistiveWindowType</a></td>
+                    <td>
+                        type</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AssistiveWindowProperties-visible">
+                    <td>boolean</td>
+                    <td>
+                        visible</td>
+                    <td>
+                    
+                    <p>
+                      Sets true to show AssistiveWindow, sets false to hide.
+                    </p></td>
+                  </tr><tr id="property-AssistiveWindowProperties-announceString">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        announceString</td>
+                    <td>
+                    
+                    <p>
+                      Strings for ChromeVox to announce.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-AssistiveWindowButton">AssistiveWindowButton</h3>
+              <dd>ID of buttons in assistive window.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;undo&quot;</code>, 
+                        or <code>&quot;addToDictionary&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-MenuParameters">MenuParameters</h3>
+              <p class="availability">
+                Since Chrome 88.
+                 <em>Warning:</em> this is the current <strong>Dev</strong> channel.
+                
+                 <a href="index.html#dev_apis">Learn more</a>.
+              </p>
+              <table>
+                  <tbody><tr><th colspan="3" id="MenuParameters-properties">properties</th></tr>
+                  <tr id="property-MenuParameters-engineID">
+                    <td>string</td>
+                    <td>
+                        engineID</td>
+                    <td>
+                    
+                    <p>
+                      ID of the engine to use.
+                    </p></td>
+                  </tr><tr id="property-MenuParameters-items">
+                    <td>array of     <a href="#type-MenuItem">MenuItem</a></td>
+                    <td>
+                        items</td>
+                    <td>
+                    
+                    <p>
+                      MenuItems to add or update. They will be added in the order they exist in the array.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-setComposition">setComposition
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.setComposition(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Set the current composition. If this extension does not own the active IME, this fails.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setComposition-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context where the composition text will be set
+                            </p></td>
+                          </tr><tr id="property-parameters-text">
+                            <td>string</td>
+                            <td>
+                                text</td>
+                            <td>
+                            
+                            <p>
+                              Text to set
+                            </p></td>
+                          </tr><tr id="property-parameters-selectionStart">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                selectionStart</td>
+                            <td>
+                            
+                            <p>
+                              Position in the text that the selection starts at.
+                            </p></td>
+                          </tr><tr id="property-parameters-selectionEnd">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                selectionEnd</td>
+                            <td>
+                            
+                            <p>
+                              Position in the text that the selection ends at.
+                            </p></td>
+                          </tr><tr id="property-parameters-cursor">
+                            <td>integer</td>
+                            <td>
+                                cursor</td>
+                            <td>
+                            
+                            <p>
+                              Position in the text of the cursor.
+                            </p></td>
+                          </tr><tr id="property-parameters-segments">
+                            <td>array of object</td>
+                            <td><span class="optional">(optional)</span>
+                                segments</td>
+                            <td>
+                            
+                            <p>
+                              List of segments and their associated types.
+                            </p>  <h4 title>Properties of each object</h4>
+                              <dl>
+                                <div>
+                                  <table>
+                                      <tbody><tr id="property-segmentsType-start">
+                                        <td>integer</td>
+                                        <td>
+                                            start</td>
+                                        <td>
+                                        
+                                        <p>
+                                          Index of the character to start this segment at
+                                        </p></td>
+                                      </tr><tr id="property-segmentsType-end">
+                                        <td>integer</td>
+                                        <td>
+                                            end</td>
+                                        <td>
+                                        
+                                        <p>
+                                          Index of the character to end this segment after.
+                                        </p></td>
+                                      </tr><tr id="property-segmentsType-style">
+                                        <td>    <a href="#type-UnderlineStyle">UnderlineStyle</a></td>
+                                        <td>
+                                            style</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The type of the underline to modify this segment.
+                                        </p></td>
+                                      </tr>
+                                  </tbody></table>
+                                </div>
+                              </dl>
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setComposition-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes with a boolean indicating if the text was accepted or not. On failure, <a href="runtime.html#property-lastError">runtime.lastError</a> is set.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean success) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-success">
+                              <td>boolean</td>
+                              <td>
+                                  success</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-clearComposition">clearComposition
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.clearComposition(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Clear the current composition. If this extension does not own the active IME, this fails.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-clearComposition-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context where the composition will be cleared
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-clearComposition-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes with a boolean indicating if the text was accepted or not. On failure, <a href="runtime.html#property-lastError">runtime.lastError</a> is set.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean success) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-success">
+                              <td>boolean</td>
+                              <td>
+                                  success</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-commitText">commitText
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.commitText(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Commits the provided text to the current input.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-commitText-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context where the text will be committed
+                            </p></td>
+                          </tr><tr id="property-parameters-text">
+                            <td>string</td>
+                            <td>
+                                text</td>
+                            <td>
+                            
+                            <p>
+                              The text to commit
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-commitText-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes with a boolean indicating if the text was accepted or not. On failure, <a href="runtime.html#property-lastError">runtime.lastError</a> is set.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean success) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-success">
+                              <td>boolean</td>
+                              <td>
+                                  success</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-sendKeyEvents">sendKeyEvents
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.sendKeyEvents(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sends the key events.  This function is expected to be used by virtual keyboards.  When key(s) on a virtual keyboard is pressed by a user, this function is used to propagate that event to the system.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-sendKeyEvents-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context where the key events will be sent, or zero to send key events to non-input field.
+                            </p></td>
+                          </tr><tr id="property-parameters-keyData">
+                            <td>array of     <a href="#type-KeyboardEvent">KeyboardEvent</a></td>
+                            <td>
+                                keyData</td>
+                            <td>
+                            
+                            <p>
+                              Data on the key event.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-sendKeyEvents-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-hideInputView">hideInputView
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.hideInputView()
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Hides the input view window, which is popped up automatically by system. If the input view window is already hidden, this function will do nothing.
+                </p>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setCandidateWindowProperties">setCandidateWindowProperties
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.setCandidateWindowProperties(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the properties of the candidate window. This fails if the extension doesn&apos;t own the active IME
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setCandidateWindowProperties-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-engineID">
+                            <td>string</td>
+                            <td>
+                                engineID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the engine to set properties on.
+                            </p></td>
+                          </tr><tr id="property-parameters-properties">
+                            <td>object</td>
+                            <td>
+                                properties</td>
+                            <td>
+                            
+                              <table class="innerTable">
+                                <tbody><tr id="property-properties-visible">
+                                  <td>boolean</td>
+                                  <td><span class="optional">(optional)</span>
+                                      visible</td>
+                                  <td>
+                                  
+                                  <p>
+                                    True to show the Candidate window, false to hide it.
+                                  </p></td>
+                                </tr><tr id="property-properties-cursorVisible">
+                                  <td>boolean</td>
+                                  <td><span class="optional">(optional)</span>
+                                      cursorVisible</td>
+                                  <td>
+                                  
+                                  <p>
+                                    True to show the cursor, false to hide it.
+                                  </p></td>
+                                </tr><tr id="property-properties-vertical">
+                                  <td>boolean</td>
+                                  <td><span class="optional">(optional)</span>
+                                      vertical</td>
+                                  <td>
+                                  
+                                  <p>
+                                    True if the candidate window should be rendered vertical, false to make it horizontal.
+                                  </p></td>
+                                </tr><tr id="property-properties-pageSize">
+                                  <td>integer</td>
+                                  <td><span class="optional">(optional)</span>
+                                      pageSize</td>
+                                  <td>
+                                  
+                                  <p>
+                                    The number of candidates to display per page.
+                                  </p></td>
+                                </tr><tr id="property-properties-auxiliaryText">
+                                  <td>string</td>
+                                  <td><span class="optional">(optional)</span>
+                                      auxiliaryText</td>
+                                  <td>
+                                  
+                                  <p>
+                                    Text that is shown at the bottom of the candidate window.
+                                  </p></td>
+                                </tr><tr id="property-properties-auxiliaryTextVisible">
+                                  <td>boolean</td>
+                                  <td><span class="optional">(optional)</span>
+                                      auxiliaryTextVisible</td>
+                                  <td>
+                                  
+                                  <p>
+                                    True to display the auxiliary text, false to hide it.
+                                  </p></td>
+                                </tr><tr id="property-properties-totalCandidates">
+                                  <td>integer</td>
+                                  <td><span class="optional">(optional)</span>
+                                      totalCandidates</td>
+                                  <td>
+                                  <p class="availability">
+                                    Since Chrome 84.
+                                  </p>
+                                  
+                                  <p>
+                                    The total number of candidates for the candidate window.
+                                  </p></td>
+                                </tr><tr id="property-properties-currentCandidateIndex">
+                                  <td>integer</td>
+                                  <td><span class="optional">(optional)</span>
+                                      currentCandidateIndex</td>
+                                  <td>
+                                  <p class="availability">
+                                    Since Chrome 84.
+                                  </p>
+                                  
+                                  <p>
+                                    The index of the current chosen candidate out of total candidates.
+                                  </p></td>
+                                </tr><tr id="property-properties-windowPosition">
+                                  <td>    <a href="#type-WindowPosition">WindowPosition</a></td>
+                                  <td><span class="optional">(optional)</span>
+                                      windowPosition</td>
+                                  <td>
+                                  
+                                  <p>
+                                    Where to display the candidate window.
+                                  </p></td>
+                                </tr>
+                              </tbody></table>
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setCandidateWindowProperties-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean success) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-success">
+                              <td>boolean</td>
+                              <td>
+                                  success</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setCandidates">setCandidates
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.setCandidates(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the current candidate list. This fails if this extension doesn&apos;t own the active IME
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setCandidates-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context that owns the candidate window.
+                            </p></td>
+                          </tr><tr id="property-parameters-candidates">
+                            <td>array of object</td>
+                            <td>
+                                candidates</td>
+                            <td>
+                            
+                            <p>
+                              List of candidates to show in the candidate window
+                            </p>  <h4 title>Properties of each object</h4>
+                              <dl>
+                                <div>
+                                  <table>
+                                      <tbody><tr id="property-candidatesType-candidate">
+                                        <td>string</td>
+                                        <td>
+                                            candidate</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The candidate
+                                        </p></td>
+                                      </tr><tr id="property-candidatesType-id">
+                                        <td>integer</td>
+                                        <td>
+                                            id</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The candidate&apos;s id
+                                        </p></td>
+                                      </tr><tr id="property-candidatesType-parentId">
+                                        <td>integer</td>
+                                        <td><span class="optional">(optional)</span>
+                                            parentId</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The id to add these candidates under
+                                        </p></td>
+                                      </tr><tr id="property-candidatesType-label">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            label</td>
+                                        <td>
+                                        
+                                        <p>
+                                          Short string displayed to next to the candidate, often the shortcut key or index
+                                        </p></td>
+                                      </tr><tr id="property-candidatesType-annotation">
+                                        <td>string</td>
+                                        <td><span class="optional">(optional)</span>
+                                            annotation</td>
+                                        <td>
+                                        
+                                        <p>
+                                          Additional text describing the candidate
+                                        </p></td>
+                                      </tr><tr id="property-candidatesType-usage">
+                                        <td>object</td>
+                                        <td><span class="optional">(optional)</span>
+                                            usage</td>
+                                        <td>
+                                        
+                                        <p>
+                                          The usage or detail description of word.
+                                        </p>  <table class="innerTable">
+                                            <tbody><tr id="property-usage-title">
+                                              <td>string</td>
+                                              <td>
+                                                  title</td>
+                                              <td>
+                                              
+                                              <p>
+                                                The title string of details description.
+                                              </p></td>
+                                            </tr><tr id="property-usage-body">
+                                              <td>string</td>
+                                              <td>
+                                                  body</td>
+                                              <td>
+                                              
+                                              <p>
+                                                The body string of detail description.
+                                              </p></td>
+                                            </tr>
+                                          </tbody></table>
+                                        </td>
+                                      </tr>
+                                  </tbody></table>
+                                </div>
+                              </dl>
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setCandidates-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean success) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-success">
+                              <td>boolean</td>
+                              <td>
+                                  success</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setCursorPosition">setCursorPosition
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.setCursorPosition(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Set the position of the cursor in the candidate window. This is a no-op if this extension does not own the active IME.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setCursorPosition-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context that owns the candidate window.
+                            </p></td>
+                          </tr><tr id="property-parameters-candidateID">
+                            <td>integer</td>
+                            <td>
+                                candidateID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the candidate to select.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setCursorPosition-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean success) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-success">
+                              <td>boolean</td>
+                              <td>
+                                  success</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setAssistiveWindowProperties">setAssistiveWindowProperties
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.setAssistiveWindowProperties(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 85.
+                </p>
+                <p>
+                  Shows/Hides an assistive window with the given properties.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setAssistiveWindowProperties-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context owning the assistive window.
+                            </p></td>
+                          </tr><tr id="property-parameters-properties">
+                            <td>    <a href="#type-AssistiveWindowProperties">AssistiveWindowProperties</a></td>
+                            <td>
+                                properties</td>
+                            <td>
+                            
+                            <p>
+                              Properties of the assistive window.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setAssistiveWindowProperties-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean success) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-success">
+                              <td>boolean</td>
+                              <td>
+                                  success</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setAssistiveWindowButtonHighlighted">setAssistiveWindowButtonHighlighted
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.setAssistiveWindowButtonHighlighted(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 86.
+                </p>
+                <p>
+                  Highlights/Unhighlights a button in an assistive window.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setAssistiveWindowButtonHighlighted-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context owning the assistive window.
+                            </p></td>
+                          </tr><tr id="property-parameters-buttonID">
+                            <td>    <a href="#type-AssistiveWindowButton">AssistiveWindowButton</a></td>
+                            <td>
+                                buttonID</td>
+                            <td>
+                            
+                            <p>
+                              The ID of the button
+                            </p></td>
+                          </tr><tr id="property-parameters-windowType">
+                            <td>    <a href="#type-AssistiveWindowType">AssistiveWindowType</a></td>
+                            <td>
+                                windowType</td>
+                            <td>
+                            
+                            <p>
+                              The window type the button belongs to.
+                            </p></td>
+                          </tr><tr id="property-parameters-announceString">
+                            <td>string</td>
+                            <td><span class="optional">(optional)</span>
+                                announceString</td>
+                            <td>
+                            
+                            <p>
+                              The text for the screenreader to announce.
+                            </p></td>
+                          </tr><tr id="property-parameters-highlighted">
+                            <td>boolean</td>
+                            <td>
+                                highlighted</td>
+                            <td>
+                            
+                            <p>
+                              Whether the button should be highlighted.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-setAssistiveWindowButtonHighlighted-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes. On failure, <a href="runtime.html#property-lastError">runtime.lastError</a> is set.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setMenuItems">setMenuItems
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.setMenuItems(<span>    <a href="#type-MenuParameters">MenuParameters</a> parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Adds the provided menu items to the language menu when this IME is active.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setMenuItems-parameters">
+                      <td>    <a href="#type-MenuParameters">MenuParameters</a></td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-setMenuItems-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-updateMenuItems">updateMenuItems
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.updateMenuItems(<span>    <a href="#type-MenuParameters">MenuParameters</a> parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Updates the state of the MenuItems specified
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-updateMenuItems-parameters">
+                      <td>    <a href="#type-MenuParameters">MenuParameters</a></td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-updateMenuItems-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-deleteSurroundingText">deleteSurroundingText
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.deleteSurroundingText(<span>object parameters</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Deletes the text around the caret.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-deleteSurroundingText-parameters">
+                      <td>object</td>
+                      <td>
+                          parameters</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-parameters-engineID">
+                            <td>string</td>
+                            <td>
+                                engineID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the engine receiving the event.
+                            </p></td>
+                          </tr><tr id="property-parameters-contextID">
+                            <td>integer</td>
+                            <td>
+                                contextID</td>
+                            <td>
+                            
+                            <p>
+                              ID of the context where the surrounding text will be deleted.
+                            </p></td>
+                          </tr><tr id="property-parameters-offset">
+                            <td>integer</td>
+                            <td>
+                                offset</td>
+                            <td>
+                            
+                            <p>
+                              The offset from the caret position where deletion will start. This value can be negative.
+                            </p></td>
+                          </tr><tr id="property-parameters-length">
+                            <td>integer</td>
+                            <td>
+                                length</td>
+                            <td>
+                            
+                            <p>
+                              The number of characters to be deleted
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-deleteSurroundingText-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the operation completes.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-keyEventHandled">keyEventHandled
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.input.ime.keyEventHandled(<span>string requestId</span>, <span>boolean response</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Indicates that the key event received by onKeyEvent is handled.  This should only be called if the onKeyEvent listener is asynchronous.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-keyEventHandled-requestId">
+                      <td>string</td>
+                      <td>
+                          requestId</td>
+                      <td>
+                      
+                      <p>
+                        Request id of the event that was handled.  This should come from keyEvent.requestId
+                      </p></td>
+                    </tr>
+                    <tr id="property-keyEventHandled-response">
+                      <td>boolean</td>
+                      <td>
+                          response</td>
+                      <td>
+                      
+                      <p>
+                        True if the keystroke was handled, false if not
+                      </p></td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onActivate">onActivate</h3>
+              <div class="description">
+            <p>
+                  This event is sent when an IME is activated. It signals that the IME will be receiving onKeyPress events.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onActivate.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onActivate-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string engineID,     <a href="#type-ScreenType">ScreenType</a> screen) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onActivate-engineID">
+                                    <td>string</td>
+                                    <td>
+                                        engineID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the engine receiving the event
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onActivate-screen">
+                                    <td>    <a href="#type-ScreenType">ScreenType</a></td>
+                                    <td>
+                                        screen</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The screen type under which the IME is activated.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onDeactivated">onDeactivated</h3>
+              <div class="description">
+            <p>
+                  This event is sent when an IME is deactivated. It signals that the IME will no longer be receiving onKeyPress events.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onDeactivated.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onDeactivated-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string engineID) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onDeactivated-engineID">
+                                    <td>string</td>
+                                    <td>
+                                        engineID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the engine receiving the event
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onFocus">onFocus</h3>
+              <div class="description">
+            <p>
+                  This event is sent when focus enters a text box. It is sent to all extensions that are listening to this event, and enabled by the user.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onFocus.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onFocus-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-InputContext">InputContext</a> context) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onFocus-context">
+                                    <td>    <a href="#type-InputContext">InputContext</a></td>
+                                    <td>
+                                        context</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Describes the text field that has acquired focus.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onBlur">onBlur</h3>
+              <div class="description">
+            <p>
+                  This event is sent when focus leaves a text box. It is sent to all extensions that are listening to this event, and enabled by the user.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onBlur.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onBlur-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(integer contextID) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onBlur-contextID">
+                                    <td>integer</td>
+                                    <td>
+                                        contextID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The ID of the text field that has lost focus. The ID is invalid after this call
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onInputContextUpdate">onInputContextUpdate</h3>
+              <div class="description">
+            <p>
+                  This event is sent when the properties of the current InputContext change, such as the the type. It is sent to all extensions that are listening to this event, and enabled by the user.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onInputContextUpdate.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onInputContextUpdate-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-InputContext">InputContext</a> context) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onInputContextUpdate-context">
+                                    <td>    <a href="#type-InputContext">InputContext</a></td>
+                                    <td>
+                                        context</td>
+                                    <td>
+                                    
+                                    <p>
+                                      An InputContext object describing the text field that has changed.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onKeyEvent">onKeyEvent</h3>
+              <div class="description">
+            <p>
+                  Fired when a key event is sent from the operating system. The event will be sent to the extension if this extension owns the active IME. The listener function should return true if the event was handled false if it was not.  If the event will be evaluated asynchronously, this function must return undefined and the IME must later call keyEventHandled() with the result.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onKeyEvent.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onKeyEvent-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string engineID,     <a href="#type-KeyboardEvent">KeyboardEvent</a> keyData, string requestId) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onKeyEvent-engineID">
+                                    <td>string</td>
+                                    <td>
+                                        engineID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the engine receiving the event
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onKeyEvent-keyData">
+                                    <td>    <a href="#type-KeyboardEvent">KeyboardEvent</a></td>
+                                    <td>
+                                        keyData</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Data on the key event
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onKeyEvent-requestId">
+                                    <td>string</td>
+                                    <td>
+                                        requestId</td>
+                                    <td>
+                                    <p class="availability">
+                                      Since Chrome 79.
+                                    </p>
+                                    
+                                    <p>
+                                      ID of the request. If the event listener returns undefined, then <code>keyEventHandled</code> must be called later with this <code>requestId</code>.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onCandidateClicked">onCandidateClicked</h3>
+              <div class="description">
+            <p>
+                  This event is sent if this extension owns the active IME.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onCandidateClicked.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onCandidateClicked-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string engineID, integer candidateID,     <a href="#type-MouseButton">MouseButton</a> button) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onCandidateClicked-engineID">
+                                    <td>string</td>
+                                    <td>
+                                        engineID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the engine receiving the event
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onCandidateClicked-candidateID">
+                                    <td>integer</td>
+                                    <td>
+                                        candidateID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the candidate that was clicked.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onCandidateClicked-button">
+                                    <td>    <a href="#type-MouseButton">MouseButton</a></td>
+                                    <td>
+                                        button</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Which mouse buttons was clicked.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onMenuItemActivated">onMenuItemActivated</h3>
+              <div class="description">
+            <p>
+                  Called when the user selects a menu item
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onMenuItemActivated.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onMenuItemActivated-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string engineID, string name) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onMenuItemActivated-engineID">
+                                    <td>string</td>
+                                    <td>
+                                        engineID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the engine receiving the event
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onMenuItemActivated-name">
+                                    <td>string</td>
+                                    <td>
+                                        name</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Name of the MenuItem which was activated
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onSurroundingTextChanged">onSurroundingTextChanged</h3>
+              <div class="description">
+            <p>
+                  Called when the editable string around caret is changed or when the caret position is moved. The text length is limited to 100 characters for each back and forth direction.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onSurroundingTextChanged.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onSurroundingTextChanged-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string engineID, object surroundingInfo) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onSurroundingTextChanged-engineID">
+                                    <td>string</td>
+                                    <td>
+                                        engineID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the engine receiving the event
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onSurroundingTextChanged-surroundingInfo">
+                                    <td>object</td>
+                                    <td>
+                                        surroundingInfo</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The surrounding information.
+                                    </p>  <table class="innerTable">
+                                        <tbody><tr id="property-surroundingInfo-text">
+                                          <td>string</td>
+                                          <td>
+                                              text</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The text around the cursor. This is only a subset of all text in the input field.
+                                          </p></td>
+                                        </tr><tr id="property-surroundingInfo-focus">
+                                          <td>integer</td>
+                                          <td>
+                                              focus</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The ending position of the selection. This value indicates caret position if there is no selection.
+                                          </p></td>
+                                        </tr><tr id="property-surroundingInfo-anchor">
+                                          <td>integer</td>
+                                          <td>
+                                              anchor</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The beginning position of the selection. This value indicates caret position if there is no selection.
+                                          </p></td>
+                                        </tr><tr id="property-surroundingInfo-offset">
+                                          <td>integer</td>
+                                          <td>
+                                              offset</td>
+                                          <td>
+                                          <p class="availability">
+                                            Since Chrome 46.
+                                          </p>
+                                          
+                                          <p>
+                                            The offset position of <code>text</code>. Since <code>text</code> only includes a subset of text around the cursor, offset indicates the absolute position of the first character of <code>text</code>.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onReset">onReset</h3>
+              <div class="description">
+            <p>
+                  This event is sent when chrome terminates ongoing text input session.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onReset.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onReset-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string engineID) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onReset-engineID">
+                                    <td>string</td>
+                                    <td>
+                                        engineID</td>
+                                    <td>
+                                    
+                                    <p>
+                                      ID of the engine receiving the event
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onAssistiveWindowButtonClicked">onAssistiveWindowButtonClicked</h3>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 85.
+                </p>
+            <p>
+                  This event is sent when a button in an assistive window is clicked.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.input.ime.onAssistiveWindowButtonClicked.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onAssistiveWindowButtonClicked-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(object details) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onAssistiveWindowButtonClicked-details">
+                                    <td>object</td>
+                                    <td>
+                                        details</td>
+                                    <td>
+                                    
+                                      <table class="innerTable">
+                                        <tbody><tr id="property-details-buttonID">
+                                          <td>    <a href="#type-AssistiveWindowButton">AssistiveWindowButton</a></td>
+                                          <td>
+                                              buttonID</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The ID of the button clicked.
+                                          </p></td>
+                                        </tr><tr id="property-details-windowType">
+                                          <td>    <a href="#type-AssistiveWindowType">AssistiveWindowType</a></td>
+                                          <td>
+                                              windowType</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The type of the assistive window.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.identity</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.identity</code> API to get OAuth2 access tokens.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;identity&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Learn More:</td>
+        <td>
+            <a href="https://developer.chrome.com/extensions/app_identity">
+            Identify User
+                    </a>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-AccountInfo">AccountInfo</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-getAccounts">getAccounts</a> &#x2212;
+            <code class="prettyprint">
+            chrome.identity.getAccounts(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getAuthToken">getAuthToken</a> &#x2212;
+            <code class="prettyprint">
+            chrome.identity.getAuthToken(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getProfileUserInfo">getProfileUserInfo</a> &#x2212;
+            <code class="prettyprint">
+            chrome.identity.getProfileUserInfo(<span class="optional">object details</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeCachedAuthToken">removeCachedAuthToken</a> &#x2212;
+            <code class="prettyprint">
+            chrome.identity.removeCachedAuthToken(<span>object details</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-clearAllCachedAuthTokens">clearAllCachedAuthTokens</a> &#x2212;
+            <code class="prettyprint">
+            chrome.identity.clearAllCachedAuthTokens(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-launchWebAuthFlow">launchWebAuthFlow</a> &#x2212;
+            <code class="prettyprint">
+            chrome.identity.launchWebAuthFlow(<span>object details</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getRedirectURL">getRedirectURL</a> &#x2212;
+            <code class="prettyprint">
+            string
+            chrome.identity.getRedirectURL(<span class="optional">string path</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onSignInChanged">onSignInChanged</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-AccountInfo">AccountInfo</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="AccountInfo-properties">properties</th></tr>
+                  <tr id="property-AccountInfo-id">
+                    <td>string</td>
+                    <td>
+                        id</td>
+                    <td>
+                    
+                    <p>
+                      A unique identifier for the account. This ID will not change for the lifetime of the account.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-getAccounts">getAccounts
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.identity.getAccounts(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  <strong>Dev</strong> channel only.
+                  
+                   <a href="index.html#dev_apis">Learn more</a>.
+                </p>
+                <p>
+                  </p><p>Retrieves a list of AccountInfo objects describing the accounts present on the profile.</p><p><code>getAccounts</code> is only supported on dev channel.</p>
+                <p></p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getAccounts-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(array of     <a href="#type-AccountInfo">AccountInfo</a> accounts) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-accounts">
+                              <td>array of     <a href="#type-AccountInfo">AccountInfo</a></td>
+                              <td>
+                                  accounts</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getAuthToken">getAuthToken
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.identity.getAuthToken(<span class="optional">object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  </p><p>Gets an OAuth2 access token using the client ID and scopes specified in the <a href="https://developer.chrome.com/extensions/app_identity.html#update_manifest"><code>oauth2</code> section of manifest.json</a>.</p><p>The Identity API caches access tokens in memory, so it&apos;s ok to call <code>getAuthToken</code> non-interactively any time a token is required. The token cache automatically handles expiration.</p><p>For a good user experience it is important interactive token requests are initiated by UI in your app explaining what the authorization is for. Failing to do this will cause your users to get authorization requests, or Chrome sign in screens if they are not signed in, with with no context. In particular, do not use <code>getAuthToken</code> interactively when your app is first launched.</p>
+                <p></p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getAuthToken-details">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        Token options.
+                      </p>  <table class="innerTable">
+                          <tbody><tr id="property-details-interactive">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                interactive</td>
+                            <td>
+                            
+                            <p>
+                              Fetching a token may require the user to sign-in to Chrome, or approve the application&apos;s requested scopes. If the interactive flag is <code>true</code>, <code>getAuthToken</code> will prompt the user as necessary. When the flag is <code>false</code> or omitted, <code>getAuthToken</code> will return failure any time a prompt would be required.
+                            </p></td>
+                          </tr><tr id="property-details-account">
+                            <td>    <a href="#type-AccountInfo">AccountInfo</a></td>
+                            <td><span class="optional">(optional)</span>
+                                account</td>
+                            <td>
+                            
+                            <p>
+                              The account ID whose token should be returned. If not specified, the function will use an account from the Chrome profile: the Sync account if there is one, or otherwise the first Google web account.
+                            </p></td>
+                          </tr><tr id="property-details-scopes">
+                            <td>array of string</td>
+                            <td><span class="optional">(optional)</span>
+                                scopes</td>
+                            <td>
+                            
+                            <p>
+                              </p><p>A list of OAuth2 scopes to request.</p><p>When the <code>scopes</code> field is present, it overrides the list of scopes specified in manifest.json.</p>
+                            <p></p></td>
+                          </tr><tr id="property-details-enableGranularPermissions">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                enableGranularPermissions</td>
+                            <td>
+                            <p class="availability">
+                              Since Chrome 87.
+                            </p>
+                            
+                            <p>
+                              The <code>enableGranularPermissions</code> flag allows extensions to opt-in early to the granular permissions consent screen, in which requested permissions are granted or denied individually.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-getAuthToken-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called with an OAuth2 access token as specified by the manifest, or undefined if there was an error. The <code>grantedScopes</code> parameter is not yet available and will be populated in future versions of Chrome. When available, this parameter will contain the list of granted scopes corresponding with the returned token.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(string token, array of string grantedScopes) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-token">
+                              <td>string</td>
+                              <td><span class="optional">(optional)</span>
+                                  token</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                            <tr id="property-callback-grantedScopes">
+                              <td>array of string</td>
+                              <td><span class="optional">(optional)</span>
+                                  grantedScopes</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getProfileUserInfo">getProfileUserInfo
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.identity.getProfileUserInfo(<span class="optional">object details</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  </p><p>Retrieves email address and obfuscated gaia id of the user signed into a profile.</p><p>Requires the <code>identity.email</code> manifest permission. Otherwise, returns an empty result.</p><p>This API is different from identity.getAccounts in two ways. The information returned is available offline, and it only applies to the primary account for the profile.</p>
+                <p></p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getProfileUserInfo-details">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          details</td>
+                      <td>
+                      <p class="availability">
+                        Since Chrome 84.
+                      </p>
+                      
+                      <p>
+                        Profile options.
+                      </p>  <table class="innerTable">
+                          <tbody><tr id="property-details-accountStatus">
+                            <td>enum of    <code>&quot;SYNC&quot;</code>,    or <code>&quot;ANY&quot;</code></td>
+                            <td><span class="optional">(optional)</span>
+                                accountStatus</td>
+                            <td>
+                            
+                            <p>
+                              A status of the primary account signed into a profile whose <code>ProfileUserInfo</code> should be returned. Defaults to <code>SYNC</code> account status.
+                            </p>    <dl>
+                                  <dt>SYNC</dt>
+                                  <dd>
+                                    Sync is enabled for the primary account.
+                                  </dd>
+                                </dl>
+                                <dl>
+                                  <dt>ANY</dt>
+                                  <dd>
+                                    Any primary account, if exists.
+                                  </dd>
+                                </dl>
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-getProfileUserInfo-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called with the <code>ProfileUserInfo</code> of the primary Chrome account, of an empty <code>ProfileUserInfo</code> if the account with given <code>details</code> doesn&apos;t exist.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object userInfo) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-userInfo">
+                              <td>object</td>
+                              <td>
+                                  userInfo</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-userInfo-email">
+                                    <td>string</td>
+                                    <td>
+                                        email</td>
+                                    <td>
+                                    
+                                    <p>
+                                      An email address for the user account signed into the current profile. Empty if the user is not signed in or the <code>identity.email</code> manifest permission is not specified.
+                                    </p></td>
+                                  </tr><tr id="property-userInfo-id">
+                                    <td>string</td>
+                                    <td>
+                                        id</td>
+                                    <td>
+                                    
+                                    <p>
+                                      A unique identifier for the account. This ID will not change for the lifetime of the account. Empty if the user is not signed in or (in M41+) the <code>identity.email</code> manifest permission is not specified.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeCachedAuthToken">removeCachedAuthToken
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.identity.removeCachedAuthToken(<span>object details</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  </p><p>Removes an OAuth2 access token from the Identity API&apos;s token cache.</p><p>If an access token is discovered to be invalid, it should be passed to removeCachedAuthToken to remove it from the cache. The app may then retrieve a fresh token with <code>getAuthToken</code>.</p>
+                <p></p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeCachedAuthToken-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        Token information.
+                      </p>  <table class="innerTable">
+                          <tbody><tr id="property-details-token">
+                            <td>string</td>
+                            <td>
+                                token</td>
+                            <td>
+                            
+                            <p>
+                              The specific token that should be removed from the cache.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-removeCachedAuthToken-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the token has been removed from the cache.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-clearAllCachedAuthTokens">clearAllCachedAuthTokens
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.identity.clearAllCachedAuthTokens(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 87.
+                </p>
+                <p>
+                  Resets the state of the Identity API: - Removes all OAuth2 access tokens from the token cache - Removes user&apos;s account preferences - De-authorizes the user from all auth flows
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-clearAllCachedAuthTokens-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the state has been cleared.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-launchWebAuthFlow">launchWebAuthFlow
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.identity.launchWebAuthFlow(<span>object details</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  </p><p>Starts an auth flow at the specified URL.</p><p>This method enables auth flows with non-Google identity providers by launching a web view and navigating it to the first URL in the provider&apos;s auth flow. When the provider redirects to a URL matching the pattern <code>https://&lt;app-id&gt;.chromiumapp.org/*</code>, the window will close, and the final redirect URL will be passed to the <var>callback</var> function.</p><p>For a good user experience it is important interactive auth flows are initiated by UI in your app explaining what the authorization is for. Failing to do this will cause your users to get authorization requests with no context. In particular, do not launch an interactive auth flow when your app is first launched.</p>
+                <p></p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-launchWebAuthFlow-details">
+                      <td>object</td>
+                      <td>
+                          details</td>
+                      <td>
+                      
+                      <p>
+                        WebAuth flow options.
+                      </p>  <table class="innerTable">
+                          <tbody><tr id="property-details-url">
+                            <td>string</td>
+                            <td>
+                                url</td>
+                            <td>
+                            
+                            <p>
+                              The URL that initiates the auth flow.
+                            </p></td>
+                          </tr><tr id="property-details-interactive">
+                            <td>boolean</td>
+                            <td><span class="optional">(optional)</span>
+                                interactive</td>
+                            <td>
+                            
+                            <p>
+                              </p><p>Whether to launch auth flow in interactive mode.</p><p>Since some auth flows may immediately redirect to a result URL, <code>launchWebAuthFlow</code> hides its web view until the first navigation either redirects to the final URL, or finishes loading a page meant to be displayed.</p><p>If the interactive flag is <code>true</code>, the window will be displayed when a page load completes. If the flag is <code>false</code> or omitted, <code>launchWebAuthFlow</code> will return with an error if the initial navigation does not complete the flow.</p>
+                            <p></p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-launchWebAuthFlow-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called with the URL redirected back to your application.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(string responseUrl) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-responseUrl">
+                              <td>string</td>
+                              <td><span class="optional">(optional)</span>
+                                  responseUrl</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getRedirectURL">getRedirectURL
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              string
+              chrome.identity.getRedirectURL(<span class="optional">string path</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  </p><p>Generates a redirect URL to be used in |launchWebAuthFlow|.</p><p>The generated URLs match the pattern <code>https://&lt;app-id&gt;.chromiumapp.org/*</code>.</p>
+                <p></p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getRedirectURL-path">
+                      <td>string</td>
+                      <td><span class="optional">(optional)</span>
+                          path</td>
+                      <td>
+                      
+                      <p>
+                        The path appended to the end of the generated URL.
+                      </p></td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onSignInChanged">onSignInChanged</h3>
+              <div class="description">
+            <p>
+                  Fired when signin state changes for an account on the user&apos;s profile.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.identity.onSignInChanged.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onSignInChanged-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(    <a href="#type-AccountInfo">AccountInfo</a> account, boolean signedIn) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onSignInChanged-account">
+                                    <td>    <a href="#type-AccountInfo">AccountInfo</a></td>
+                                    <td>
+                                        account</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onSignInChanged-signedIn">
+                                    <td>boolean</td>
+                                    <td>
+                                        signedIn</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

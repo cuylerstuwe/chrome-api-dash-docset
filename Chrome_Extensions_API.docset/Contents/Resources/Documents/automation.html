@@ -1,0 +1,3865 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<p class="warning">
+  This API is experimental. It is only available to Chrome users on the
+  <a href="http://www.chromium.org/getting-involved/dev-channel">dev channel</a>.
+</p>
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.automation</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             The <code>chrome.automation</code> API allows developers to access the
+             automation (accessibility) tree for the browser. The tree resembles the DOM
+             tree, but only exposes the <em>semantic</em> structure of a page. It can be
+             used to programmatically interact with a page by examining names, roles, and
+             states, listening for events, and performing actions on nodes.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            <strong>Dev</strong> channel only.
+            
+             <a href="index.html#dev_apis">Learn more</a>.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Manifest:</td>
+        <td>
+            <span class="code">
+            &quot;automation&quot;: {...}
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <!-- Kept here to generate a link in TOC once promoted from trunk. -->
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-EventType">EventType</a></td></tr>
+          <tr><td><a href="#type-RoleType">RoleType</a></td></tr>
+          <tr><td><a href="#type-StateType">StateType</a></td></tr>
+          <tr><td><a href="#type-ActionType">ActionType</a></td></tr>
+          <tr><td><a href="#type-DescriptionFromType">DescriptionFromType</a></td></tr>
+          <tr><td><a href="#type-Restriction">Restriction</a></td></tr>
+          <tr><td><a href="#type-HasPopup">HasPopup</a></td></tr>
+          <tr><td><a href="#type-MarkerType">MarkerType</a></td></tr>
+          <tr><td><a href="#type-IntentInputEventType">IntentInputEventType</a></td></tr>
+          <tr><td><a href="#type-Rect">Rect</a></td></tr>
+          <tr><td><a href="#type-FindParams">FindParams</a></td></tr>
+          <tr><td><a href="#type-SetDocumentSelectionParams">SetDocumentSelectionParams</a></td></tr>
+          <tr><td><a href="#type-AutomationIntent">AutomationIntent</a></td></tr>
+          <tr><td><a href="#type-AutomationEvent">AutomationEvent</a></td></tr>
+          <tr><td><a href="#type-TreeChange">TreeChange</a></td></tr>
+          <tr><td><a href="#type-CustomAction">CustomAction</a></td></tr>
+          <tr><td><a href="#type-LanguageSpan">LanguageSpan</a></td></tr>
+          <tr><td><a href="#type-Marker">Marker</a></td></tr>
+          <tr><td><a href="#type-AutomationPosition">AutomationPosition</a></td></tr>
+          <tr><td><a href="#type-AutomationNode">AutomationNode</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-getTree">getTree</a> &#x2212;
+            <code class="prettyprint">
+            chrome.automation.getTree(<span class="optional">integer tabId</span>, <span class="optional">function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getDesktop">getDesktop</a> &#x2212;
+            <code class="prettyprint">
+            chrome.automation.getDesktop(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getFocus">getFocus</a> &#x2212;
+            <code class="prettyprint">
+            chrome.automation.getFocus(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getAccessibilityFocus">getAccessibilityFocus</a> &#x2212;
+            <code class="prettyprint">
+            chrome.automation.getAccessibilityFocus(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-addTreeChangeObserver">addTreeChangeObserver</a> &#x2212;
+            <code class="prettyprint">
+            chrome.automation.addTreeChangeObserver(<span>enum of    <code>&quot;noTreeChanges&quot;</code>,    <code>&quot;liveRegionTreeChanges&quot;</code>,    <code>&quot;textMarkerChanges&quot;</code>,    or <code>&quot;allTreeChanges&quot;</code> filter</span>, <span>function observer</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-removeTreeChangeObserver">removeTreeChangeObserver</a> &#x2212;
+            <code class="prettyprint">
+            chrome.automation.removeTreeChangeObserver(<span>function observer</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setDocumentSelection">setDocumentSelection</a> &#x2212;
+            <code class="prettyprint">
+            chrome.automation.setDocumentSelection(<span>    SetDocumentSelectionParams params</span>)
+            </code>
+          </td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-EventType">EventType</h3>
+              <dd>Possible events fired on an <a href="#type-AutomationNode">automation.AutomationNode</a>.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;accessKeyChanged&quot;</code>, 
+                        <code>&quot;activeDescendantChanged&quot;</code>, 
+                        <code>&quot;alert&quot;</code>, 
+                        <code>&quot;ariaAttributeChanged&quot;</code>, 
+                        <code>&quot;ariaCurrentChanged&quot;</code>, 
+                        <code>&quot;atomicChanged&quot;</code>, 
+                        <code>&quot;autoCompleteChanged&quot;</code>, 
+                        <code>&quot;autocorrectionOccured&quot;</code>, 
+                        <code>&quot;blur&quot;</code>, 
+                        <code>&quot;busyChanged&quot;</code>, 
+                        <code>&quot;checkedStateChanged&quot;</code>, 
+                        <code>&quot;childrenChanged&quot;</code>, 
+                        <code>&quot;classNameChanged&quot;</code>, 
+                        <code>&quot;clicked&quot;</code>, 
+                        <code>&quot;collapsed&quot;</code>, 
+                        <code>&quot;controlsChanged&quot;</code>, 
+                        <code>&quot;describedByChanged&quot;</code>, 
+                        <code>&quot;descriptionChanged&quot;</code>, 
+                        <code>&quot;documentSelectionChanged&quot;</code>, 
+                        <code>&quot;documentTitleChanged&quot;</code>, 
+                        <code>&quot;dropeffectChanged&quot;</code>, 
+                        <code>&quot;editableTextChanged&quot;</code>, 
+                        <code>&quot;enabledChanged&quot;</code>, 
+                        <code>&quot;endOfTest&quot;</code>, 
+                        <code>&quot;expanded&quot;</code>, 
+                        <code>&quot;expandedChanged&quot;</code>, 
+                        <code>&quot;flowFromChanged&quot;</code>, 
+                        <code>&quot;flowToChanged&quot;</code>, 
+                        <code>&quot;focus&quot;</code>, 
+                        <code>&quot;focusAfterMenuClose&quot;</code>, 
+                        <code>&quot;focusChanged&quot;</code>, 
+                        <code>&quot;focusContext&quot;</code>, 
+                        <code>&quot;grabbedChanged&quot;</code>, 
+                        <code>&quot;haspopupChanged&quot;</code>, 
+                        <code>&quot;hide&quot;</code>, 
+                        <code>&quot;hierarchicalLevelChanged&quot;</code>, 
+                        <code>&quot;hitTestResult&quot;</code>, 
+                        <code>&quot;hover&quot;</code>, 
+                        <code>&quot;ignoredChanged&quot;</code>, 
+                        <code>&quot;imageAnnotationChanged&quot;</code>, 
+                        <code>&quot;imageFrameUpdated&quot;</code>, 
+                        <code>&quot;invalidStatusChanged&quot;</code>, 
+                        <code>&quot;keyShortcutsChanged&quot;</code>, 
+                        <code>&quot;labeledByChanged&quot;</code>, 
+                        <code>&quot;languageChanged&quot;</code>, 
+                        <code>&quot;layoutComplete&quot;</code>, 
+                        <code>&quot;layoutInvalidated&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;liveRegionChanged&quot;</code></dt>
+                        <dd>
+                          fired when aria-busy goes false
+                        </dd>
+                      </dl>
+                        <code>&quot;liveRegionCreated&quot;</code>, 
+                        <code>&quot;liveRegionNodeChanged&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;liveRelevantChanged&quot;</code></dt>
+                        <dd>
+                          fired on a node within a live region.
+                        </dd>
+                      </dl>
+                        <code>&quot;liveStatusChanged&quot;</code>, 
+                        <code>&quot;loadComplete&quot;</code>, 
+                        <code>&quot;loadStart&quot;</code>, 
+                        <code>&quot;locationChanged&quot;</code>, 
+                        <code>&quot;mediaStartedPlaying&quot;</code>, 
+                        <code>&quot;mediaStoppedPlaying&quot;</code>, 
+                        <code>&quot;menuEnd&quot;</code>, 
+                        <code>&quot;menuItemSelected&quot;</code>, 
+                        <code>&quot;menuListItemSelected&quot;</code>, 
+                        <code>&quot;menuListValueChanged&quot;</code>, 
+                        <code>&quot;menuPopupEnd&quot;</code>, 
+                        <code>&quot;menuPopupStart&quot;</code>, 
+                        <code>&quot;menuStart&quot;</code>, 
+                        <code>&quot;mouseCanceled&quot;</code>, 
+                        <code>&quot;mouseDragged&quot;</code>, 
+                        <code>&quot;mouseMoved&quot;</code>, 
+                        <code>&quot;mousePressed&quot;</code>, 
+                        <code>&quot;mouseReleased&quot;</code>, 
+                        <code>&quot;multilineStateChanged&quot;</code>, 
+                        <code>&quot;multiselectableStateChanged&quot;</code>, 
+                        <code>&quot;nameChanged&quot;</code>, 
+                        <code>&quot;objectAttributeChanged&quot;</code>, 
+                        <code>&quot;otherAttributeChanged&quot;</code>, 
+                        <code>&quot;parentChanged&quot;</code>, 
+                        <code>&quot;placeholderChanged&quot;</code>, 
+                        <code>&quot;portalActivated&quot;</code>, 
+                        <code>&quot;positionInSetChanged&quot;</code>, 
+                        <code>&quot;rangeValueChanged&quot;</code>, 
+                        <code>&quot;rangeValueMaxChanged&quot;</code>, 
+                        <code>&quot;rangeValueMinChanged&quot;</code>, 
+                        <code>&quot;rangeValueStepChanged&quot;</code>, 
+                        <code>&quot;readonlyChanged&quot;</code>, 
+                        <code>&quot;relatedNodeChanged&quot;</code>, 
+                        <code>&quot;requiredStateChanged&quot;</code>, 
+                        <code>&quot;roleChanged&quot;</code>, 
+                        <code>&quot;rowCollapsed&quot;</code>, 
+                        <code>&quot;rowCountChanged&quot;</code>, 
+                        <code>&quot;rowExpanded&quot;</code>, 
+                        <code>&quot;scrollHorizontalPositionChanged&quot;</code>, 
+                        <code>&quot;scrollPositionChanged&quot;</code>, 
+                        <code>&quot;scrollVerticalPositionChanged&quot;</code>, 
+                        <code>&quot;scrolledToAnchor&quot;</code>, 
+                        <code>&quot;selectedChanged&quot;</code>, 
+                        <code>&quot;selectedChildrenChanged&quot;</code>, 
+                        <code>&quot;selectedValueChanged&quot;</code>, 
+                        <code>&quot;selection&quot;</code>, 
+                        <code>&quot;selectionAdd&quot;</code>, 
+                        <code>&quot;selectionInTextFieldChanged&quot;</code>, 
+                        <code>&quot;selectionRemove&quot;</code>, 
+                        <code>&quot;setSizeChanged&quot;</code>, 
+                        <code>&quot;show&quot;</code>, 
+                        <code>&quot;sortChanged&quot;</code>, 
+                        <code>&quot;stateChanged&quot;</code>, 
+                        <code>&quot;subtreeCreated&quot;</code>, 
+                        <code>&quot;textAttributeChanged&quot;</code>, 
+                        <code>&quot;textSelectionChanged&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;textChanged&quot;</code></dt>
+                        <dd>
+                          Deprecated.
+                        </dd>
+                      </dl>
+                        <code>&quot;tooltipClosed&quot;</code>, 
+                        <code>&quot;tooltipOpened&quot;</code>, 
+                        <code>&quot;treeChanged&quot;</code>, 
+                        <code>&quot;valueInTextFieldChanged&quot;</code>, 
+                        <code>&quot;valueChanged&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;windowActivated&quot;</code></dt>
+                        <dd>
+                          Deprecated.
+                        </dd>
+                      </dl>
+                        <code>&quot;windowDeactivated&quot;</code>, 
+                        or <code>&quot;windowVisibilityChanged&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-RoleType">RoleType</h3>
+              <dd>Describes the purpose of an <a href="#type-AutomationNode">automation.AutomationNode</a>.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;abbr&quot;</code>, 
+                        <code>&quot;alert&quot;</code>, 
+                        <code>&quot;alertDialog&quot;</code>, 
+                        <code>&quot;anchor&quot;</code>, 
+                        <code>&quot;application&quot;</code>, 
+                        <code>&quot;article&quot;</code>, 
+                        <code>&quot;audio&quot;</code>, 
+                        <code>&quot;banner&quot;</code>, 
+                        <code>&quot;blockquote&quot;</code>, 
+                        <code>&quot;button&quot;</code>, 
+                        <code>&quot;canvas&quot;</code>, 
+                        <code>&quot;caption&quot;</code>, 
+                        <code>&quot;caret&quot;</code>, 
+                        <code>&quot;cell&quot;</code>, 
+                        <code>&quot;checkBox&quot;</code>, 
+                        <code>&quot;client&quot;</code>, 
+                        <code>&quot;code&quot;</code>, 
+                        <code>&quot;colorWell&quot;</code>, 
+                        <code>&quot;column&quot;</code>, 
+                        <code>&quot;columnHeader&quot;</code>, 
+                        <code>&quot;comboBoxGrouping&quot;</code>, 
+                        <code>&quot;comboBoxMenuButton&quot;</code>, 
+                        <code>&quot;comment&quot;</code>, 
+                        <code>&quot;complementary&quot;</code>, 
+                        <code>&quot;contentDeletion&quot;</code>, 
+                        <code>&quot;contentInsertion&quot;</code>, 
+                        <code>&quot;contentInfo&quot;</code>, 
+                        <code>&quot;date&quot;</code>, 
+                        <code>&quot;dateTime&quot;</code>, 
+                        <code>&quot;definition&quot;</code>, 
+                        <code>&quot;descriptionList&quot;</code>, 
+                        <code>&quot;descriptionListDetail&quot;</code>, 
+                        <code>&quot;descriptionListTerm&quot;</code>, 
+                        <code>&quot;desktop&quot;</code>, 
+                        <code>&quot;details&quot;</code>, 
+                        <code>&quot;dialog&quot;</code>, 
+                        <code>&quot;directory&quot;</code>, 
+                        <code>&quot;disclosureTriangle&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;docAbstract&quot;</code></dt>
+                        <dd>
+                          -------------------------------------------------------------- DPub Roles: https://www.w3.org/TR/dpub-aam-1.0/#mapping_role_table
+                        </dd>
+                      </dl>
+                        <code>&quot;docAcknowledgments&quot;</code>, 
+                        <code>&quot;docAfterword&quot;</code>, 
+                        <code>&quot;docAppendix&quot;</code>, 
+                        <code>&quot;docBackLink&quot;</code>, 
+                        <code>&quot;docBiblioEntry&quot;</code>, 
+                        <code>&quot;docBibliography&quot;</code>, 
+                        <code>&quot;docBiblioRef&quot;</code>, 
+                        <code>&quot;docChapter&quot;</code>, 
+                        <code>&quot;docColophon&quot;</code>, 
+                        <code>&quot;docConclusion&quot;</code>, 
+                        <code>&quot;docCover&quot;</code>, 
+                        <code>&quot;docCredit&quot;</code>, 
+                        <code>&quot;docCredits&quot;</code>, 
+                        <code>&quot;docDedication&quot;</code>, 
+                        <code>&quot;docEndnote&quot;</code>, 
+                        <code>&quot;docEndnotes&quot;</code>, 
+                        <code>&quot;docEpigraph&quot;</code>, 
+                        <code>&quot;docEpilogue&quot;</code>, 
+                        <code>&quot;docErrata&quot;</code>, 
+                        <code>&quot;docExample&quot;</code>, 
+                        <code>&quot;docFootnote&quot;</code>, 
+                        <code>&quot;docForeword&quot;</code>, 
+                        <code>&quot;docGlossary&quot;</code>, 
+                        <code>&quot;docGlossRef&quot;</code>, 
+                        <code>&quot;docIndex&quot;</code>, 
+                        <code>&quot;docIntroduction&quot;</code>, 
+                        <code>&quot;docNoteRef&quot;</code>, 
+                        <code>&quot;docNotice&quot;</code>, 
+                        <code>&quot;docPageBreak&quot;</code>, 
+                        <code>&quot;docPageFooter&quot;</code>, 
+                        <code>&quot;docPageHeader&quot;</code>, 
+                        <code>&quot;docPageList&quot;</code>, 
+                        <code>&quot;docPart&quot;</code>, 
+                        <code>&quot;docPreface&quot;</code>, 
+                        <code>&quot;docPrologue&quot;</code>, 
+                        <code>&quot;docPullquote&quot;</code>, 
+                        <code>&quot;docQna&quot;</code>, 
+                        <code>&quot;docSubtitle&quot;</code>, 
+                        <code>&quot;docTip&quot;</code>, 
+                        <code>&quot;docToc&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;document&quot;</code></dt>
+                        <dd>
+                          End DPub roles. --------------------------------------------------------------
+                        </dd>
+                      </dl>
+                        <code>&quot;embeddedObject&quot;</code>, 
+                        <code>&quot;emphasis&quot;</code>, 
+                        <code>&quot;feed&quot;</code>, 
+                        <code>&quot;figcaption&quot;</code>, 
+                        <code>&quot;figure&quot;</code>, 
+                        <code>&quot;footer&quot;</code>, 
+                        <code>&quot;footerAsNonLandmark&quot;</code>, 
+                        <code>&quot;form&quot;</code>, 
+                        <code>&quot;genericContainer&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;graphicsDocument&quot;</code></dt>
+                        <dd>
+                          -------------------------------------------------------------- ARIA Graphics module roles: https://rawgit.com/w3c/graphics-aam/master/#mapping_role_table
+                        </dd>
+                      </dl>
+                        <code>&quot;graphicsObject&quot;</code>, 
+                        <code>&quot;graphicsSymbol&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;grid&quot;</code></dt>
+                        <dd>
+                          End ARIA Graphics module roles. --------------------------------------------------------------
+                        </dd>
+                      </dl>
+                        <code>&quot;group&quot;</code>, 
+                        <code>&quot;header&quot;</code>, 
+                        <code>&quot;headerAsNonLandmark&quot;</code>, 
+                        <code>&quot;heading&quot;</code>, 
+                        <code>&quot;iframe&quot;</code>, 
+                        <code>&quot;iframePresentational&quot;</code>, 
+                        <code>&quot;ignored&quot;</code>, 
+                        <code>&quot;image&quot;</code>, 
+                        <code>&quot;imageMap&quot;</code>, 
+                        <code>&quot;imeCandidate&quot;</code>, 
+                        <code>&quot;inlineTextBox&quot;</code>, 
+                        <code>&quot;inputTime&quot;</code>, 
+                        <code>&quot;keyboard&quot;</code>, 
+                        <code>&quot;labelText&quot;</code>, 
+                        <code>&quot;layoutTable&quot;</code>, 
+                        <code>&quot;layoutTableCell&quot;</code>, 
+                        <code>&quot;layoutTableRow&quot;</code>, 
+                        <code>&quot;legend&quot;</code>, 
+                        <code>&quot;lineBreak&quot;</code>, 
+                        <code>&quot;link&quot;</code>, 
+                        <code>&quot;list&quot;</code>, 
+                        <code>&quot;listBox&quot;</code>, 
+                        <code>&quot;listBoxOption&quot;</code>, 
+                        <code>&quot;listGrid&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;listItem&quot;</code></dt>
+                        <dd>
+                          Native
+                        </dd>
+                      </dl>
+                        <code>&quot;listMarker&quot;</code>, 
+                        <code>&quot;log&quot;</code>, 
+                        <code>&quot;main&quot;</code>, 
+                        <code>&quot;mark&quot;</code>, 
+                        <code>&quot;marquee&quot;</code>, 
+                        <code>&quot;math&quot;</code>, 
+                        <code>&quot;menu&quot;</code>, 
+                        <code>&quot;menuBar&quot;</code>, 
+                        <code>&quot;menuItem&quot;</code>, 
+                        <code>&quot;menuItemCheckBox&quot;</code>, 
+                        <code>&quot;menuItemRadio&quot;</code>, 
+                        <code>&quot;menuListOption&quot;</code>, 
+                        <code>&quot;menuListPopup&quot;</code>, 
+                        <code>&quot;meter&quot;</code>, 
+                        <code>&quot;navigation&quot;</code>, 
+                        <code>&quot;note&quot;</code>, 
+                        <code>&quot;pane&quot;</code>, 
+                        <code>&quot;paragraph&quot;</code>, 
+                        <code>&quot;pdfActionableHighlight&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;pluginObject&quot;</code></dt>
+                        <dd>
+                          PDF specific highlight role.
+                        </dd>
+                      </dl>
+                        <code>&quot;popUpButton&quot;</code>, 
+                        <code>&quot;portal&quot;</code>, 
+                        <code>&quot;pre&quot;</code>, 
+                        <code>&quot;presentational&quot;</code>, 
+                        <code>&quot;progressIndicator&quot;</code>, 
+                        <code>&quot;radioButton&quot;</code>, 
+                        <code>&quot;radioGroup&quot;</code>, 
+                        <code>&quot;region&quot;</code>, 
+                        <code>&quot;rootWebArea&quot;</code>, 
+                        <code>&quot;row&quot;</code>, 
+                        <code>&quot;rowGroup&quot;</code>, 
+                        <code>&quot;rowHeader&quot;</code>, 
+                        <code>&quot;ruby&quot;</code>, 
+                        <code>&quot;rubyAnnotation&quot;</code>, 
+                        <code>&quot;scrollBar&quot;</code>, 
+                        <code>&quot;scrollView&quot;</code>, 
+                        <code>&quot;search&quot;</code>, 
+                        <code>&quot;searchBox&quot;</code>, 
+                        <code>&quot;section&quot;</code>, 
+                        <code>&quot;slider&quot;</code>, 
+                        <code>&quot;spinButton&quot;</code>, 
+                        <code>&quot;splitter&quot;</code>, 
+                        <code>&quot;staticText&quot;</code>, 
+                        <code>&quot;status&quot;</code>, 
+                        <code>&quot;strong&quot;</code>, 
+                        <code>&quot;suggestion&quot;</code>, 
+                        <code>&quot;svgRoot&quot;</code>, 
+                        <code>&quot;switch&quot;</code>, 
+                        <code>&quot;tab&quot;</code>, 
+                        <code>&quot;tabList&quot;</code>, 
+                        <code>&quot;tabPanel&quot;</code>, 
+                        <code>&quot;table&quot;</code>, 
+                        <code>&quot;tableHeaderContainer&quot;</code>, 
+                        <code>&quot;term&quot;</code>, 
+                        <code>&quot;textField&quot;</code>, 
+                        <code>&quot;textFieldWithComboBox&quot;</code>, 
+                        <code>&quot;time&quot;</code>, 
+                        <code>&quot;timer&quot;</code>, 
+                        <code>&quot;titleBar&quot;</code>, 
+                        <code>&quot;toggleButton&quot;</code>, 
+                        <code>&quot;toolbar&quot;</code>, 
+                        <code>&quot;tooltip&quot;</code>, 
+                        <code>&quot;tree&quot;</code>, 
+                        <code>&quot;treeGrid&quot;</code>, 
+                        <code>&quot;treeItem&quot;</code>, 
+                        <code>&quot;unknown&quot;</code>, 
+                        <code>&quot;video&quot;</code>, 
+                        <code>&quot;webArea&quot;</code>, 
+                        <code>&quot;webView&quot;</code>, 
+                        or <code>&quot;window&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-StateType">StateType</h3>
+              <dd>Describes characteristics of an <a href="#type-AutomationNode">automation.AutomationNode</a>.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;autofillAvailable&quot;</code>, 
+                        <code>&quot;collapsed&quot;</code>, 
+                        <code>&quot;default&quot;</code>, 
+                        <code>&quot;editable&quot;</code>, 
+                        <code>&quot;expanded&quot;</code>, 
+                        <code>&quot;focusable&quot;</code>, 
+                        <code>&quot;focused&quot;</code>, 
+                        <code>&quot;horizontal&quot;</code>, 
+                        <code>&quot;hovered&quot;</code>, 
+                        <code>&quot;ignored&quot;</code>, 
+                        <code>&quot;invisible&quot;</code>, 
+                        <code>&quot;linked&quot;</code>, 
+                        <code>&quot;multiline&quot;</code>, 
+                        <code>&quot;multiselectable&quot;</code>, 
+                        <code>&quot;offscreen&quot;</code>, 
+                        <code>&quot;protected&quot;</code>, 
+                        <code>&quot;required&quot;</code>, 
+                        <code>&quot;richlyEditable&quot;</code>, 
+                        <code>&quot;vertical&quot;</code>, 
+                        or <code>&quot;visited&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-ActionType">ActionType</h3>
+              <dd>All possible actions that can be performed on automation nodes.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;annotatePageImages&quot;</code>, 
+                        <code>&quot;blur&quot;</code>, 
+                        <code>&quot;clearAccessibilityFocus&quot;</code>, 
+                        <code>&quot;collapse&quot;</code>, 
+                        <code>&quot;customAction&quot;</code>, 
+                        <code>&quot;decrement&quot;</code>, 
+                        <code>&quot;doDefault&quot;</code>, 
+                        <code>&quot;expand&quot;</code>, 
+                        <code>&quot;focus&quot;</code>, 
+                        <code>&quot;getImageData&quot;</code>, 
+                        <code>&quot;getTextLocation&quot;</code>, 
+                        <code>&quot;hideTooltip&quot;</code>, 
+                        <code>&quot;hitTest&quot;</code>, 
+                        <code>&quot;increment&quot;</code>, 
+                        <code>&quot;internalInvalidateTree&quot;</code>, 
+                        <code>&quot;loadInlineTextBoxes&quot;</code>, 
+                        <code>&quot;replaceSelectedText&quot;</code>, 
+                        <code>&quot;scrollBackward&quot;</code>, 
+                        <code>&quot;scrollDown&quot;</code>, 
+                        <code>&quot;scrollForward&quot;</code>, 
+                        <code>&quot;scrollLeft&quot;</code>, 
+                        <code>&quot;scrollRight&quot;</code>, 
+                        <code>&quot;scrollUp&quot;</code>, 
+                        <code>&quot;scrollToMakeVisible&quot;</code>, 
+                        <code>&quot;scrollToPoint&quot;</code>, 
+                        <code>&quot;setAccessibilityFocus&quot;</code>, 
+                        <code>&quot;setScrollOffset&quot;</code>, 
+                        <code>&quot;setSelection&quot;</code>, 
+                        <code>&quot;setSequentialFocusNavigationStartingPoint&quot;</code>, 
+                        <code>&quot;setValue&quot;</code>, 
+                        <code>&quot;showContextMenu&quot;</code>, 
+                        <code>&quot;signalEndOfTest&quot;</code>, 
+                        or <code>&quot;showTooltip&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-DescriptionFromType">DescriptionFromType</h3>
+              <dd></dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;uninitialized&quot;</code>, 
+                        <code>&quot;attribute&quot;</code>, 
+                        <code>&quot;contents&quot;</code>, 
+                        <code>&quot;relatedElement&quot;</code>, 
+                        or <code>&quot;title&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-Restriction">Restriction</h3>
+              <dd>The input restriction for a object -- even non-controls can be disabled.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;disabled&quot;</code>, 
+                        or <code>&quot;readOnly&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-HasPopup">HasPopup</h3>
+              <dd>Indicates the availability and type of interactive popup element</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;true&quot;</code>, 
+                        <code>&quot;menu&quot;</code>, 
+                        <code>&quot;listbox&quot;</code>, 
+                        <code>&quot;tree&quot;</code>, 
+                        <code>&quot;grid&quot;</code>, 
+                        or <code>&quot;dialog&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-MarkerType">MarkerType</h3>
+              <dd>Types of markers on text. See <code>AutomationNode.markerTypes</code>.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;spelling&quot;</code>, 
+                        <code>&quot;grammar&quot;</code>, 
+                        <code>&quot;textMatch&quot;</code>, 
+                        <code>&quot;activeSuggestion&quot;</code>, 
+                        or <code>&quot;suggestion&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-IntentInputEventType">IntentInputEventType</h3>
+              <dd>The type of an input event associated with an <a href="#type-AutomationIntent">automation.AutomationIntent</a>. It describes an edit command, e.g. IntentCommandType.insert, in more detail.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                      <dl>
+                        <dt><code>&quot;insertText&quot;</code></dt>
+                        <dd>
+                          Insertion.
+                        </dd>
+                      </dl>
+                        <code>&quot;insertLineBreak&quot;</code>, 
+                        <code>&quot;insertParagraph&quot;</code>, 
+                        <code>&quot;insertOrderedList&quot;</code>, 
+                        <code>&quot;insertUnorderedList&quot;</code>, 
+                        <code>&quot;insertHorizontalRule&quot;</code>, 
+                        <code>&quot;insertFromPaste&quot;</code>, 
+                        <code>&quot;insertFromDrop&quot;</code>, 
+                        <code>&quot;insertFromYank&quot;</code>, 
+                        <code>&quot;insertTranspose&quot;</code>, 
+                        <code>&quot;insertReplacementText&quot;</code>, 
+                        <code>&quot;insertCompositionText&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;deleteWordBackward&quot;</code></dt>
+                        <dd>
+                          Deletion.
+                        </dd>
+                      </dl>
+                        <code>&quot;deleteWordForward&quot;</code>, 
+                        <code>&quot;deleteSoftLineBackward&quot;</code>, 
+                        <code>&quot;deleteSoftLineForward&quot;</code>, 
+                        <code>&quot;deleteHardLineBackward&quot;</code>, 
+                        <code>&quot;deleteHardLineForward&quot;</code>, 
+                        <code>&quot;deleteContentBackward&quot;</code>, 
+                        <code>&quot;deleteContentForward&quot;</code>, 
+                        <code>&quot;deleteByCut&quot;</code>, 
+                        <code>&quot;deleteByDrag&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;historyUndo&quot;</code></dt>
+                        <dd>
+                          History.
+                        </dd>
+                      </dl>
+                        <code>&quot;historyRedo&quot;</code>, 
+                      <dl>
+                        <dt><code>&quot;formatBold&quot;</code></dt>
+                        <dd>
+                          Formatting.
+                        </dd>
+                      </dl>
+                        <code>&quot;formatItalic&quot;</code>, 
+                        <code>&quot;formatUnderline&quot;</code>, 
+                        <code>&quot;formatStrikeThrough&quot;</code>, 
+                        <code>&quot;formatSuperscript&quot;</code>, 
+                        <code>&quot;formatSubscript&quot;</code>, 
+                        <code>&quot;formatJustifyCenter&quot;</code>, 
+                        <code>&quot;formatJustifyFull&quot;</code>, 
+                        <code>&quot;formatJustifyRight&quot;</code>, 
+                        <code>&quot;formatJustifyLeft&quot;</code>, 
+                        <code>&quot;formatIndent&quot;</code>, 
+                        <code>&quot;formatOutdent&quot;</code>, 
+                        <code>&quot;formatRemove&quot;</code>, 
+                        or <code>&quot;formatSetBlockTextDirection&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-Rect">Rect</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="Rect-properties">properties</th></tr>
+                  <tr id="property-Rect-left">
+                    <td>integer</td>
+                    <td>
+                        left</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-Rect-top">
+                    <td>integer</td>
+                    <td>
+                        top</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-Rect-width">
+                    <td>integer</td>
+                    <td>
+                        width</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-Rect-height">
+                    <td>integer</td>
+                    <td>
+                        height</td>
+                    <td>
+                    
+                    </td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-FindParams">FindParams</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="FindParams-properties">properties</th></tr>
+                  <tr id="property-FindParams-role">
+                    <td>    <a href="#type-RoleType">RoleType</a></td>
+                    <td><span class="optional">(optional)</span>
+                        role</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-FindParams-state">
+                    <td>object</td>
+                    <td><span class="optional">(optional)</span>
+                        state</td>
+                    <td>
+                    
+                    <p>
+                      A map of <a href="#type-StateType">automation.StateType</a> to boolean, indicating for each state whether it should be set or not. For example: <code>{ StateType.disabled: false }</code> would only match if <code>StateType.disabled</code> was <em>not</em> present in the node&apos;s <code>state</code> object.
+                    </p></td>
+                  </tr><tr id="property-FindParams-attributes">
+                    <td>object</td>
+                    <td><span class="optional">(optional)</span>
+                        attributes</td>
+                    <td>
+                    
+                    <p>
+                      A map of attribute name to expected value, for example <code>{ name: &apos;Root directory&apos;, checkbox_mixed: true }</code>. String attribute values may be specified as a regex, for example <code>{ name: /stralia$/</code> }. Unless specifying a regex, the expected value must be an exact match in type and value for the actual value. Thus, the type of expected value must be one of: </p><ul> <li>string</li> <li>integer</li> <li>float</li> <li>boolean</li> </ul>
+                    <p></p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-SetDocumentSelectionParams">SetDocumentSelectionParams</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="SetDocumentSelectionParams-properties">properties</th></tr>
+                  <tr id="property-SetDocumentSelectionParams-anchorObject">
+                    <td>AutomationNode</td>
+                    <td>
+                        anchorObject</td>
+                    <td>
+                    
+                    <p>
+                      The node where the selection begins.
+                    </p></td>
+                  </tr><tr id="property-SetDocumentSelectionParams-anchorOffset">
+                    <td>integer</td>
+                    <td>
+                        anchorOffset</td>
+                    <td>
+                    
+                    <p>
+                      The offset in the anchor node where the selection begins.
+                    </p></td>
+                  </tr><tr id="property-SetDocumentSelectionParams-focusObject">
+                    <td>AutomationNode</td>
+                    <td>
+                        focusObject</td>
+                    <td>
+                    
+                    <p>
+                      The node where the selection ends.
+                    </p></td>
+                  </tr><tr id="property-SetDocumentSelectionParams-focusOffset">
+                    <td>integer</td>
+                    <td>
+                        focusOffset</td>
+                    <td>
+                    
+                    <p>
+                      The offset within the focus node where the selection ends.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-AutomationIntent">AutomationIntent</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="AutomationIntent-properties">properties</th></tr>
+                  <tr id="property-AutomationIntent-command">
+                    <td>enum of    <code>&quot;clearSelection&quot;</code>,    <code>&quot;delete&quot;</code>,    <code>&quot;dictate&quot;</code>,    <code>&quot;extendSelection&quot;</code>,    <code>&quot;format&quot;</code>,    <code>&quot;history&quot;</code>,    <code>&quot;insert&quot;</code>,    <code>&quot;marker&quot;</code>,    <code>&quot;moveSelection&quot;</code>,    or <code>&quot;setSelection&quot;</code></td>
+                    <td>
+                        command</td>
+                    <td>
+                    
+                    <p>
+                      A command associated with this AutomationIntent.
+                    </p></td>
+                  </tr><tr id="property-AutomationIntent-textBoundary">
+                    <td>enum of    <code>&quot;character&quot;</code>,    <code>&quot;format&quot;</code>,    <code>&quot;lineEnd&quot;</code>,    <code>&quot;lineStart&quot;</code>,    <code>&quot;lineStartOrEnd&quot;</code>,    <code>&quot;object&quot;</code>,    <code>&quot;pageEnd&quot;</code>,    <code>&quot;pageStart&quot;</code>,    <code>&quot;pageStartOrEnd&quot;</code>,    <code>&quot;paragraphEnd&quot;</code>,    <code>&quot;paragraphStart&quot;</code>,    <code>&quot;paragraphStartOrEnd&quot;</code>,    <code>&quot;sentenceEnd&quot;</code>,    <code>&quot;sentenceStart&quot;</code>,    <code>&quot;sentenceStartOrEnd&quot;</code>,    <code>&quot;webPage&quot;</code>,    <code>&quot;wordEnd&quot;</code>,    <code>&quot;wordStart&quot;</code>,    or <code>&quot;wordStartOrEnd&quot;</code></td>
+                    <td>
+                        textBoundary</td>
+                    <td>
+                    
+                    <p>
+                      A text boundary associated with this AutomationIntent.
+                    </p></td>
+                  </tr><tr id="property-AutomationIntent-moveDirection">
+                    <td>enum of    <code>&quot;backward&quot;</code>,    or <code>&quot;forward&quot;</code></td>
+                    <td>
+                        moveDirection</td>
+                    <td>
+                    
+                    <p>
+                      A move direction associated with this AutomationIntent.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-AutomationEvent">AutomationEvent</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="AutomationEvent-properties">properties</th></tr>
+                  <tr id="property-AutomationEvent-target">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td>
+                        target</td>
+                    <td>
+                    
+                    <p>
+                      The <a href="#type-AutomationNode">automation.AutomationNode</a> to which the event was targeted.
+                    </p></td>
+                  </tr><tr id="property-AutomationEvent-type">
+                    <td>    <a href="#type-EventType">EventType</a></td>
+                    <td>
+                        type</td>
+                    <td>
+                    
+                    <p>
+                      The type of the event.
+                    </p></td>
+                  </tr><tr id="property-AutomationEvent-eventFrom">
+                    <td>string</td>
+                    <td>
+                        eventFrom</td>
+                    <td>
+                    
+                    <p>
+                      The source of this event.
+                    </p></td>
+                  </tr><tr id="property-AutomationEvent-mouseX">
+                    <td>integer</td>
+                    <td>
+                        mouseX</td>
+                    <td>
+                    
+                    <p>
+                      Any mouse coordinates associated with this event.
+                    </p></td>
+                  </tr><tr id="property-AutomationEvent-mouseY">
+                    <td>integer</td>
+                    <td>
+                        mouseY</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationEvent-intents">
+                    <td>array of     <a href="#type-AutomationIntent">AutomationIntent</a></td>
+                    <td>
+                        intents</td>
+                    <td>
+                    
+                    <p>
+                      A list of <a href="#type-AutomationIntent">automation.AutomationIntent</a>s associated with this event.
+                    </p></td>
+                  </tr><tr id="property-AutomationEvent-stopPropagation">
+                    <td>function</td>
+                    <td>
+                        stopPropagation</td>
+                    <td>
+                    
+                    <p>
+                      Stops this event from further processing except for any remaining listeners on <a href="#property-AutomationEvent-target">automation.AutomationEvent.target</a>.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-TreeChange">TreeChange</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="TreeChange-properties">properties</th></tr>
+                  <tr id="property-TreeChange-target">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td>
+                        target</td>
+                    <td>
+                    
+                    <p>
+                      The <a href="#type-AutomationNode">automation.AutomationNode</a> that changed.
+                    </p></td>
+                  </tr><tr id="property-TreeChange-type">
+                    <td>enum of    <code>&quot;nodeCreated&quot;</code>,    <code>&quot;subtreeCreated&quot;</code>,    <code>&quot;nodeChanged&quot;</code>,    <code>&quot;textChanged&quot;</code>,    <code>&quot;nodeRemoved&quot;</code>,    or <code>&quot;subtreeUpdateEnd&quot;</code></td>
+                    <td>
+                        type</td>
+                    <td>
+                    
+                    <p>
+                      The type of change.
+                    </p>    <dl>
+                          <dt>nodeCreated</dt>
+                          <dd>
+                            * This node was added to the tree and its parent is new as well, so it&apos;s just one node in a new subtree that was added.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>subtreeCreated</dt>
+                          <dd>
+                            * This node was added to the tree but its parent was already in the tree, so it&apos;s possibly the root of a new subtree - it does not mean that it necessarily has children.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>nodeChanged</dt>
+                          <dd>
+                            * This node changed.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>textChanged</dt>
+                          <dd>
+                            * This node&apos;s text (name) changed.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>nodeRemoved</dt>
+                          <dd>
+                            * This node was removed.
+                          </dd>
+                        </dl>
+                        <dl>
+                          <dt>subtreeUpdateEnd</dt>
+                          <dd>
+                            * This subtree has finished an update.
+                          </dd>
+                        </dl>
+                    </td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-CustomAction">CustomAction</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="CustomAction-properties">properties</th></tr>
+                  <tr id="property-CustomAction-id">
+                    <td>integer</td>
+                    <td>
+                        id</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-CustomAction-description">
+                    <td>string</td>
+                    <td>
+                        description</td>
+                    <td>
+                    
+                    </td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-LanguageSpan">LanguageSpan</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="LanguageSpan-properties">properties</th></tr>
+                  <tr id="property-LanguageSpan-startIndex">
+                    <td>integer</td>
+                    <td>
+                        startIndex</td>
+                    <td>
+                    
+                    <p>
+                      Inclusive start index of substring that contains language.
+                    </p></td>
+                  </tr><tr id="property-LanguageSpan-endIndex">
+                    <td>integer</td>
+                    <td>
+                        endIndex</td>
+                    <td>
+                    
+                    <p>
+                      Exclusive end index of substring that contains language.
+                    </p></td>
+                  </tr><tr id="property-LanguageSpan-language">
+                    <td>string</td>
+                    <td>
+                        language</td>
+                    <td>
+                    
+                    <p>
+                      Detected language for substring.
+                    </p></td>
+                  </tr><tr id="property-LanguageSpan-probability">
+                    <td>double</td>
+                    <td>
+                        probability</td>
+                    <td>
+                    
+                    <p>
+                      Probability that language is correct.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-Marker">Marker</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="Marker-properties">properties</th></tr>
+                  <tr id="property-Marker-startOffset">
+                    <td>integer</td>
+                    <td>
+                        startOffset</td>
+                    <td>
+                    
+                    <p>
+                      The start offset within the text of the associated node.
+                    </p></td>
+                  </tr><tr id="property-Marker-endOffset">
+                    <td>integer</td>
+                    <td>
+                        endOffset</td>
+                    <td>
+                    
+                    <p>
+                      The end offset within the text of the associated node.
+                    </p></td>
+                  </tr><tr id="property-Marker-flags">
+                    <td>object</td>
+                    <td>
+                        flags</td>
+                    <td>
+                    
+                    <p>
+                      A mapping of MarkerType to true or undefined indicating the marker types for this marker.
+                    </p></td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-AutomationPosition">AutomationPosition</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="AutomationPosition-properties">properties</th></tr>
+                  <tr id="property-AutomationPosition-node">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        node</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-childIndex">
+                    <td>integer</td>
+                    <td>
+                        childIndex</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-textOffset">
+                    <td>integer</td>
+                    <td>
+                        textOffset</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-affinity">
+                    <td>string</td>
+                    <td>
+                        affinity</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-isNullPosition">
+                    <td>function</td>
+                    <td>
+                        isNullPosition</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-isTreePosition">
+                    <td>function</td>
+                    <td>
+                        isTreePosition</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-isTextPosition">
+                    <td>function</td>
+                    <td>
+                        isTextPosition</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-isLeafTextPosition">
+                    <td>function</td>
+                    <td>
+                        isLeafTextPosition</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atStartOfAnchor">
+                    <td>function</td>
+                    <td>
+                        atStartOfAnchor</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atEndOfAnchor">
+                    <td>function</td>
+                    <td>
+                        atEndOfAnchor</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atStartOfWord">
+                    <td>function</td>
+                    <td>
+                        atStartOfWord</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atEndOfWord">
+                    <td>function</td>
+                    <td>
+                        atEndOfWord</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atStartOfLine">
+                    <td>function</td>
+                    <td>
+                        atStartOfLine</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atEndOfLine">
+                    <td>function</td>
+                    <td>
+                        atEndOfLine</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atStartOfParagraph">
+                    <td>function</td>
+                    <td>
+                        atStartOfParagraph</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atEndOfParagraph">
+                    <td>function</td>
+                    <td>
+                        atEndOfParagraph</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atStartOfPage">
+                    <td>function</td>
+                    <td>
+                        atStartOfPage</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atEndOfPage">
+                    <td>function</td>
+                    <td>
+                        atEndOfPage</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atStartOfFormat">
+                    <td>function</td>
+                    <td>
+                        atStartOfFormat</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atEndOfFormat">
+                    <td>function</td>
+                    <td>
+                        atEndOfFormat</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atStartOfDocument">
+                    <td>function</td>
+                    <td>
+                        atStartOfDocument</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-atEndOfDocument">
+                    <td>function</td>
+                    <td>
+                        atEndOfDocument</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-asTreePosition">
+                    <td>function</td>
+                    <td>
+                        asTreePosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-asTextPosition">
+                    <td>function</td>
+                    <td>
+                        asTextPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-asLeafTextPosition">
+                    <td>function</td>
+                    <td>
+                        asLeafTextPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPositionAtStartOfAnchor">
+                    <td>function</td>
+                    <td>
+                        moveToPositionAtStartOfAnchor</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPositionAtEndOfAnchor">
+                    <td>function</td>
+                    <td>
+                        moveToPositionAtEndOfAnchor</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPositionAtStartOfDocument">
+                    <td>function</td>
+                    <td>
+                        moveToPositionAtStartOfDocument</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPositionAtEndOfDocument">
+                    <td>function</td>
+                    <td>
+                        moveToPositionAtEndOfDocument</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToParentPosition">
+                    <td>function</td>
+                    <td>
+                        moveToParentPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextLeafTreePosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextLeafTreePosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousLeafTreePosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousLeafTreePosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextLeafTextPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextLeafTextPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousLeafTextPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousLeafTextPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextCharacterPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextCharacterPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousCharacterPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousCharacterPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextWordStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextWordStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousWordStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousWordStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextWordEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextWordEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousWordEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousWordEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextLineStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextLineStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousLineStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousLineStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextLineEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextLineEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousLineEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousLineEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousFormatStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousFormatStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextFormatEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextFormatEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextParagraphStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextParagraphStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousParagraphStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousParagraphStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextParagraphEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextParagraphEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousParagraphEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousParagraphEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextPageStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextPageStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousPageStartPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousPageStartPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextPageEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextPageEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousPageEndPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousPageEndPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToNextAnchorPosition">
+                    <td>function</td>
+                    <td>
+                        moveToNextAnchorPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-moveToPreviousAnchorPosition">
+                    <td>function</td>
+                    <td>
+                        moveToPreviousAnchorPosition</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationPosition-maxTextOffset">
+                    <td>function</td>
+                    <td>
+                        maxTextOffset</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        integer.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-isInLineBreak">
+                    <td>function</td>
+                    <td>
+                        isInLineBreak</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-isInTextObject">
+                    <td>function</td>
+                    <td>
+                        isInTextObject</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-isInWhiteSpace">
+                    <td>function</td>
+                    <td>
+                        isInWhiteSpace</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-isValid">
+                    <td>function</td>
+                    <td>
+                        isValid</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                    </td>
+                  </tr><tr id="property-AutomationPosition-getText">
+                    <td>function</td>
+                    <td>
+                        getText</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                        string.
+                      </span>
+                    </td>
+                  </tr>
+              </tbody></table>
+            </div>
+            <div>
+              <h3 id="type-AutomationNode">AutomationNode</h3>
+              <table>
+                  <tbody><tr><th colspan="3" id="AutomationNode-properties">properties</th></tr>
+                  <tr id="property-AutomationNode-root">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        root</td>
+                    <td>
+                    
+                    <p>
+                      The root node of the tree containing this AutomationNode.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-isRootNode">
+                    <td>boolean</td>
+                    <td>
+                        isRootNode</td>
+                    <td>
+                    
+                    <p>
+                      Whether this AutomationNode is a root node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-role">
+                    <td>    <a href="#type-RoleType">RoleType</a></td>
+                    <td><span class="optional">(optional)</span>
+                        role</td>
+                    <td>
+                    
+                    <p>
+                      The role of this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-state">
+                    <td>object</td>
+                    <td><span class="optional">(optional)</span>
+                        state</td>
+                    <td>
+                    
+                    <p>
+                      The <a href="#type-StateType">automation.StateType</a>s describing this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-location">
+                    <td>    <a href="#type-Rect">Rect</a></td>
+                    <td><span class="optional">(optional)</span>
+                        location</td>
+                    <td>
+                    
+                    <p>
+                      The rendered location (as a bounding box) of this node in global screen coordinates.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-boundsForRange">
+                    <td>function</td>
+                    <td>
+                        boundsForRange</td>
+                    <td>
+                    
+                    <p>
+                      Determines the location of the text within the node specified by |startIndex| and |endIndex|, inclusively. Invokes |callback| with the bounding rectangle, in screen coordinates. |callback| can be invoked either synchronously or asynchronously. The bounds are clipped to ancestors.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-boundsForRange-startIndex">
+                          <td>integer</td>
+                          <td>
+                              startIndex</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-boundsForRange-endIndex">
+                          <td>integer</td>
+                          <td>
+                              endIndex</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-unclippedBoundsForRange">
+                    <td>function</td>
+                    <td>
+                        unclippedBoundsForRange</td>
+                    <td>
+                    
+                    <p>
+                      Determines the location of the text within the node specified by |startIndex| and |endIndex|, inclusively. Invokes |callback| with the bounding rectangle, in screen coordinates. |callback| can be invoked either synchronously or asynchronously. The bounds are not clipped to ancestors.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-unclippedBoundsForRange-startIndex">
+                          <td>integer</td>
+                          <td>
+                              startIndex</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-unclippedBoundsForRange-endIndex">
+                          <td>integer</td>
+                          <td>
+                              endIndex</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-unclippedLocation">
+                    <td>    <a href="#type-Rect">Rect</a></td>
+                    <td><span class="optional">(optional)</span>
+                        unclippedLocation</td>
+                    <td>
+                    
+                    <p>
+                      The location (as a bounding box) of this node in global screen coordinates without applying any clipping from ancestors.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-description">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        description</td>
+                    <td>
+                    
+                    <p>
+                      The purpose of the node, other than the role, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-checkedStateDescription">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        checkedStateDescription</td>
+                    <td>
+                    
+                    <p>
+                      Description of the state of the checkbox. Used only when the node is checkable.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-placeholder">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        placeholder</td>
+                    <td>
+                    
+                    <p>
+                      The placeholder for this text field, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-roleDescription">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        roleDescription</td>
+                    <td>
+                    
+                    <p>
+                      The role description for this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-name">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        name</td>
+                    <td>
+                    
+                    <p>
+                      The accessible name for this node, via the <a href="http://www.w3.org/TR/wai-aria/#namecalculation"> Accessible Name Calculation</a> process.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tooltip">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        tooltip</td>
+                    <td>
+                    
+                    <p>
+                      The tooltip of the node, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-nameFrom">
+                    <td>enum of    <code>&quot;uninitialized&quot;</code>,    <code>&quot;attribute&quot;</code>,    <code>&quot;attributeExplicitlyEmpty&quot;</code>,    <code>&quot;caption&quot;</code>,    <code>&quot;contents&quot;</code>,    <code>&quot;placeholder&quot;</code>,    <code>&quot;relatedElement&quot;</code>,    <code>&quot;title&quot;</code>,    or <code>&quot;value&quot;</code></td>
+                    <td><span class="optional">(optional)</span>
+                        nameFrom</td>
+                    <td>
+                    
+                    <p>
+                      The source of the name.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-imageAnnotation">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        imageAnnotation</td>
+                    <td>
+                    
+                    <p>
+                      The image annotation for image nodes, which may be a human-readable string that is the contextualized annotation or a status string related to annotations.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-value">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        value</td>
+                    <td>
+                    
+                    <p>
+                      The value for this node: for example the <code>value</code> attribute of an <code>&lt;input&gt; element.
+                    </code></p></td>
+                  </tr><tr id="property-AutomationNode-htmlTag">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        htmlTag</td>
+                    <td>
+                    
+                    <p>
+                      The HTML tag for this element, if this node is an HTML element.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-hierarchicalLevel">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        hierarchicalLevel</td>
+                    <td>
+                    
+                    <p>
+                      The level of a heading or tree item.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-wordStarts">
+                    <td>array of integer</td>
+                    <td><span class="optional">(optional)</span>
+                        wordStarts</td>
+                    <td>
+                    
+                    <p>
+                      The start and end index of each word in an inline text box.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-wordEnds">
+                    <td>array of integer</td>
+                    <td><span class="optional">(optional)</span>
+                        wordEnds</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-sentenceStarts">
+                    <td>array of integer</td>
+                    <td><span class="optional">(optional)</span>
+                        sentenceStarts</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Not fully implemented</strong>.
+                       You must build Chromium from source to try this API.
+                      
+                       <a href="http://www.chromium.org/developers">Learn more</a>.
+                    </p>
+                    
+                    <p>
+                      The start indexes of each sentence within the node&apos;s name.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-sentenceEnds">
+                    <td>array of integer</td>
+                    <td><span class="optional">(optional)</span>
+                        sentenceEnds</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Not fully implemented</strong>.
+                       You must build Chromium from source to try this API.
+                      
+                       <a href="http://www.chromium.org/developers">Learn more</a>.
+                    </p>
+                    
+                    <p>
+                      The end indexes of each sentence within the node&apos;s name. For most nodes, the size of sentenceStarts array should be equal to the size of sentenceEnds array. Two exceptions are (1) node at the begining of a paragraph but the end of the node&apos;s sentences is in its following node. Such a node has one more start index. (2) Node at the end of a paragraph but the start of the node&apos;s sentences is in its previous node. Such a node has one more end index. For example, </p><p><b>Hello</b> world.</p> has two nodes. The first one has one start index (i.e., 0) but no end index. The second node has one end index (i.e., 7) but no start index.
+                    <p></p></td>
+                  </tr><tr id="property-AutomationNode-nonInlineTextWordStarts">
+                    <td>array of integer</td>
+                    <td><span class="optional">(optional)</span>
+                        nonInlineTextWordStarts</td>
+                    <td>
+                    
+                    <p>
+                      The start index of each word within the node&apos;s name. This is different from wordStarts because it is not restricted to inline text boxes and can be used for any type of element.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-nonInlineTextWordEnds">
+                    <td>array of integer</td>
+                    <td><span class="optional">(optional)</span>
+                        nonInlineTextWordEnds</td>
+                    <td>
+                    
+                    <p>
+                      The end index of each word within the node&apos;s name. This is different from wordEnds because it is not restricted to inline text boxes and can be used for any type of element.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-controls">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        controls</td>
+                    <td>
+                    
+                    <p>
+                      The nodes, if any, which this node is specified to control via <a href="http://www.w3.org/TR/wai-aria/#aria-controls"> <code>aria-controls</code></a>.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-describedBy">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        describedBy</td>
+                    <td>
+                    
+                    <p>
+                      The nodes, if any, which form a description for this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-flowTo">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        flowTo</td>
+                    <td>
+                    
+                    <p>
+                      The nodes, if any, which may optionally be navigated to after this one. See <a href="http://www.w3.org/TR/wai-aria/#aria-flowto"> <code>aria-flowto</code></a>.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-labelledBy">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        labelledBy</td>
+                    <td>
+                    
+                    <p>
+                      The nodes, if any, which form a label for this element. Generally, the text from these elements will also be exposed as the element&apos;s accessible name, via the <a href="#property-AutomationNode-name">automation.AutomationNode.name</a> attribute.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-activeDescendant">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        activeDescendant</td>
+                    <td>
+                    
+                    <p>
+                      The node referred to by <code>aria-activedescendant</code>, where applicable
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-activeDescendantFor">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        activeDescendantFor</td>
+                    <td>
+                    
+                    <p>
+                      Reverse relationship for active descendant.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-inPageLinkTarget">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        inPageLinkTarget</td>
+                    <td>
+                    
+                    <p>
+                      The target of an in-page link.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-details">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        details</td>
+                    <td>
+                    
+                    <p>
+                      A node that provides more details about the current node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-errorMessage">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        errorMessage</td>
+                    <td>
+                    
+                    <p>
+                      A node that provides an error message for a current node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-detailsFor">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        detailsFor</td>
+                    <td>
+                    
+                    <p>
+                      Reverse relationship for details.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-errorMessageFor">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        errorMessageFor</td>
+                    <td>
+                    
+                    <p>
+                      Reverse relationship for errorMessage.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-controlledBy">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        controlledBy</td>
+                    <td>
+                    
+                    <p>
+                      Reverse relationship for controls.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-descriptionFor">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        descriptionFor</td>
+                    <td>
+                    
+                    <p>
+                      Reverse relationship for describedBy.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-flowFrom">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        flowFrom</td>
+                    <td>
+                    
+                    <p>
+                      Reverse relationship for flowTo.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-labelFor">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        labelFor</td>
+                    <td>
+                    
+                    <p>
+                      Reverse relationship for labelledBy.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableCellColumnHeaders">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        tableCellColumnHeaders</td>
+                    <td>
+                    
+                    <p>
+                      The column header nodes for a table cell.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableCellRowHeaders">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        tableCellRowHeaders</td>
+                    <td>
+                    
+                    <p>
+                      The row header nodes for a table cell.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-standardActions">
+                    <td>array of     <a href="#type-ActionType">ActionType</a></td>
+                    <td><span class="optional">(optional)</span>
+                        standardActions</td>
+                    <td>
+                    
+                    <p>
+                      An array of standard actions available on this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-customActions">
+                    <td>array of     <a href="#type-CustomAction">CustomAction</a></td>
+                    <td><span class="optional">(optional)</span>
+                        customActions</td>
+                    <td>
+                    
+                    <p>
+                      An array of custom actions.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-defaultActionVerb">
+                    <td>enum of    <code>&quot;activate&quot;</code>,    <code>&quot;check&quot;</code>,    <code>&quot;click&quot;</code>,    <code>&quot;clickAncestor&quot;</code>,    <code>&quot;jump&quot;</code>,    <code>&quot;open&quot;</code>,    <code>&quot;press&quot;</code>,    <code>&quot;select&quot;</code>,    or <code>&quot;uncheck&quot;</code></td>
+                    <td><span class="optional">(optional)</span>
+                        defaultActionVerb</td>
+                    <td>
+                    
+                    <p>
+                      The action taken by calling <code>doDefault</code>.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-url">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        url</td>
+                    <td>
+                    
+                    <p>
+                      The URL that this link will navigate to.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-docUrl">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        docUrl</td>
+                    <td>
+                    
+                    <p>
+                      The URL of this document.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-docTitle">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        docTitle</td>
+                    <td>
+                    
+                    <p>
+                      The title of this document.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-docLoaded">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        docLoaded</td>
+                    <td>
+                    
+                    <p>
+                      Whether this document has finished loading.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-docLoadingProgress">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        docLoadingProgress</td>
+                    <td>
+                    
+                    <p>
+                      The proportion (out of 1.0) that this doc has completed loading.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollX">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        scrollX</td>
+                    <td>
+                    
+                    <p>
+                      Scrollable container attributes.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollXMin">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        scrollXMin</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-scrollXMax">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        scrollXMax</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-scrollY">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        scrollY</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-scrollYMin">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        scrollYMin</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-scrollYMax">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        scrollYMax</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-scrollable">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        scrollable</td>
+                    <td>
+                    
+                    <p>
+                      Indicates whether this node is scrollable.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-textSelStart">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        textSelStart</td>
+                    <td>
+                    
+                    <p>
+                      The character index of the start of the selection within this editable text element; -1 if no selection.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-textSelEnd">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        textSelEnd</td>
+                    <td>
+                    
+                    <p>
+                      The character index of the end of the selection within this editable text element; -1 if no selection.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-textInputType">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        textInputType</td>
+                    <td>
+                    
+                    <p>
+                      The input type, like email or number.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-markers">
+                    <td>array of     <a href="#type-Marker">Marker</a></td>
+                    <td><span class="optional">(optional)</span>
+                        markers</td>
+                    <td>
+                    
+                    <p>
+                      An array of Marker objects for this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-isSelectionBackward">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        isSelectionBackward</td>
+                    <td>
+                    
+                    <p>
+                      If a selection is present, whether the anchor of the selection comes after its focus in the accessibility tree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-anchorObject">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        anchorObject</td>
+                    <td>
+                    
+                    <p>
+                      The anchor node of the tree selection, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-anchorOffset">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        anchorOffset</td>
+                    <td>
+                    
+                    <p>
+                      The anchor offset of the tree selection, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-anchorAffinity">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        anchorAffinity</td>
+                    <td>
+                    
+                    <p>
+                      The affinity of the tree selection anchor, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-focusObject">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        focusObject</td>
+                    <td>
+                    
+                    <p>
+                      The focus node of the tree selection, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-focusOffset">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        focusOffset</td>
+                    <td>
+                    
+                    <p>
+                      The focus offset of the tree selection, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-focusAffinity">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        focusAffinity</td>
+                    <td>
+                    
+                    <p>
+                      The affinity of the tree selection focus, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-selectionStartObject">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        selectionStartObject</td>
+                    <td>
+                    
+                    <p>
+                      The selection start node of the tree selection, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-selectionStartOffset">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        selectionStartOffset</td>
+                    <td>
+                    
+                    <p>
+                      The selection start offset of the tree selection, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-selectionStartAffinity">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        selectionStartAffinity</td>
+                    <td>
+                    
+                    <p>
+                      The affinity of the tree selection start, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-selectionEndObject">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        selectionEndObject</td>
+                    <td>
+                    
+                    <p>
+                      The selection end node of the tree selection, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-selectionEndOffset">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        selectionEndOffset</td>
+                    <td>
+                    
+                    <p>
+                      The selection end offset of the tree selection, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-selectionEndAffinity">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        selectionEndAffinity</td>
+                    <td>
+                    
+                    <p>
+                      The affinity of the tree selection end, if any.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-notUserSelectableStyle">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        notUserSelectableStyle</td>
+                    <td>
+                    
+                    <p>
+                      Indicates that the node is marked user-select:none
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-valueForRange">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        valueForRange</td>
+                    <td>
+                    
+                    <p>
+                      The current value for this range.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-minValueForRange">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        minValueForRange</td>
+                    <td>
+                    
+                    <p>
+                      The minimum possible value for this range.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-maxValueForRange">
+                    <td>double</td>
+                    <td><span class="optional">(optional)</span>
+                        maxValueForRange</td>
+                    <td>
+                    
+                    <p>
+                      The maximum possible value for this range.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-posInSet">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        posInSet</td>
+                    <td>
+                    
+                    <p>
+                      The 1-based index of an item in a set.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-setSize">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        setSize</td>
+                    <td>
+                    
+                    <p>
+                      The number of items in a set;
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableRowCount">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableRowCount</td>
+                    <td>
+                    
+                    <p>
+                      The number of rows in this table as specified in the DOM.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-ariaRowCount">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        ariaRowCount</td>
+                    <td>
+                    
+                    <p>
+                      The number of rows in this table as specified by the page author.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableColumnCount">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableColumnCount</td>
+                    <td>
+                    
+                    <p>
+                      The number of columns in this table as specified in the DOM.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-ariaColumnCount">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        ariaColumnCount</td>
+                    <td>
+                    
+                    <p>
+                      The number of columns in this table as specified by the page author.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableCellColumnIndex">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableCellColumnIndex</td>
+                    <td>
+                    
+                    <p>
+                      The zero-based index of the column that this cell is in as specified in the DOM.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableCellAriaColumnIndex">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableCellAriaColumnIndex</td>
+                    <td>
+                    
+                    <p>
+                      The ARIA column index as specified by the page author.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableCellColumnSpan">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableCellColumnSpan</td>
+                    <td>
+                    
+                    <p>
+                      The number of columns that this cell spans (default is 1).
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableCellRowIndex">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableCellRowIndex</td>
+                    <td>
+                    
+                    <p>
+                      The zero-based index of the row that this cell is in as specified in the DOM.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableCellAriaRowIndex">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableCellAriaRowIndex</td>
+                    <td>
+                    
+                    <p>
+                      The ARIA row index as specified by the page author.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableCellRowSpan">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableCellRowSpan</td>
+                    <td>
+                    
+                    <p>
+                      The number of rows that this cell spans (default is 1).
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableColumnHeader">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        tableColumnHeader</td>
+                    <td>
+                    
+                    <p>
+                      The corresponding column header for this cell.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableRowHeader">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        tableRowHeader</td>
+                    <td>
+                    
+                    <p>
+                      The corresponding row header for this cell.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableColumnIndex">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableColumnIndex</td>
+                    <td>
+                    
+                    <p>
+                      The column index of this column node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-tableRowIndex">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        tableRowIndex</td>
+                    <td>
+                    
+                    <p>
+                      The row index of this row node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-liveStatus">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        liveStatus</td>
+                    <td>
+                    
+                    <p>
+                      The type of region if this is the root of a live region. Possible values are &apos;polite&apos; and &apos;assertive&apos;.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-liveRelevant">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        liveRelevant</td>
+                    <td>
+                    
+                    <p>
+                      The value of aria-relevant for a live region.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-liveAtomic">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        liveAtomic</td>
+                    <td>
+                    
+                    <p>
+                      The value of aria-atomic for a live region.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-busy">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        busy</td>
+                    <td>
+                    
+                    <p>
+                      The value of aria-busy for a live region or any other element.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-containerLiveStatus">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        containerLiveStatus</td>
+                    <td>
+                    
+                    <p>
+                      The type of live region if this node is inside a live region.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-containerLiveRelevant">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        containerLiveRelevant</td>
+                    <td>
+                    
+                    <p>
+                      The value of aria-relevant if this node is inside a live region.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-containerLiveAtomic">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        containerLiveAtomic</td>
+                    <td>
+                    
+                    <p>
+                      The value of aria-atomic if this node is inside a live region.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-containerLiveBusy">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        containerLiveBusy</td>
+                    <td>
+                    
+                    <p>
+                      The value of aria-busy if this node is inside a live region.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-autoComplete">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        autoComplete</td>
+                    <td>
+                    
+                    <p>
+                      Aria auto complete.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-className">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        className</td>
+                    <td>
+                    
+                    <p>
+                      The name of the programmatic backing object.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-modal">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        modal</td>
+                    <td>
+                    
+                    <p>
+                      Marks this subtree as modal.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-htmlAttributes">
+                    <td>object</td>
+                    <td><span class="optional">(optional)</span>
+                        htmlAttributes</td>
+                    <td>
+                    
+                    <p>
+                      A map containing all HTML attributes and their values
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-inputType">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        inputType</td>
+                    <td>
+                    
+                    <p>
+                      The input type of a text field, such as &quot;text&quot; or &quot;email&quot;.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-accessKey">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        accessKey</td>
+                    <td>
+                    
+                    <p>
+                      The key that activates this widget.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-ariaInvalidValue">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        ariaInvalidValue</td>
+                    <td>
+                    
+                    <p>
+                      The value of the aria-invalid attribute, indicating the error type.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-display">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        display</td>
+                    <td>
+                    
+                    <p>
+                      The CSS display attribute for this node, if applicable.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-imageDataUrl">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        imageDataUrl</td>
+                    <td>
+                    
+                    <p>
+                      A data url with the contents of this object&apos;s image or thumbnail.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-language">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        language</td>
+                    <td>
+                    
+                    <p>
+                      The author-provided language code for this subtree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-detectedLanguage">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        detectedLanguage</td>
+                    <td>
+                    
+                    <p>
+                      The detected language code for this subtree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-hasPopup">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        hasPopup</td>
+                    <td>
+                    
+                    <p>
+                      Indicates the availability and type of interactive popup element true - the popup is a menu menu - the popup is a menu listbox - the popup is a listbox tree - the popup is a tree grid - the popup is a grid dialog - the popup is a dialog
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-restriction">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        restriction</td>
+                    <td>
+                    
+                    <p>
+                      Input restriction, if any, such as readonly or disabled: undefined - enabled control or other object that is not disabled Restriction.DISABLED - disallows input in itself + any descendants Restriction.READONLY - allow focus/selection but not input
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-checked">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        checked</td>
+                    <td>
+                    
+                    <p>
+                      Tri-state describing checkbox or radio button: &apos;false&apos; | &apos;true&apos; | &apos;mixed&apos;
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-innerHtml">
+                    <td>string</td>
+                    <td><span class="optional">(optional)</span>
+                        innerHtml</td>
+                    <td>
+                    
+                    <p>
+                      The inner html of this element. Only populated for math content.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-color">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        color</td>
+                    <td>
+                    
+                    <p>
+                      The RGBA foreground color of this subtree, as an integer.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-backgroundColor">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        backgroundColor</td>
+                    <td>
+                    
+                    <p>
+                      The RGBA background color of this subtree, as an integer.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-colorValue">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        colorValue</td>
+                    <td>
+                    
+                    <p>
+                      The RGBA color of an input element whose value is a color.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-subscript">
+                    <td>boolean</td>
+                    <td>
+                        subscript</td>
+                    <td>
+                    
+                    <p>
+                      Indicates node text is subscript.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-superscript">
+                    <td>boolean</td>
+                    <td>
+                        superscript</td>
+                    <td>
+                    
+                    <p>
+                      Indicates node text is superscript.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-bold">
+                    <td>boolean</td>
+                    <td>
+                        bold</td>
+                    <td>
+                    
+                    <p>
+                      Indicates node text is bold.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-italic">
+                    <td>boolean</td>
+                    <td>
+                        italic</td>
+                    <td>
+                    
+                    <p>
+                      Indicates node text is italic.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-underline">
+                    <td>boolean</td>
+                    <td>
+                        underline</td>
+                    <td>
+                    
+                    <p>
+                      Indicates node text is underline.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-lineThrough">
+                    <td>boolean</td>
+                    <td>
+                        lineThrough</td>
+                    <td>
+                    
+                    <p>
+                      Indicates node text is line through.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-selected">
+                    <td>boolean</td>
+                    <td><span class="optional">(optional)</span>
+                        selected</td>
+                    <td>
+                    
+                    <p>
+                      Indicates whether this node is selected, unselected, or neither.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-fontSize">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        fontSize</td>
+                    <td>
+                    
+                    <p>
+                      Indicates the font size of this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-fontFamily">
+                    <td>string</td>
+                    <td>
+                        fontFamily</td>
+                    <td>
+                    
+                    <p>
+                      Indicates the font family.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-editableRoot">
+                    <td>boolean</td>
+                    <td>
+                        editableRoot</td>
+                    <td>
+                    
+                    <p>
+                      Indicates whether this is a root of an editable subtree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-children">
+                    <td>array of     <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td>
+                        children</td>
+                    <td>
+                    
+                    <p>
+                      Walking the tree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-parent">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        parent</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-firstChild">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        firstChild</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-lastChild">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        lastChild</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-previousSibling">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        previousSibling</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-nextSibling">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        nextSibling</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-previousOnLine">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        previousOnLine</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-nextOnLine">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        nextOnLine</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-previousFocus">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        previousFocus</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-nextFocus">
+                    <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                    <td><span class="optional">(optional)</span>
+                        nextFocus</td>
+                    <td>
+                    
+                    </td>
+                  </tr><tr id="property-AutomationNode-indexInParent">
+                    <td>integer</td>
+                    <td><span class="optional">(optional)</span>
+                        indexInParent</td>
+                    <td>
+                    
+                    <p>
+                      The index of this node in its parent node&apos;s list of children. If this is the root node, this will be undefined.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-sortDirection">
+                    <td>enum of    <code>&quot;unsorted&quot;</code>,    <code>&quot;ascending&quot;</code>,    <code>&quot;descending&quot;</code>,    or <code>&quot;other&quot;</code></td>
+                    <td>
+                        sortDirection</td>
+                    <td>
+                    
+                    <p>
+                      The sort direction of this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-doDefault">
+                    <td>function</td>
+                    <td>
+                        doDefault</td>
+                    <td>
+                    
+                    <p>
+                      Does the default action based on this node&apos;s role. This is generally the same action that would result from clicking the node such as expanding a treeitem, toggling a checkbox, selecting a radiobutton, or activating a button.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-focus">
+                    <td>function</td>
+                    <td>
+                        focus</td>
+                    <td>
+                    
+                    <p>
+                      Places focus on this node.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-getImageData">
+                    <td>function</td>
+                    <td>
+                        getImageData</td>
+                    <td>
+                    
+                    <p>
+                      Request a data url for the contents of an image, optionally resized.  Pass zero for maxWidth and/or maxHeight for the original size.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-getImageData-maxWidth">
+                          <td>integer</td>
+                          <td>
+                              maxWidth</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-getImageData-maxHeight">
+                          <td>integer</td>
+                          <td>
+                              maxHeight</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-hitTest">
+                    <td>function</td>
+                    <td>
+                        hitTest</td>
+                    <td>
+                    
+                    <p>
+                      Does a hit test of the given global screen coordinates, and fires eventToFire on the resulting object.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-hitTest-x">
+                          <td>integer</td>
+                          <td>
+                              x</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-hitTest-y">
+                          <td>integer</td>
+                          <td>
+                              y</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-hitTest-eventToFire">
+                          <td>    <a href="#type-EventType">EventType</a></td>
+                          <td>
+                              eventToFire</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-hitTestWithReply">
+                    <td>function</td>
+                    <td>
+                        hitTestWithReply</td>
+                    <td>
+                    
+                    <p>
+                      Does a <a href="#property-AutomationNode-hitTest">automation.AutomationNode.hitTest</a>, and receives a callback with the resulting hit node.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-hitTestWithReply-x">
+                          <td>integer</td>
+                          <td>
+                              x</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-hitTestWithReply-y">
+                          <td>integer</td>
+                          <td>
+                              y</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-makeVisible">
+                    <td>function</td>
+                    <td>
+                        makeVisible</td>
+                    <td>
+                    
+                    <p>
+                      Scrolls this node to make it visible.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-performCustomAction">
+                    <td>function</td>
+                    <td>
+                        performCustomAction</td>
+                    <td>
+                    
+                    <p>
+                      Performs custom action.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-performCustomAction-customActionId">
+                          <td>integer</td>
+                          <td>
+                              customActionId</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-performStandardAction">
+                    <td>function</td>
+                    <td>
+                        performStandardAction</td>
+                    <td>
+                    
+                    <p>
+                      Convenience method to perform a standard action supported by this node. For actions requiring additional arguments, call the specific binding e.g. <code>setSelection</code>.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-performStandardAction-actionType">
+                          <td>    <a href="#type-ActionType">ActionType</a></td>
+                          <td>
+                              actionType</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-replaceSelectedText">
+                    <td>function</td>
+                    <td>
+                        replaceSelectedText</td>
+                    <td>
+                    
+                    <p>
+                      Replaces the selected text within a text field.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-replaceSelectedText-value">
+                          <td>string</td>
+                          <td>
+                              value</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-setAccessibilityFocus">
+                    <td>function</td>
+                    <td>
+                        setAccessibilityFocus</td>
+                    <td>
+                    
+                    <p>
+                      Sets accessibility focus. Accessibility focus is the node on which an extension tracks a user&apos;s focus. This may be conveyed through a focus ring or or speech output by the extension. Automation will dispatch more events to the accessibility focus such as location changes.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-setSelection">
+                    <td>function</td>
+                    <td>
+                        setSelection</td>
+                    <td>
+                    
+                    <p>
+                      Sets selection within a text field.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-setSelection-startIndex">
+                          <td>integer</td>
+                          <td>
+                              startIndex</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-setSelection-endIndex">
+                          <td>integer</td>
+                          <td>
+                              endIndex</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-setSequentialFocusNavigationStartingPoint">
+                    <td>function</td>
+                    <td>
+                        setSequentialFocusNavigationStartingPoint</td>
+                    <td>
+                    
+                    <p>
+                      Clears focus and sets this node as the starting point for the next time the user presses Tab or Shift+Tab.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-setValue">
+                    <td>function</td>
+                    <td>
+                        setValue</td>
+                    <td>
+                    
+                    <p>
+                      Sets the value of a text field.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-setValue-value">
+                          <td>string</td>
+                          <td>
+                              value</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-showContextMenu">
+                    <td>function</td>
+                    <td>
+                        showContextMenu</td>
+                    <td>
+                    
+                    <p>
+                      Show the context menu for this element, as if the user right-clicked.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-resumeMedia">
+                    <td>function</td>
+                    <td>
+                        resumeMedia</td>
+                    <td>
+                    
+                    <p>
+                      Resume playing any media within this tree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-startDuckingMedia">
+                    <td>function</td>
+                    <td>
+                        startDuckingMedia</td>
+                    <td>
+                    
+                    <p>
+                      Start ducking any media within this tree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-stopDuckingMedia">
+                    <td>function</td>
+                    <td>
+                        stopDuckingMedia</td>
+                    <td>
+                    
+                    <p>
+                      Stop ducking any media within this tree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-suspendMedia">
+                    <td>function</td>
+                    <td>
+                        suspendMedia</td>
+                    <td>
+                    
+                    <p>
+                      Suspend any media playing within this tree.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollBackward">
+                    <td>function</td>
+                    <td>
+                        scrollBackward</td>
+                    <td>
+                    
+                    <p>
+                      Scrolls this scrollable container backward.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollForward">
+                    <td>function</td>
+                    <td>
+                        scrollForward</td>
+                    <td>
+                    
+                    <p>
+                      Scrolls this scrollable container forward.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollUp">
+                    <td>function</td>
+                    <td>
+                        scrollUp</td>
+                    <td>
+                    
+                    <p>
+                      Scrolls this scrollable container up.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollDown">
+                    <td>function</td>
+                    <td>
+                        scrollDown</td>
+                    <td>
+                    
+                    <p>
+                      Scrolls this scrollable container down.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollLeft">
+                    <td>function</td>
+                    <td>
+                        scrollLeft</td>
+                    <td>
+                    
+                    <p>
+                      Scrolls this scrollable container left.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollRight">
+                    <td>function</td>
+                    <td>
+                        scrollRight</td>
+                    <td>
+                    
+                    <p>
+                      Scrolls this scrollable container right.
+                    </p></td>
+                  </tr><tr id="property-AutomationNode-scrollToPoint">
+                    <td>function</td>
+                    <td>
+                        scrollToPoint</td>
+                    <td>
+                    
+                    <p>
+                      Scrolls this scrollable container to the given point.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-scrollToPoint-x">
+                          <td>integer</td>
+                          <td>
+                              x</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-scrollToPoint-y">
+                          <td>integer</td>
+                          <td>
+                              y</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-setScrollOffset">
+                    <td>function</td>
+                    <td>
+                        setScrollOffset</td>
+                    <td>
+                    
+                    <p>
+                      Sets this scrollable container&apos;s scroll offset.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-setScrollOffset-x">
+                          <td>integer</td>
+                          <td>
+                              x</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-setScrollOffset-y">
+                          <td>integer</td>
+                          <td>
+                              y</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-addEventListener">
+                    <td>function</td>
+                    <td>
+                        addEventListener</td>
+                    <td>
+                    
+                    <p>
+                      Adds a listener for the given event type and event phase.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-addEventListener-eventType">
+                          <td>    <a href="#type-EventType">EventType</a></td>
+                          <td>
+                              eventType</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-addEventListener-listener">
+                          <td>function</td>
+                          <td>
+                              listener</td>
+                          <td>
+                          
+                          <p>
+                            A listener for events on an <code>AutomationNode</code>.
+                          </p>  <table class="innerTable">
+                              <tbody><tr><th colspan="3">Parameters</th></tr>
+                              <tr id="property-listener-event">
+                                <td>    <a href="#type-AutomationEvent">AutomationEvent</a></td>
+                                <td>
+                                    event</td>
+                                <td>
+                                
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr><tr id="property-addEventListener-capture">
+                          <td>boolean</td>
+                          <td>
+                              capture</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-removeEventListener">
+                    <td>function</td>
+                    <td>
+                        removeEventListener</td>
+                    <td>
+                    
+                    <p>
+                      Removes a listener for the given event type and event phase.
+                    </p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-removeEventListener-eventType">
+                          <td>    <a href="#type-EventType">EventType</a></td>
+                          <td>
+                              eventType</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-removeEventListener-listener">
+                          <td>function</td>
+                          <td>
+                              listener</td>
+                          <td>
+                          
+                          <p>
+                            A listener for events on an <code>AutomationNode</code>.
+                          </p>  <table class="innerTable">
+                              <tbody><tr><th colspan="3">Parameters</th></tr>
+                              <tr id="property-listener-event">
+                                <td>    <a href="#type-AutomationEvent">AutomationEvent</a></td>
+                                <td>
+                                    event</td>
+                                <td>
+                                
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr><tr id="property-removeEventListener-capture">
+                          <td>boolean</td>
+                          <td>
+                              capture</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-domQuerySelector">
+                    <td>function</td>
+                    <td>
+                        domQuerySelector</td>
+                    <td>
+                    
+                    <p>
+                      </p><p>Gets the first node in this node&apos;s subtree which matches the given CSS selector and is within the same DOM context.</p><p>If this node doesn&apos;t correspond directly with an HTML node in the DOM, querySelector will be run on this node&apos;s nearest HTML node ancestor. Note that this may result in the query returning a node which is not a descendant of this node.</p><p>If the selector matches a node which doesn&apos;t directly correspond to an automation node (for example an element within an ARIA widget, where the ARIA widget forms one node of the automation tree, or an element which is hidden from accessibility via hiding it using CSS or using aria-hidden), this will return the nearest ancestor which does correspond to an automation node.</p>
+                    <p></p>  <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-domQuerySelector-selector">
+                          <td>string</td>
+                          <td>
+                              selector</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-find">
+                    <td>function</td>
+                    <td>
+                        find</td>
+                    <td>
+                    
+                    <p>
+                      Finds the first AutomationNode in this node&apos;s subtree which matches the given search parameters.
+                    </p>	
+                      <br>Returns<span class="property">	
+                            <a href="#type-AutomationNode">AutomationNode</a>.
+                      </span>
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-find-params">
+                          <td>    <a href="#type-FindParams">FindParams</a></td>
+                          <td>
+                              params</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-findAll">
+                    <td>function</td>
+                    <td>
+                        findAll</td>
+                    <td>
+                    
+                    <p>
+                      Finds all the AutomationNodes in this node&apos;s subtree which matches the given search parameters.
+                    </p>	
+                      <br>Returns<span class="property">	
+                        array of     <a href="#type-AutomationNode">AutomationNode</a>.
+                      </span>
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-findAll-params">
+                          <td>    <a href="#type-FindParams">FindParams</a></td>
+                          <td>
+                              params</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-matches">
+                    <td>function</td>
+                    <td>
+                        matches</td>
+                    <td>
+                    
+                    <p>
+                      Returns whether this node matches the given <a href="#type-FindParams">automation.FindParams</a>.
+                    </p>	
+                      <br>Returns<span class="property">	
+                        boolean.
+                      </span>
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-matches-params">
+                          <td>    <a href="#type-FindParams">FindParams</a></td>
+                          <td>
+                              params</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-getNextTextMatch">
+                    <td>function</td>
+                    <td>
+                        getNextTextMatch</td>
+                    <td>
+                    
+                    	
+                      <br>Returns<span class="property">	
+                            <a href="#type-AutomationNode">AutomationNode</a>.
+                      </span>
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-getNextTextMatch-searchStr">
+                          <td>string</td>
+                          <td>
+                              searchStr</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-getNextTextMatch-backward">
+                          <td>boolean</td>
+                          <td>
+                              backward</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-languageAnnotationForStringAttribute">
+                    <td>function</td>
+                    <td>
+                        languageAnnotationForStringAttribute</td>
+                    <td>
+                    <p class="availability">
+                      <strong>Dev</strong> channel only.
+                      
+                       <a href="index.html#dev_apis">Learn more</a>.
+                    </p>
+                    
+                    <p>
+                      Returns the detected languages for the provided string attribute as an array of LanguageSpan objects. There are several guarantees about the format of the LanguageSpan array: 1. Is either empty or contains LanguageSpans that cover all indices in the associated string attribute value. 2. Is sorted by increasing startIndex (those with smaller startIndex appear first). 3. LanguageSpans are non-overlapping and contain exactly one language.
+                    </p>	
+                      <br>Returns<span class="property">	
+                        array of     <a href="#type-LanguageSpan">LanguageSpan</a>.
+                      </span>
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-languageAnnotationForStringAttribute-attribute">
+                          <td>string</td>
+                          <td>
+                              attribute</td>
+                          <td>
+                          <p class="availability">
+                            Since Chrome 88.
+                             <em>Warning:</em> this is the current <strong>Dev</strong> channel.
+                            
+                             <a href="index.html#dev_apis">Learn more</a>.
+                          </p>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr><tr id="property-AutomationNode-createPosition">
+                    <td>function</td>
+                    <td>
+                        createPosition</td>
+                    <td>
+                    
+                    <p>
+                      Creates a position object backed by Chrome&apos;s accessibility position support.
+                    </p>	
+                      <br>Returns<span class="property">	
+                            <a href="#type-AutomationPosition">AutomationPosition</a>.
+                      </span>
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                        <tr id="property-createPosition-offset">
+                          <td>integer</td>
+                          <td>
+                              offset</td>
+                          <td>
+                          
+                          </td>
+                        </tr><tr id="property-createPosition-isUpstream">
+                          <td>boolean</td>
+                          <td><span class="optional">(optional)</span>
+                              isUpstream</td>
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-getTree">getTree
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.automation.getTree(<span class="optional">integer tabId</span>, <span class="optional">function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Get the automation tree for the tab with the given tabId, or the current tab if no tabID is given, enabling automation if necessary. Returns a tree with a placeholder root node; listen for the &quot;loadComplete&quot; event to get a notification that the tree has fully loaded (the previous root node reference will stop working at or before this point).
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getTree-tabId">
+                      <td>integer</td>
+                      <td><span class="optional">(optional)</span>
+                          tabId</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-getTree-callback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the <code>AutomationNode</code> for the page is available.
+                      </p>    <p>
+                              If you specify the <em>callback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-AutomationNode">AutomationNode</a> rootNode) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-rootNode">
+                              <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                              <td>
+                                  rootNode</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getDesktop">getDesktop
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.automation.getDesktop(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Get the automation tree for the whole desktop which consists of all on screen views. Note this API is currently only supported on Chrome OS.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getDesktop-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called when the <code>AutomationNode</code> for the page is available.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-AutomationNode">AutomationNode</a> rootNode) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-rootNode">
+                              <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                              <td>
+                                  rootNode</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getFocus">getFocus
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.automation.getFocus(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Get the automation node that currently has focus, globally. Will return null if none of the nodes in any loaded trees have focus.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getFocus-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called with the <code>AutomationNode</code> that currently has focus.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-AutomationNode">AutomationNode</a> focusedNode) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-focusedNode">
+                              <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                              <td>
+                                  focusedNode</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getAccessibilityFocus">getAccessibilityFocus
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.automation.getAccessibilityFocus(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Get the automation node that currently has accessibility focus, globally. Will return null if none of the nodes in any loaded trees have accessibility focus.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getAccessibilityFocus-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called with the <code>AutomationNode</code> that currently has accessibility focus.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-AutomationNode">AutomationNode</a> focusedNode) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-focusedNode">
+                              <td>    <a href="#type-AutomationNode">AutomationNode</a></td>
+                              <td>
+                                  focusedNode</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-addTreeChangeObserver">addTreeChangeObserver
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.automation.addTreeChangeObserver(<span>enum of    <code>&quot;noTreeChanges&quot;</code>,    <code>&quot;liveRegionTreeChanges&quot;</code>,    <code>&quot;textMarkerChanges&quot;</code>,    or <code>&quot;allTreeChanges&quot;</code> filter</span>, <span>function observer</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Add a tree change observer. Tree change observers are static/global, they listen to changes across all trees. Pass a filter to determine what specific tree changes to listen to, and note that listnening to all tree changes can be expensive.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-addTreeChangeObserver-filter">
+                      <td>enum of    <code>&quot;noTreeChanges&quot;</code>,    <code>&quot;liveRegionTreeChanges&quot;</code>,    <code>&quot;textMarkerChanges&quot;</code>,    or <code>&quot;allTreeChanges&quot;</code></td>
+                      <td>
+                          filter</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-addTreeChangeObserver-observer">
+                      <td>function</td>
+                      <td>
+                          observer</td>
+                      <td>
+                      
+                      <p>
+                        A listener for changes on the <code>AutomationNode</code> tree.
+                      </p>    <p>
+                              The <em>observer</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-TreeChange">TreeChange</a> treeChange) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-observer-treeChange">
+                              <td>    <a href="#type-TreeChange">TreeChange</a></td>
+                              <td>
+                                  treeChange</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-removeTreeChangeObserver">removeTreeChangeObserver
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.automation.removeTreeChangeObserver(<span>function observer</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Remove a tree change observer.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-removeTreeChangeObserver-observer">
+                      <td>function</td>
+                      <td>
+                          observer</td>
+                      <td>
+                      
+                      <p>
+                        A listener for changes on the <code>AutomationNode</code> tree.
+                      </p>    <p>
+                              The <em>observer</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(    <a href="#type-TreeChange">TreeChange</a> treeChange) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-observer-treeChange">
+                              <td>    <a href="#type-TreeChange">TreeChange</a></td>
+                              <td>
+                                  treeChange</td>
+                              <td>
+                              
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setDocumentSelection">setDocumentSelection
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.automation.setDocumentSelection(<span>    <a href="#type-SetDocumentSelectionParams">SetDocumentSelectionParams</a> params</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the selection in a tree. This creates a selection in a single tree (anchorObject and focusObject must have the same root). Everything in the tree between the two node/offset pairs gets included in the selection. The anchor is where the user started the selection, while the focus is the point at which the selection gets extended e.g. when dragging with a mouse or using the keyboard. For nodes with the role staticText, the offset gives the character offset within the value where the selection starts or ends, respectively.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setDocumentSelection-params">
+                      <td>    <a href="#type-SetDocumentSelectionParams">SetDocumentSelectionParams</a></td>
+                      <td>
+                          params</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

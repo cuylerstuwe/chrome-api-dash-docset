@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.extension</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            The <code>chrome.extension</code> API has utilities that can be used by any extension page. It includes support for exchanging messages between an extension and its content scripts or between extensions, as described in detail in <a href="https://developer.chrome.com/extensions/messaging">Message Passing</a>.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Content Scripts:</td>
+        <td>
+                <a href="#method-getURL">getURL</a>
+                  ,
+                <a href="#property-inIncognitoContext">inIncognitoContext</a>
+                  ,
+                <a href="#property-lastError">lastError</a>
+                  ,
+                <a href="#event-onRequest">onRequest</a>
+                   and 
+                <a href="#method-sendRequest">sendRequest</a>
+             are supported.
+            <a href="https://developer.chrome.com/extensions/content_scripts">Learn more</a>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-ViewType">ViewType</a></td></tr>
+        <tr><th colspan="2">Properties</th></tr>
+          <tr><td><a href="#property-lastError">lastError</a></td>
+          </tr><tr><td><a href="#property-inIncognitoContext">inIncognitoContext</a></td>
+        </tr><tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-sendRequest">sendRequest</a> &#x2212;
+            <code class="prettyprint">
+            chrome.extension.sendRequest(<span class="optional">string extensionId</span>, <span>any request</span>, <span class="optional">function responseCallback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getURL">getURL</a> &#x2212;
+            <code class="prettyprint">
+            string
+            chrome.extension.getURL(<span>string path</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getViews">getViews</a> &#x2212;
+            <code class="prettyprint">
+            array of Window
+            chrome.extension.getViews(<span class="optional">object fetchProperties</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getBackgroundPage">getBackgroundPage</a> &#x2212;
+            <code class="prettyprint">
+            Window
+            chrome.extension.getBackgroundPage()
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-getExtensionTabs">getExtensionTabs</a> &#x2212;
+            <code class="prettyprint">
+            array of Window
+            chrome.extension.getExtensionTabs(<span class="optional">integer windowId</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-isAllowedIncognitoAccess">isAllowedIncognitoAccess</a> &#x2212;
+            <code class="prettyprint">
+            chrome.extension.isAllowedIncognitoAccess(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-isAllowedFileSchemeAccess">isAllowedFileSchemeAccess</a> &#x2212;
+            <code class="prettyprint">
+            chrome.extension.isAllowedFileSchemeAccess(<span>function callback</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-setUpdateUrlData">setUpdateUrlData</a> &#x2212;
+            <code class="prettyprint">
+            chrome.extension.setUpdateUrlData(<span>string data</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onRequest">onRequest</a></td></tr>
+          <tr><td><a href="#event-onRequestExternal">onRequestExternal</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-ViewType">ViewType</h3>
+              <dd>The type of extension view.</dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;tab&quot;</code>, 
+                        or <code>&quot;popup&quot;</code>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+          <h2 id="properties">Properties</h2>
+          <table>
+            <tbody><tr>
+              <td><span class="type_name">  object</span></td>
+              <td><code id="property-lastError">chrome.extension.lastError</code></td>
+              <td>
+                <p class="availability">
+                  <strong>Deprecated</strong> since Chrome 58.
+                    Please use <a href="runtime.html#property-lastError">runtime.lastError</a>.
+                </p>
+                  Set for the lifetime of a callback if an ansychronous extension api has resulted in an error. If no error has occured lastError will be <var>undefined</var>.
+                <table class="innerTable">
+                <thead><tr><th colspan="3">Properties</th></tr></thead>
+                  <tbody><tr id="property-lastError-message">
+                    <td>string</td>
+                    <td>
+                        message</td>
+                    <td>
+                    
+                    <p>
+                      Description of the error that has taken place.
+                    </p></td>
+                  </tr>
+                </tbody></table>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="type_name">  boolean</span></td>
+              <td><code id="property-inIncognitoContext">chrome.extension.inIncognitoContext</code></td>
+              <td>
+                  True for content scripts running inside incognito tabs, and for extension pages running inside an incognito process. The latter only applies to extensions with &apos;split&apos; incognito_behavior.
+              </td>
+            </tr>
+          </tbody></table>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-sendRequest">sendRequest
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.extension.sendRequest(<span class="optional">string extensionId</span>, <span>any request</span>, <span class="optional">function responseCallback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  <strong>Deprecated</strong> since Chrome 38.
+                    Please use <a href="runtime.html#method-sendMessage">runtime.sendMessage</a>.
+                </p>
+                <p>
+                  Sends a single request to other listeners within the extension. Similar to <a href="runtime.html#method-connect">runtime.connect</a>, but only sends a single request with an optional response. The <a href="#event-onRequest">extension.onRequest</a> event is fired in each page of the extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-sendRequest-extensionId">
+                      <td>string</td>
+                      <td><span class="optional">(optional)</span>
+                          extensionId</td>
+                      <td>
+                      
+                      <p>
+                        The extension ID of the extension you want to connect to. If omitted, default is your own extension.
+                      </p></td>
+                    </tr>
+                    <tr id="property-sendRequest-request">
+                      <td>any</td>
+                      <td>
+                          request</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                    <tr id="property-sendRequest-responseCallback">
+                      <td>function</td>
+                      <td><span class="optional">(optional)</span>
+                          responseCallback</td>
+                      <td>
+                      
+                          <p>
+                              If you specify the <em>responseCallback</em> parameter, it should
+                              be a function that looks like this:
+                          </p>
+                        <code class="prettyprint">function(any response) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-responseCallback-response">
+                              <td>any</td>
+                              <td>
+                                  response</td>
+                              <td>
+                              
+                              <p>
+                                The JSON response object sent by the handler of the request. If an error occurs while connecting to the extension, the callback will be called with no arguments and <a href="runtime.html#property-lastError">runtime.lastError</a> will be set to the error message.
+                              </p></td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getURL">getURL
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              string
+              chrome.extension.getURL(<span>string path</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  <strong>Deprecated</strong> since Chrome 58.
+                    Please use <a href="runtime.html#method-getURL">runtime.getURL</a>.
+                </p>
+                <p>
+                  Converts a relative path within an extension install directory to a fully-qualified URL.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getURL-path">
+                      <td>string</td>
+                      <td>
+                          path</td>
+                      <td>
+                      
+                      <p>
+                        A path to a resource within an extension expressed relative to its install directory.
+                      </p></td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getViews">getViews
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              array of Window
+              chrome.extension.getViews(<span class="optional">object fetchProperties</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns an array of the JavaScript &apos;window&apos; objects for each of the pages running inside the current extension.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getViews-fetchProperties">
+                      <td>object</td>
+                      <td><span class="optional">(optional)</span>
+                          fetchProperties</td>
+                      <td>
+                      
+                        <table class="innerTable">
+                          <tbody><tr id="property-fetchProperties-type">
+                            <td>    <a href="#type-ViewType">ViewType</a></td>
+                            <td><span class="optional">(optional)</span>
+                                type</td>
+                            <td>
+                            
+                            <p>
+                              The type of view to get. If omitted, returns all views (including background pages and tabs). Valid values: &apos;tab&apos;, &apos;notification&apos;, &apos;popup&apos;.
+                            </p></td>
+                          </tr><tr id="property-fetchProperties-windowId">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                windowId</td>
+                            <td>
+                            
+                            <p>
+                              The window to restrict the search to. If omitted, returns all views.
+                            </p></td>
+                          </tr><tr id="property-fetchProperties-tabId">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                tabId</td>
+                            <td>
+                            <p class="availability">
+                              Since Chrome 54.
+                            </p>
+                            
+                            <p>
+                              Find a view according to a tab id. If this field is omitted, returns all views.
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getBackgroundPage">getBackgroundPage
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              Window
+              chrome.extension.getBackgroundPage()
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Returns the JavaScript &apos;window&apos; object for the background page running inside the current extension. Returns null if the extension has no background page.
+                </p>
+                  <h4 title>Returns</h4>
+                  <div>
+                    <table>
+                    </table>
+                  </div>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-getExtensionTabs">getExtensionTabs
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              array of Window
+              chrome.extension.getExtensionTabs(<span class="optional">integer windowId</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  <strong>Deprecated</strong> since Chrome 38.
+                    Please use <a href="#method-getViews">extension.getViews</a> <code>{type: &quot;tab&quot;}</code>.
+                </p>
+                <p>
+                  Returns an array of the JavaScript &apos;window&apos; objects for each of the tabs running inside the current extension. If <code>windowId</code> is specified, returns only the &apos;window&apos; objects of tabs attached to the specified window.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-getExtensionTabs-windowId">
+                      <td>integer</td>
+                      <td><span class="optional">(optional)</span>
+                          windowId</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-isAllowedIncognitoAccess">isAllowedIncognitoAccess
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.extension.isAllowedIncognitoAccess(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Retrieves the state of the extension&apos;s access to Incognito-mode (as determined by the user-controlled &apos;Allowed in Incognito&apos; checkbox.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-isAllowedIncognitoAccess-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean isAllowedAccess) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-isAllowedAccess">
+                              <td>boolean</td>
+                              <td>
+                                  isAllowedAccess</td>
+                              <td>
+                              
+                              <p>
+                                True if the extension has access to Incognito mode, false otherwise.
+                              </p></td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-isAllowedFileSchemeAccess">isAllowedFileSchemeAccess
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.extension.isAllowedFileSchemeAccess(<span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Retrieves the state of the extension&apos;s access to the &apos;file://&apos; scheme (as determined by the user-controlled &apos;Allow access to File URLs&apos; checkbox.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-isAllowedFileSchemeAccess-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                          <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(boolean isAllowedAccess) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-isAllowedAccess">
+                              <td>boolean</td>
+                              <td>
+                                  isAllowedAccess</td>
+                              <td>
+                              
+                              <p>
+                                True if the extension can access the &apos;file://&apos; scheme, false otherwise.
+                              </p></td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-setUpdateUrlData">setUpdateUrlData
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.extension.setUpdateUrlData(<span>string data</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Sets the value of the ap CGI parameter used in the extension&apos;s update URL.  This value is ignored for extensions that are hosted in the Chrome Extension Gallery.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-setUpdateUrlData-data">
+                      <td>string</td>
+                      <td>
+                          data</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onRequest">onRequest</h3>
+              <div class="description">
+                <p class="availability">
+                  <strong>Deprecated</strong> since Chrome 38.
+                    Please use <a href="runtime.html#event-onMessage">runtime.onMessage</a>.
+                </p>
+            <p>
+                  Fired when a request is sent from either an extension process or a content script.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.extension.onRequest.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onRequest-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(any request,     <a href="runtime.html#type-MessageSender">runtime.MessageSender</a> sender, function sendResponse) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onRequest-request">
+                                    <td>any</td>
+                                    <td><span class="optional">(optional)</span>
+                                        request</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The request sent by the calling script.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onRequest-sender">
+                                    <td>    <a href="runtime.html#type-MessageSender">runtime.MessageSender</a></td>
+                                    <td>
+                                        sender</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onRequest-sendResponse">
+                                    <td>function</td>
+                                    <td>
+                                        sendResponse</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Function to call (at most once) when you have a response. The argument should be any JSON-ifiable object, or undefined if there is no response. If you have more than one <code>onRequest</code> listener in the same document, then only one may send a response.
+                                    </p>    <p>
+                                            The <em>sendResponse</em> parameter should be a function
+                                            that looks like this:
+                                        </p>
+                                      <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onRequestExternal">onRequestExternal</h3>
+              <div class="description">
+                <p class="availability">
+                  <strong>Deprecated</strong> since Chrome 38.
+                    Please use <a href="runtime.html#event-onMessageExternal">runtime.onMessageExternal</a>.
+                </p>
+            <p>
+                  Fired when a request is sent from another extension.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.extension.onRequestExternal.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onRequestExternal-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(any request,     <a href="runtime.html#type-MessageSender">runtime.MessageSender</a> sender, function sendResponse) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onRequestExternal-request">
+                                    <td>any</td>
+                                    <td><span class="optional">(optional)</span>
+                                        request</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The request sent by the calling script.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onRequestExternal-sender">
+                                    <td>    <a href="runtime.html#type-MessageSender">runtime.MessageSender</a></td>
+                                    <td>
+                                        sender</td>
+                                    <td>
+                                    
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onRequestExternal-sendResponse">
+                                    <td>function</td>
+                                    <td>
+                                        sendResponse</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Function to call when you have a response. The argument should be any JSON-ifiable object, or undefined if there is no response.
+                                    </p>    <p>
+                                            The <em>sendResponse</em> parameter should be a function
+                                            that looks like this:
+                                        </p>
+                                      <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

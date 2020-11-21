@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.ttsEngine</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+            Use the <code>chrome.ttsEngine</code> API to implement a text-to-speech(TTS) engine using an extension. If your extension registers using this API, it will receive events containing an utterance to be spoken and other parameters when any extension or Chrome App uses the <a href="tts.html">tts</a> API to generate speech. Your extension can then use any available web technology to synthesize and output the speech, and send events back to the calling function to report the status.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;ttsEngine&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <h2 id="overview">Overview</h2>
+      
+      <p>An extension can register itself as a speech engine. By doing so, it
+      can intercept some or all calls to functions such as
+      <a href="tts.html#method-speak">tts.speak</a> and
+      <a href="tts.html#method-stop">tts.stop</a>
+      and provide an alternate implementation.
+      Extensions are free to use any available web technology
+      to provide speech, including streaming audio from a server, HTML5 audio,
+      Native Client, or Flash. An extension could even do something different
+      with the utterances, like display closed captions in a pop-up window or
+      send them as log messages to a remote server.</p>
+      
+      <h2 id="manifest">Manifest</h2>
+      
+      <p>To implement a TTS engine, an extension must
+      declare the &quot;ttsEngine&quot; permission and then declare all voices
+      it provides in the extension manifest, like this:</p>
+      
+      <pre data-filename="manifest.json">      {
+        &quot;name&quot;: &quot;My TTS Engine&quot;,
+        &quot;version&quot;: &quot;1.0&quot;,
+        <b>&quot;permissions&quot;: [&quot;ttsEngine&quot;],
+        &quot;tts_engine&quot;: {
+          &quot;voices&quot;: [
+            {
+              &quot;voice_name&quot;: &quot;Alice&quot;,
+              &quot;lang&quot;: &quot;en-US&quot;,
+              &quot;event_types&quot;: [&quot;start&quot;, &quot;marker&quot;, &quot;end&quot;]
+            },
+            {
+              &quot;voice_name&quot;: &quot;Pat&quot;,
+              &quot;lang&quot;: &quot;en-US&quot;,
+              &quot;event_types&quot;: [&quot;end&quot;]
+            }
+          ]
+        },</b>
+        &quot;background&quot;: {
+          &quot;page&quot;: &quot;background.html&quot;,
+          &quot;persistent&quot;: false
+        }
+      }
+      </pre>
+      
+      <p>An extension can specify any number of voices.</p>
+      
+      <p>Once loaded, an extension can replace the list of declared voices
+        by calling <code>chrome.ttsEngine.updateVoices</code></p>
+      
+      <p>The <code>voice_name</code> parameter is required. The name should be
+      descriptive enough that it identifies the name of the voice and the
+      engine used. In the unlikely event that two extensions register voices
+      with the same name, a client can specify the ID of the extension that
+      should do the synthesis.</p>
+      
+      <p>The <code>lang</code> parameter is optional, but highly recommended.
+      Almost always, a voice can synthesize speech in just a single language.
+      When an engine supports more than one language, it can easily register a
+      separate voice for each language. Under rare circumstances where a single
+      voice can handle more than one language, it&apos;s easiest to just list two
+      separate voices and handle them using the same logic internally. However,
+      if you want to create a voice that will handle utterances in any language,
+      leave out the <code>lang</code> parameter from your extension&apos;s manifest.</p>
+      
+      <p>Finally, the <code>event_types</code> parameter is required if the engine can
+      send events to update the client on the progress of speech synthesis.
+      At a minimum, supporting the <code>&apos;end&apos;</code> event type to indicate
+      when speech is finished is highly recommended, otherwise Chrome cannot
+      schedule queued utterances.</p>
+      
+      <p class="note">
+      <strong>Note:</strong> If your TTS engine does not support
+      the <code>&apos;end&apos;</code> event type, Chrome cannot queue utterances
+      because it has no way of knowing when your utterance has finished. To
+      help mitigate this, Chrome passes an additional boolean <code>enqueue</code>
+      option to your engine&apos;s onSpeak handler, giving you the option of
+      implementing your own queueing.  This is discouraged because then
+      clients are unable to queue utterances that should get spoken by different
+      speech engines.</p>
+      
+      <p>The possible event types that you can send correspond to the event types
+      that the <code>speak()</code> method receives:</p>
+      
+      <ul>
+        <li><code>&apos;start&apos;</code>: The engine has started speaking the utterance.
+        </li><li><code>&apos;word&apos;</code>: A word boundary was reached. Use
+                <code>event.charIndex</code> to determine the current speech
+                position.
+        </li><li><code>&apos;sentence&apos;</code>: A sentence boundary was reached. Use
+                <code>event.charIndex</code> to determine the current speech
+                position.
+        </li><li><code>&apos;marker&apos;</code>: An SSML marker was reached. Use
+                <code>event.charIndex</code> to determine the current speech
+                position.
+        </li><li><code>&apos;end&apos;</code>: The engine has finished speaking the utterance.
+        </li><li><code>&apos;error&apos;</code>: An engine-specific error occurred and
+                this utterance cannot be spoken.
+                Pass more information in <code>event.errorMessage</code>.
+      </li></ul>
+      
+      <p>The <code>&apos;interrupted&apos;</code> and <code>&apos;cancelled&apos;</code> events are
+      not sent by the speech engine; they are generated automatically by Chrome.</p>
+      
+      <p>Text-to-speech clients can get the voice information from your
+      extension&apos;s manifest by calling
+      <a href="tts.html#method-getVoices">tts.getVoices</a>,
+      assuming you&apos;ve registered speech event listeners as described below.</p>
+      
+      <h2 id="handling_speech_events">Handling speech events</h2>
+      
+      <p>To generate speech at the request of clients, your extension must
+      register listeners for both <code>onSpeak</code> and <code>onStop</code>,
+      like this:</p>
+      
+      <pre>var speakListener = function(utterance, options, sendTtsEvent) {
+        sendTtsEvent({&apos;event_type&apos;: &apos;start&apos;, &apos;charIndex&apos;: 0})
+      
+        // (start speaking)
+      
+        sendTtsEvent({&apos;event_type&apos;: &apos;end&apos;, &apos;charIndex&apos;: utterance.length})
+      };
+      
+      var stopListener = function() {
+        // (stop all speech)
+      };
+      
+      chrome.ttsEngine.onSpeak.addListener(speakListener);
+      chrome.ttsEngine.onStop.addListener(stopListener);</pre>
+      
+      <p class="warning">
+      <b>Important:</b>
+      If your extension does not register listeners for both
+      <code>onSpeak</code> and <code>onStop</code>, it will not intercept any
+      speech calls, regardless of what is in the manifest.</p>
+      
+      <p>The decision of whether or not to send a given speech request to an
+      extension is based solely on whether the extension supports the given voice
+      parameters in its manifest and has registered listeners
+      for <code>onSpeak</code> and <code>onStop</code>. In other words,
+      there&apos;s no way for an extension to receive a speech request and
+      dynamically decide whether to handle it.</p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-VoiceGender">VoiceGender</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-updateVoices">updateVoices</a> &#x2212;
+            <code class="prettyprint">
+            chrome.ttsEngine.updateVoices(<span>array of     <a href="tts.html#type-TtsVoice">tts.TtsVoice</a> voices</span>)
+            </code>
+          </td></tr>
+        <tr><th colspan="2">Events</th></tr>
+          <tr><td><a href="#event-onSpeak">onSpeak</a></td></tr>
+          <tr><td><a href="#event-onStop">onStop</a></td></tr>
+          <tr><td><a href="#event-onPause">onPause</a></td></tr>
+          <tr><td><a href="#event-onResume">onResume</a></td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-VoiceGender">VoiceGender</h3>
+              <table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                        <code>&quot;male&quot;</code>, 
+                        or <code>&quot;female&quot;</code>
+                </td></tr>
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-updateVoices">updateVoices
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.ttsEngine.updateVoices(<span>array of     <a href="tts.html#type-TtsVoice">tts.TtsVoice</a> voices</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p class="availability">
+                  Since Chrome 66.
+                </p>
+                <p>
+                  Called by an engine to update its list of voices. This list overrides any voices declared in this extension&apos;s manifest.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-updateVoices-voices">
+                      <td>array of     <a href="tts.html#type-TtsVoice">tts.TtsVoice</a></td>
+                      <td>
+                          voices</td>
+                      <td>
+                      
+                      <p>
+                        Array of <a href="tts.html#type-TtsVoice">tts.TtsVoice</a> objects representing the available voices for speech synthesis.
+                      </p></td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+          <h2 id="events">Events</h2>
+            <div>
+              <h3 id="event-onSpeak">onSpeak</h3>
+              <div class="description">
+            <p>
+                  Called when the user makes a call to tts.speak() and one of the voices from this extension&apos;s manifest is the first to match the options object.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.ttsEngine.onSpeak.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onSpeak-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function(string utterance, object options, function sendTtsEvent) <span class="subdued">{...}</span>;</code>
+                                <table class="innerTable">
+                                  <tbody><tr id="property-onSpeak-utterance">
+                                    <td>string</td>
+                                    <td>
+                                        utterance</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The text to speak, specified as either plain text or an SSML document. If your engine does not support SSML, you should strip out all XML markup and synthesize only the underlying text content. The value of this parameter is guaranteed to be no more than 32,768 characters. If this engine does not support speaking that many characters at a time, the utterance should be split into smaller chunks and queued internally without returning an error.
+                                    </p></td>
+                                  </tr>
+                                  <tr id="property-onSpeak-options">
+                                    <td>object</td>
+                                    <td>
+                                        options</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Options specified to the tts.speak() method.
+                                    </p>  <table class="innerTable">
+                                        <tbody><tr id="property-options-voiceName">
+                                          <td>string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              voiceName</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The name of the voice to use for synthesis.
+                                          </p></td>
+                                        </tr><tr id="property-options-lang">
+                                          <td>string</td>
+                                          <td><span class="optional">(optional)</span>
+                                              lang</td>
+                                          <td>
+                                          
+                                          <p>
+                                            The language to be used for synthesis, in the form <em>language</em>-<em>region</em>. Examples: &apos;en&apos;, &apos;en-US&apos;, &apos;en-GB&apos;, &apos;zh-CN&apos;.
+                                          </p></td>
+                                        </tr><tr id="property-options-gender">
+                                          <td>    <a href="#type-VoiceGender">VoiceGender</a></td>
+                                          <td><span class="optional">(optional)</span>
+                                              gender</td>
+                                          <td>
+                                          <p class="availability">
+                                            <strong>Deprecated</strong> since Chrome 70.
+                                              Gender is deprecated and will be ignored.
+                                          </p>
+                                          
+                                          <p>
+                                            Gender of voice for synthesized speech.
+                                          </p></td>
+                                        </tr><tr id="property-options-rate">
+                                          <td>double</td>
+                                          <td><span class="optional">(optional)</span>
+                                              rate</td>
+                                          <td>
+                                          
+                                          <p>
+                                            Speaking rate relative to the default rate for this voice. 1.0 is the default rate, normally around 180 to 220 words per minute. 2.0 is twice as fast, and 0.5 is half as fast. This value is guaranteed to be between 0.1 and 10.0, inclusive. When a voice does not support this full range of rates, don&apos;t return an error. Instead, clip the rate to the range the voice supports.
+                                          </p></td>
+                                        </tr><tr id="property-options-pitch">
+                                          <td>double</td>
+                                          <td><span class="optional">(optional)</span>
+                                              pitch</td>
+                                          <td>
+                                          
+                                          <p>
+                                            Speaking pitch between 0 and 2 inclusive, with 0 being lowest and 2 being highest. 1.0 corresponds to this voice&apos;s default pitch.
+                                          </p></td>
+                                        </tr><tr id="property-options-volume">
+                                          <td>double</td>
+                                          <td><span class="optional">(optional)</span>
+                                              volume</td>
+                                          <td>
+                                          
+                                          <p>
+                                            Speaking volume between 0 and 1 inclusive, with 0 being lowest and 1 being highest, with a default of 1.0.
+                                          </p></td>
+                                        </tr>
+                                      </tbody></table>
+                                    </td>
+                                  </tr>
+                                  <tr id="property-onSpeak-sendTtsEvent">
+                                    <td>function</td>
+                                    <td>
+                                        sendTtsEvent</td>
+                                    <td>
+                                    
+                                    <p>
+                                      Call this function with events that occur in the process of speaking the utterance.
+                                    </p>    <p>
+                                            The <em>sendTtsEvent</em> parameter should be a function
+                                            that looks like this:
+                                        </p>
+                                      <code class="prettyprint">function(    <a href="tts.html#type-TtsEvent">tts.TtsEvent</a> event) <span class="subdued">{...}</span>;</code>
+                                        <table class="innerTable">
+                                          <tbody><tr id="property-sendTtsEvent-event">
+                                            <td>    <a href="tts.html#type-TtsEvent">tts.TtsEvent</a></td>
+                                            <td>
+                                                event</td>
+                                            <td>
+                                            
+                                            <p>
+                                              The event from the text-to-speech engine indicating the status of this utterance.
+                                            </p></td>
+                                          </tr>
+                                        </tbody></table>
+                                    </td>
+                                  </tr>
+                                </tbody></table>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onStop">onStop</h3>
+              <div class="description">
+            <p>
+                  Fired when a call is made to tts.stop and this extension may be in the middle of speaking. If an extension receives a call to onStop and speech is already stopped, it should do nothing (not raise an error). If speech is in the paused state, this should cancel the paused state.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.ttsEngine.onStop.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onStop-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onPause">onPause</h3>
+              <div class="description">
+            <p>
+                  Optional: if an engine supports the pause event, it should pause the current utterance being spoken, if any, until it receives a resume event or stop event. Note that a stop event should also clear the paused state.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.ttsEngine.onPause.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onPause-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            <div>
+              <h3 id="event-onResume">onResume</h3>
+              <div class="description">
+            <p>
+                  Optional: if an engine supports the pause event, it should also support the resume event, to continue speaking the current utterance, if any. Note that a stop event should also clear the paused state.
+                </p>      
+                  <div>
+                    <h4 title>addListener
+                    </h4>
+                    <div class="summary">
+                    <code class="prettyprint">
+                    chrome.ttsEngine.onResume.addListener(<span>function callback</span>)
+                    </code>
+                    </div>
+                    <div class="description">
+                      <table class="innerTable">
+                        <tbody><tr><th colspan="3">Parameters</th></tr>
+                          <tr id="property-onResume-callback">
+                            <td>function</td>
+                            <td>
+                                callback</td>
+                            <td>
+                            
+                                <p>
+                                    The <em>callback</em> parameter should be a function
+                                    that looks like this:
+                                </p>
+                              <code class="prettyprint">function() <span class="subdued">{...}</span>;</code>
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.power</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.power</code> API to override the system&apos;s power
+             management features.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 38.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;power&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <section>
+      <h2 id="usage">Usage</h2>
+      
+      <p>
+      By default,
+      operating systems dim the screen when users are inactive
+      and eventually suspend the system.
+      With the power API,
+      an app or extension can keep the system awake.
+      </p>
+      
+      <p>
+      Using this API,
+      you can specify the
+      <a href="#type-Level">Level</a> to which power management is disabled.
+      The <code>&quot;system&quot;</code> level keeps the system active,
+      but allows the screen to be dimmed or turned off.
+      For example,
+      a communication app can continue to receive messages
+      while the screen is off.
+      The <code>&quot;display&quot;</code> level keeps the screen and system active.
+      E-book and presentation apps, for example,
+      can keep the screen and system active
+      while users read.
+      </p>
+      
+      <p>
+      When a user has more than one app or extension active,
+      each with its own power level,
+      the highest-precedence level takes effect;
+      <code>&quot;display&quot;</code> always takes precedence
+      over <code>&quot;system&quot;</code>.
+      For example,
+      if app A asks for <code>&quot;system&quot;</code> power management,
+      and app B asks for <code>&quot;display&quot;</code>,
+      <code>&quot;display&quot;</code> is used until app B
+      is unloaded or releases its request.
+      If app A is still active,
+      <code>&quot;system&quot;</code> is then used.
+      </p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Types</th></tr>
+          <tr><td><a href="#type-Level">Level</a></td></tr>
+        <tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-requestKeepAwake">requestKeepAwake</a> &#x2212;
+            <code class="prettyprint">
+            chrome.power.requestKeepAwake(<span>    Level level</span>)
+            </code>
+          </td></tr>
+        <tr><td><a href="#method-releaseKeepAwake">releaseKeepAwake</a> &#x2212;
+            <code class="prettyprint">
+            chrome.power.releaseKeepAwake()
+            </code>
+          </td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="types">Types</h2>
+            <div>
+              <h3 id="type-Level">Level</h3>
+              <dd></dd><table>
+                <tbody><tr><th>Enum</th></tr>
+                <tr><td>
+                      <dl>
+                        <dt><code>&quot;system&quot;</code></dt>
+                        <dd>
+                          Prevent the system from sleeping in response to user inactivity.
+                        </dd>
+                      </dl>
+                      <dl>
+                        <dt><code>&quot;display&quot;</code></dt>
+                        <dd>
+                          Prevent the display from being turned off or dimmed or the system from sleeping in response to user inactivity.
+                        </dd>
+                      </dl>
+                </td></tr>
+                
+              </tbody></table>
+            </div>
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-requestKeepAwake">requestKeepAwake
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.power.requestKeepAwake(<span>    <a href="#type-Level">Level</a> level</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Requests that power management be temporarily disabled. |level| describes the degree to which power management should be disabled. If a request previously made by the same app is still active, it will be replaced by the new request.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-requestKeepAwake-level">
+                      <td>    <a href="#type-Level">Level</a></td>
+                      <td>
+                          level</td>
+                      <td>
+                      
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+            <div>
+              <h3 id="method-releaseKeepAwake">releaseKeepAwake
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.power.releaseKeepAwake()
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Releases a request previously made via requestKeepAwake().
+                </p>
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>

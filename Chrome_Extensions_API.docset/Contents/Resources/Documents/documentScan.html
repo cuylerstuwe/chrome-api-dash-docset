@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html><head>
+<link href="assets/site.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8" />
+</head><body><div>
+<main id="gc-pagecontent" role="main">
+<main id="gc-pagecontent" role="main">
+
+
+<article>
+  <div itemprop="articleBody" class="api">
+    <h1>chrome.documentScan</h1>
+    <table class="intro" id="intro">
+      <tbody><tr>
+        <td class="title">Description:</td>
+        <td>
+             Use the <code>chrome.documentScan</code> API to discover and retrieve
+             images from attached paper document scanners.
+                    <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Availability:</td>
+        <td>
+            Since Chrome 44.
+            <br>
+        </td>
+      </tr>
+      <tr>
+        <td class="title">Permissions:</td>
+        <td>
+            <span class="code">
+            &quot;documentScan&quot;
+                    </span>
+            <br>
+        </td>
+      </tr>
+    </tbody></table>
+    <p class="caution">
+      <b>Important:</b>
+      This API works <b>only on Chrome OS</b>.
+    </p>
+    <section>
+      <h2 id="code">Document Scan API</h2>
+      
+      <p>
+      The Document Scan API is designed to allow apps and extensions to view
+      the content of paper documents on an attached document scanner.
+      </p>
+      
+      <p class="note">
+      <b>Note:</b>
+      This API depends on OS features that may not be available depending on the
+      underlying operating system.  As of this writing only Chrome OS for certain
+      USB-attached devices is known to successfully work.
+      </p>
+    </section>
+    <section id="toc">
+    <h2>Summary</h2>
+    <table class="api-summary">
+      <tbody><tr>
+        </tr><tr><th colspan="2">Methods</th></tr>
+        <tr><td><a href="#method-scan">scan</a> &#x2212;
+            <code class="prettyprint">
+            chrome.documentScan.scan(<span>object options</span>, <span>function callback</span>)
+            </code>
+          </td></tr>
+    </tbody></table>
+    </section>
+    <section>
+      <div class="api-reference">
+          <h2 id="methods">Methods</h2>
+            <div>
+              <h3 id="method-scan">scan
+              </h3>
+              <div class="summary">
+              <code class="prettyprint">
+              chrome.documentScan.scan(<span>object options</span>, <span>function callback</span>)
+              </code>
+              </div>
+              <div class="description">
+                <p>
+                  Performs a document scan.  On success, the PNG data will be sent to the callback.
+                </p>
+                <table>
+                  <tbody><tr><th colspan="3">Parameters</th></tr>
+                    <tr id="property-scan-options">
+                      <td>object</td>
+                      <td>
+                          options</td>
+                      <td>
+                      
+                      <p>
+                        Object containing scan parameters.
+                      </p>  <table class="innerTable">
+                          <tbody><tr id="property-options-mimeTypes">
+                            <td>array of string</td>
+                            <td><span class="optional">(optional)</span>
+                                mimeTypes</td>
+                            <td>
+                            
+                            <p>
+                              The MIME types that are accepted by the caller.
+                            </p></td>
+                          </tr><tr id="property-options-maxImages">
+                            <td>integer</td>
+                            <td><span class="optional">(optional)</span>
+                                maxImages</td>
+                            <td>
+                            
+                            <p>
+                              The number of scanned images allowed (defaults to 1).
+                            </p></td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                    <tr id="property-scan-callback">
+                      <td>function</td>
+                      <td>
+                          callback</td>
+                      <td>
+                      
+                      <p>
+                        Called with the result and data from the scan.
+                      </p>    <p>
+                              The <em>callback</em> parameter should be a function
+                              that looks like this:
+                          </p>
+                        <code class="prettyprint">function(object result) <span class="subdued">{...}</span>;</code>
+                          <table class="innerTable">
+                            <tbody><tr id="property-callback-result">
+                              <td>object</td>
+                              <td>
+                                  result</td>
+                              <td>
+                              
+                                <table class="innerTable">
+                                  <tbody><tr id="property-result-dataUrls">
+                                    <td>array of string</td>
+                                    <td>
+                                        dataUrls</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The data image URLs in a form that can be passed as the &quot;src&quot; value to an image tag.
+                                    </p></td>
+                                  </tr><tr id="property-result-mimeType">
+                                    <td>string</td>
+                                    <td>
+                                        mimeType</td>
+                                    <td>
+                                    
+                                    <p>
+                                      The MIME type of <code>dataUrls</code>.
+                                    </p></td>
+                                  </tr>
+                                </tbody></table>
+                              </td>
+                            </tr>
+                          </tbody></table>
+                      </td>
+                    </tr>
+                </tbody></table>
+              </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</article>
+    </main>
+</main></div></body></html>
