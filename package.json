@@ -4,7 +4,8 @@
   "description": "",
   "main": "chromeapi_docset.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "first-build": "npm i && node regenerate-chrome-api-docset.js",
+    "build": "node regenerate-chrome-api-docset.js"
   },
   "author": "Georg Barikin, Cuyler Stuwe",
   "license": "ISC",
