@@ -60,6 +60,8 @@ function getHTML(url, fn) {
 
 function saveHTML(url, doc) {
 
+    console.log({url});
+
     doc.find('nav').remove();
     doc.find('a').each(function() {
         var h = localLink($(this).attr('href'), url);
@@ -77,7 +79,7 @@ function saveHTML(url, doc) {
 
     var h = [
         '<!DOCTYPE html>',
-        '<html><head>',
+        `<html><!-- Online page at ${url} --><head>`,
         '<link href="assets/site.css" rel="stylesheet" type="text/css">',
         '<meta charset="utf-8" />',
         '</head><body><div>',
