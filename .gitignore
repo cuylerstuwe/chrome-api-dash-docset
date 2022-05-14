@@ -1,2 +1,5 @@
 node_modules/
 .DS_Store
+Chrome_Extensions_API.docset/
+Chrome_Extensions_API.tgz
+.idea/
