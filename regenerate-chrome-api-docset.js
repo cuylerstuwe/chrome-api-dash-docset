@@ -64,6 +64,7 @@ function saveHTML(url, doc) {
 
     doc.find('nav').remove();
     doc.find('navigation-tree').remove();
+    doc.find('announcement-banner').remove();
     doc.find('a').each(function() {
         var h = localLink($(this).attr('href'), url);
         $(this).attr('href', h);
