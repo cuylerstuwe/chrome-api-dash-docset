@@ -76,7 +76,9 @@ function saveHTML(url, doc) {
         return $("<a href='" + src + "'>" + src + '</a>');
     });
     doc.find('img').each(function() {
-        var h = urlLib.resolve(url, $(this).attr('src'));
+        const whichApi = url?.match(/([^/]+)\/?$/)?.[0] || "";
+        const apiImageRoute = `https://developer.chrome.com/extensions/reference/${whichApi}/${$(this).attr('src')}`;
+        var h = apiImageRoute;
         images[h] = 1;
         $(this).attr('src', 'assets/' + path.basename(h));
     });
