@@ -2,7 +2,7 @@
 
 var fs = require('fs');
 var request = require('request');
-var $ = require('cheerio');
+var $ = require('cheerio').default;
 var exec = require('child_process').exec;
 var urlLib = require('url');
 var path = require('path');
@@ -52,7 +52,7 @@ function getHTML(url, fn) {
     getURL(url, function(url, html) {
         var doc = $(html.toString());
         doc.find('a').each(function() {
-            $(this).attr('href', urlLib.resolve(url, $(this).attr('href')));
+            $(this).attr('href', urlLib.resolve(url || "", $(this).attr('href') || ""));
         });
         fn(url, doc);
     });
@@ -63,6 +63,7 @@ function saveHTML(url, doc) {
     console.log({url});
 
     doc.find('nav').remove();
+    doc.find('navigation-tree').remove();
     doc.find('a').each(function() {
         var h = localLink($(this).attr('href'), url);
         $(this).attr('href', h);
