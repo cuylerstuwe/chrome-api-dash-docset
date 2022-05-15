@@ -5,7 +5,7 @@
   "main": "chromeapi_docset.js",
   "scripts": {
     "first-build": "npm i && node regenerate-chrome-api-docset.js extensions",
-    "build": "node regenerate-chrome-api-docset.js extensions"
+    "build": "node regenerate-chrome-api-docset.js extensions && rm Chrome_Extensions_API.docset.zip; zip -r Chrome_Extensions_API.docset.zip Chrome_Extensions_API.docset"
   },
   "author": "Georg Barikin, Cuyler Stuwe",
   "license": "ISC",
