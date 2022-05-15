@@ -137,21 +137,16 @@ function extractIndex(url, doc) {
     var mod = doc.find('h1').text();
     index[url] = [mod, 'Module', url];
 
-    var header = null;
-    doc.find('.api-summary tr').each(function() {
-        if($(this).find('th').length) {
-            var t = $(this).find('th').text();
-            if(!htype[t])
-                console.log('???', t);
-            header = htype[t];
-            return;
-        }
-        if(!header)
-            return;
-        $(this).find('a').each(function() {
-            var h = $(this).attr('href');
-            index[h] = [mod + '.' + $(this).text(), header, h];
-        });
+    ["type", "method", "event", "property"].forEach(typeOfDocumentedEntity => {
+        const capitalizedTypeOfDocumentedEntity = typeOfDocumentedEntity[0].toUpperCase() + typeOfDocumentedEntity.substring(1);
+        let linkElementsForTypeOfDocumentedEntity;
+        try {
+            linkElementsForTypeOfDocumentedEntity = doc.find(`.toc-container [href$=${typeOfDocumentedEntity}] + ul a`);
+            linkElementsForTypeOfDocumentedEntity.each(function() {
+                const href = $(this).attr('href');
+                index[href] = [mod + "." + $(this).text(), capitalizedTypeOfDocumentedEntity, href];
+            });
+        } catch(err) {}
     });
 }
 
